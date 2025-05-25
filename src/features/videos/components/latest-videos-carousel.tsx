@@ -1,19 +1,14 @@
 "use client";
 
-import FallbackImage from "@/components/fallback-image";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import Link from "next/link";
-import { useEffect } from "react";
-import useGetLatestVideos from "@/features/videos/hooks/useGetLatestVideos";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import useGetLatestVideos from "@/features/videos/hooks/useGetLatestVideos";
 import LatestVideosCarouselSkeleton from "@/features/videos/skeletons/latest-videos-carousel-skeleton";
+import Autoplay from "embla-carousel-autoplay";
+import Link from "next/link";
 import Thumbnail from "./thumbnail";
 
 export default function LatestVideosCarousel() {
@@ -46,8 +41,6 @@ export default function LatestVideosCarousel() {
           );
         })}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
     </Carousel>
   );
 }

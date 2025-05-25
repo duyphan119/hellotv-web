@@ -12,7 +12,7 @@ export default function LatestVideosCarouselSkeleton() {
       <CarouselContent>
         {Array(4)
           .fill(0)
-          .map((item, index) => {
+          .map((_, index) => {
             return (
               <CarouselItem
                 key={index}
