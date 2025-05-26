@@ -58,9 +58,6 @@ export default function SearchForm() {
           onFocus={() => {
             setVisible(true);
           }}
-          onBlur={() => {
-            setVisible(false);
-          }}
           className="outline-none bg-transparent w-full"
         />
         <button type="submit">
