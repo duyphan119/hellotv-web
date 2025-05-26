@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function parseHtmlString(htmlString: string) {
-  let parser = new DOMParser();
-  let doc = parser.parseFromString(htmlString, "text/html");
-  let decoded = doc.body.textContent;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, "text/html");
+  const decoded = doc.body.textContent;
 
   return decoded;
 }

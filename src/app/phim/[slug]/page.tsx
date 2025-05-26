@@ -19,7 +19,9 @@ export const generateMetadata = async ({
         title: `Hellotv | ${video.name}`,
       };
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   return {
     title: "Hellotv",
   };

@@ -31,7 +31,9 @@ export const generateMetadata = async ({
         ),
       };
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   return {
     title: "Hellotv",
   };

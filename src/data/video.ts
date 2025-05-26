@@ -24,21 +24,39 @@ export type Pagination = {
 };
 
 export type LatestVideoParams = {
-  page?: number;
+  page?: string | number;
+};
+
+type LatestVideoRaw = {
+  _id: string;
+  name: string;
+  origin_name: string;
+  slug: string;
+  thumb_url: string;
+  poster_url: string;
+  episode_current: string;
+  country: Country[];
+  category: Category[];
+  lang: string;
+};
+
+type SeoOnPage = {
+  og_type: string;
+  titleHead: string;
+  descriptionHead: string;
+  og_image: string[];
+  og_url: string;
 };
 
 export const getLatestVideos = async (params?: LatestVideoParams) => {
   try {
     const {
-      data: {
-        items,
-        pagination: { updateToday, ...pagination },
-      },
+      data: { items, pagination },
     } = await axios.get("https://phimapi.com/danh-sach/phim-moi-cap-nhat-v3", {
       params,
     });
 
-    const latestVideos: LatestVideo[] = items.map((item: any) => ({
+    const latestVideos: LatestVideo[] = items.map((item: LatestVideoRaw) => ({
       id: item._id,
       name: item.name,
       originName: item.origin_name,
@@ -52,6 +70,7 @@ export const getLatestVideos = async (params?: LatestVideoParams) => {
     }));
 
     return {
+      seoOnPage: DEFAULT_VIDEOS_RESPONSE.seoOnPage,
       titlePage: "Phim mới cập nhật",
       items: latestVideos,
       pagination: pagination as Pagination,
@@ -60,6 +79,7 @@ export const getLatestVideos = async (params?: LatestVideoParams) => {
     console.log("getLatestVideos error", error);
     return {
       titlePage: "Phim mới cập nhật",
+      seoOnPage: DEFAULT_VIDEOS_RESPONSE.seoOnPage,
       items: [],
       pagination: {
         totalItems: 0,
@@ -92,7 +112,12 @@ export type Episode = {
   link_embed: string;
 };
 
-const DEFAULT_VIDEOS_RESPONSE = {
+const DEFAULT_VIDEOS_RESPONSE: {
+  titlePage: string;
+  items: LatestVideo[];
+  pagination: Pagination;
+  seoOnPage: SeoOnPage;
+} = {
   titlePage: "",
   items: [],
   pagination: {
@@ -100,6 +125,13 @@ const DEFAULT_VIDEOS_RESPONSE = {
     currentPage: 1,
     totalPages: 1,
     totalItemsPerPage: 24,
+  },
+  seoOnPage: {
+    og_type: "",
+    titleHead: "",
+    descriptionHead: "",
+    og_image: [],
+    og_url: "",
   },
 };
 
@@ -128,10 +160,12 @@ export const getVideo = async (slug: string) => {
       trailer: movie.trailer_url,
     };
 
-    const servers: VideoServer[] = episodes.map((item: any) => ({
-      name: item.server_name,
-      episodes: item.server_data,
-    }));
+    const servers: VideoServer[] = episodes.map(
+      (item: { server_name: string; server_data: Episode[] }) => ({
+        name: item.server_name,
+        episodes: item.server_data,
+      })
+    );
 
     return {
       video,
@@ -191,6 +225,7 @@ export const getVideosByTypeList = async (
           APP_DOMAIN_CDN_IMAGE,
           params: { pagination },
           titlePage,
+          seoOnPage,
         },
       },
     } = await axios.get(`https://phimapi.com/v1/api/danh-sach/${typeList}`, {
@@ -199,7 +234,9 @@ export const getVideosByTypeList = async (
 
     return {
       titlePage,
-      items: items.map((item: any) => ({
+      seoOnPage: seoOnPage as SeoOnPage,
+
+      items: items.map((item: LatestVideoRaw) => ({
         id: item._id,
         name: item.name,
         originName: item.origin_name,
@@ -233,6 +270,7 @@ export const getVideosByCountry = async (
           APP_DOMAIN_CDN_IMAGE,
           params: { pagination },
           titlePage,
+          seoOnPage,
         },
       },
     } = await axios.get(`https://phimapi.com/v1/api/quoc-gia/${countrySlug}`, {
@@ -241,7 +279,9 @@ export const getVideosByCountry = async (
 
     return {
       titlePage,
-      items: items.map((item: any) => ({
+      seoOnPage: seoOnPage as SeoOnPage,
+
+      items: items.map((item: LatestVideoRaw) => ({
         id: item._id,
         name: item.name,
         originName: item.origin_name,
@@ -275,6 +315,7 @@ export const getVideosByCategory = async (
           APP_DOMAIN_CDN_IMAGE,
           params: { pagination },
           titlePage,
+          seoOnPage,
         },
       },
     } = await axios.get(`https://phimapi.com/v1/api/the-loai/${categorySlug}`, {
@@ -283,7 +324,9 @@ export const getVideosByCategory = async (
 
     return {
       titlePage,
-      items: items.map((item: any) => ({
+      seoOnPage: seoOnPage as SeoOnPage,
+
+      items: items.map((item: LatestVideoRaw) => ({
         id: item._id,
         name: item.name,
         originName: item.origin_name,
@@ -308,7 +351,6 @@ export const getVideosByCategory = async (
 export type SearchVideosParams = VideosParams & { keyword: string };
 
 export const searchVideos = async (params: SearchVideosParams) => {
-  console.log("search", params);
   if (params.keyword) {
     try {
       const {
@@ -318,15 +360,16 @@ export const searchVideos = async (params: SearchVideosParams) => {
             APP_DOMAIN_CDN_IMAGE,
             params: { pagination },
             titlePage,
+            seoOnPage,
           },
         },
       } = await axios.get(`https://phimapi.com/v1/api/tim-kiem`, {
         params,
       });
-      console.log(params.page);
       return {
         titlePage,
-        items: items.map((item: any) => ({
+        seoOnPage: seoOnPage as SeoOnPage,
+        items: items.map((item: LatestVideoRaw) => ({
           id: item._id,
           name: item.name,
           originName: item.origin_name,

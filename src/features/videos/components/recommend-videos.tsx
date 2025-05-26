@@ -1,6 +1,5 @@
 "use client";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { Country } from "@/data/country";
 import Link from "next/link";
 import useGetVideosByTypeList from "../hooks/useGetVideosByTypeList";

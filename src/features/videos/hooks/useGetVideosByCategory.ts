@@ -1,8 +1,4 @@
-import {
-  getVideosByCategory,
-  getVideosByCountry,
-  VideosParams,
-} from "@/data/video";
+import { getVideosByCategory, VideosParams } from "@/data/video";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useGetVideosByCountry(

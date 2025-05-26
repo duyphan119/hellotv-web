@@ -1,6 +1,6 @@
 "use client";
 
-import { LatestVideo, Video } from "@/data/video";
+import { LatestVideo } from "@/data/video";
 import Link from "next/link";
 import Thumbnail from "./thumbnail";
 import { cn } from "@/lib/utils";

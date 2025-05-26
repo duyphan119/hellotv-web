@@ -3,7 +3,6 @@ import {
   getVideosByCategory,
   getVideosByCountry,
   getVideosByTypeList,
-  TypeList,
   VideosParams,
 } from "@/data/video";
 import { useInfiniteQuery } from "@tanstack/react-query";

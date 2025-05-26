@@ -40,7 +40,7 @@ export default function VideoStreaming({
   useEffect(() => {
     if (!data || !data.video) return;
 
-    let server: VideoServer | undefined = searchParams.ser
+    const server: VideoServer | undefined = searchParams.ser
       ? data.servers.find(({ name }) => name.includes(searchParams.ser))
       : data.servers[0];
 
@@ -48,7 +48,7 @@ export default function VideoStreaming({
 
     setCurrentServer(server);
 
-    let episode: Episode | undefined = searchParams.ep
+    const episode: Episode | undefined = searchParams.ep
       ? server.episodes.find(({ slug }) => searchParams.ep === slug)
       : server.episodes[0];
 
