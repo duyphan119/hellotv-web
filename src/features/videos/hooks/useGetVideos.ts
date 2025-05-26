@@ -11,21 +11,27 @@ export default function useGetVideos(params?: VideosParams) {
   return useInfiniteQuery({
     queryKey: ["videos", params],
     queryFn: ({ pageParam }) => {
-      if (params?.typelist)
+      if (params?.typelist) {
+        const { typelist, ...searchParams } = params;
         return getVideosByTypeList(params.typelist, {
-          ...params,
+          ...searchParams,
           page: pageParam,
         });
-      if (params?.country)
+      }
+      if (params?.country) {
+        const { country, ...searchParams } = params;
         return getVideosByCountry(params.country, {
-          ...params,
+          ...searchParams,
           page: pageParam,
         });
-      if (params?.category)
+      }
+      if (params?.category) {
+        const { category, ...searchParams } = params;
         return getVideosByCategory(params.category, {
-          ...params,
+          ...searchParams,
           page: pageParam,
         });
+      }
 
       return getLatestVideos({
         page: pageParam,

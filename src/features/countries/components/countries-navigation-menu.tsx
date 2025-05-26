@@ -7,11 +7,16 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { Country } from "@/data/country";
 import Link from "next/link";
-import useGetCountries from "../hooks/useGetCountries";
 
-export default function CountriesNavigationMenu() {
-  const { data: countriesData } = useGetCountries();
+type CountriesNavigationMenuProps = {
+  countries: Country[];
+};
+
+export default function CountriesNavigationMenu({
+  countries,
+}: CountriesNavigationMenuProps) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -19,10 +24,10 @@ export default function CountriesNavigationMenu() {
           <NavigationMenuTrigger>Quốc gia</NavigationMenuTrigger>
           <NavigationMenuContent>
             <div className="grid grid-cols-4 lg:w-[600px] sm:w-[300px] w-screen bg-neutral-900">
-              {countriesData?.map((country) => (
+              {countries.map((country) => (
                 <Link
                   key={country.name}
-                  href={`/danh-sach-phim&country=${country.slug}`}
+                  href={`/danh-sach-phim?country=${country.slug}`}
                   className="p-2 col-span-4 sm:col-span-2 lg:col-span-1 text-neutral-200 hover:text-yellow-600"
                 >
                   {country.name}

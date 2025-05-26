@@ -235,7 +235,6 @@ export const getVideosByTypeList = async (
     return {
       titlePage,
       seoOnPage: seoOnPage as SeoOnPage,
-
       items: items.map((item: LatestVideoRaw) => ({
         id: item._id,
         name: item.name,
@@ -280,7 +279,6 @@ export const getVideosByCountry = async (
     return {
       titlePage,
       seoOnPage: seoOnPage as SeoOnPage,
-
       items: items.map((item: LatestVideoRaw) => ({
         id: item._id,
         name: item.name,

@@ -33,6 +33,7 @@ export default function VideosPage({ searchParams }: VideosPageProps) {
         <VideosSkeleton />
       </div>
     );
+
   return (
     <div className="p-4">
       <Breadcrumb className="mb-4">
