@@ -20,9 +20,8 @@ import useGetCountries from "@/features/countries/hooks/useGetCountries";
 import SearchForm from "@/features/videos/components/search-form";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
-import axios from "axios";
 
 export default function Header() {
   const { data: categoriesData } = useGetCategories();

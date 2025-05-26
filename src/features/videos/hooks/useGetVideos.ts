@@ -13,21 +13,21 @@ export default function useGetVideos(params?: VideosParams) {
     queryFn: ({ pageParam }) => {
       if (params?.typelist) {
         const { typelist, ...searchParams } = params;
-        return getVideosByTypeList(params.typelist, {
+        return getVideosByTypeList(typelist, {
           ...searchParams,
           page: pageParam,
         });
       }
       if (params?.country) {
         const { country, ...searchParams } = params;
-        return getVideosByCountry(params.country, {
+        return getVideosByCountry(country, {
           ...searchParams,
           page: pageParam,
         });
       }
       if (params?.category) {
         const { category, ...searchParams } = params;
-        return getVideosByCategory(params.category, {
+        return getVideosByCategory(category, {
           ...searchParams,
           page: pageParam,
         });
