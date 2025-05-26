@@ -22,7 +22,7 @@ export default function CountriesNavigationMenu() {
               {countriesData?.map((country) => (
                 <Link
                   key={country.name}
-                  href={`/`}
+                  href={`/danh-sach-phim&country=${country.slug}`}
                   className="p-2 col-span-4 sm:col-span-2 lg:col-span-1 text-neutral-200 hover:text-yellow-600"
                 >
                   {country.name}

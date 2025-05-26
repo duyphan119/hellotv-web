@@ -5,7 +5,7 @@ type VideosSkeletonProps = {
 };
 
 export default function VideosSkeleton({
-  totalItems = 10,
+  totalItems = 15,
 }: VideosSkeletonProps) {
   return (
     <div className="grid grid-cols-12 xl:grid-cols-10 gap-4">

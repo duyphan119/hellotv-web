@@ -8,6 +8,5 @@ export default function useSearchVideos(params: SearchVideosParams) {
     initialPageParam: 1,
     getNextPageParam: ({ pagination: { currentPage, totalPages } }) =>
       currentPage + 1 > totalPages ? undefined : currentPage + 1,
-    staleTime: 345,
   });
 }

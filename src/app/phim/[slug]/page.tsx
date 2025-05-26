@@ -1,15 +1,17 @@
 import { getVideo } from "@/data/video";
 import { Metadata } from "next";
+import VideoDetailsPage from "@/features/videos/components/video-details";
 
 type VideoDetailsProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export const generateMetadata = async ({
-  params: { slug },
+  params,
 }: VideoDetailsProps): Promise<Metadata> => {
+  const { slug } = await params;
   try {
     const { video } = await getVideo(slug);
     if (video) {
@@ -23,6 +25,7 @@ export const generateMetadata = async ({
   };
 };
 
-export default function VideoDetails() {
-  return <div>VideoDetails</div>;
+export default async function VideoDetails({ params }: VideoDetailsProps) {
+  const { slug } = await params;
+  return <VideoDetailsPage slug={slug} />;
 }

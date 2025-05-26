@@ -22,7 +22,7 @@ export default function CategoriesNavigationMenu() {
               {categoriesData?.map((category) => (
                 <Link
                   key={category.name}
-                  href={`/`}
+                  href={`/danh-sach-phim&country=${category.slug}`}
                   className="p-2 col-span-4 sm:col-span-2 lg:col-span-1 text-neutral-200 hover:text-yellow-600"
                 >
                   {category.name}
