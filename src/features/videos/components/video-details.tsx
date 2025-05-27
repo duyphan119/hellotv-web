@@ -48,16 +48,16 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="col-span-12 md:col-span-9">
+          <div className="col-span-12 lg:col-span-9">
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 md:col-span-4">
+              <div className="col-span-12 sm:col-span-6 md:col-span-4">
                 <Poster
                   src={data.video.poster}
                   fallbackSrc={data.video.thumbnail}
                   alt={data.video.slug}
                 />
               </div>
-              <div className="col-span-12 md:col-span-8">
+              <div className="col-span-12 sm:col-span-6 md:col-span-8">
                 <div className="text-3xl font-medium">{data.video.name}</div>
                 <div className="text-neutral-400">{data.video.originName}</div>
                 <div className="mt-2">Đạo diễn: {data.video.director}</div>
@@ -71,7 +71,7 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
                   {data.video.categories.map((item) => item.name).join(", ")}
                 </div>
                 <div className="">
-                  Diễn viên: {data.video.actors.join(", ")}
+                  Diễn viên: {data.video.actors.slice(0, 5).join(", ")}
                 </div>
                 <div className="my-2">
                   <Link
@@ -87,7 +87,7 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
                 <div className="">
                   <div className="mb-2">Danh sách tập</div>
                   <ScrollArea className="h-36 bg-neutral-900 p-2 rounded-md">
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+                    <div className="grid grid-cols-5  sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-4">
                       {[...data.servers[0].episodes]
                         .reverse()
                         .map((episode) => (
@@ -125,7 +125,7 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
       ) : (
         <VideoDetailsSkeleton />
       )}
-      <div className="col-span-12 md:col-span-3">
+      <div className="col-span-12 lg:col-span-3">
         {data && data.video ? (
           <RecommendVideos slug={slug} country={data.video.countries[0]} />
         ) : (

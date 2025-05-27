@@ -19,7 +19,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 type VideoStreamingProps = {
@@ -169,7 +169,7 @@ export default function VideoStreaming({
                   {data.video.categories.map((item) => item.name).join(", ")}
                 </div>
                 <div className="mb-2">
-                  Diễn viên: {data.video.actors.join(", ")}
+                  Diễn viên: {data.video.actors.slice(0, 5).join(", ")}
                 </div>
                 <div className="mb-2">
                   {parseHtmlString(data.video.content)}
