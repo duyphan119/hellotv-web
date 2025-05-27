@@ -58,6 +58,7 @@ export default function SearchForm() {
           onFocus={() => {
             setVisible(true);
           }}
+          placeholder="Tìm kiếm phim..."
           className="outline-none bg-transparent w-full"
         />
         <button type="submit">

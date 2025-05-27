@@ -16,6 +16,7 @@ import Link from "next/link";
 import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type VideoDetailsProps = {
   slug: string;
@@ -69,22 +70,45 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
                   Thể loại:{" "}
                   {data.video.categories.map((item) => item.name).join(", ")}
                 </div>
-                <div className="mb-2">
+                <div className="">
                   Diễn viên: {data.video.actors.join(", ")}
                 </div>
-                <div className="mb-2">
-                  {parseHtmlString(data.video.content)}
-                </div>
-                <div className="">
+                <div className="my-2">
                   <Link
                     href={`/xem-phim/${data.video.slug}`}
                     className={buttonVariants({
                       size: "xl",
+                      variant: "green",
                     })}
                   >
                     XEM PHIM
                   </Link>
                 </div>
+                <div className="">
+                  <div className="mb-2">Danh sách tập</div>
+                  <ScrollArea className="h-36 bg-neutral-900 p-2 rounded-md">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+                      {[...data.servers[0].episodes]
+                        .reverse()
+                        .map((episode) => (
+                          <Link
+                            key={episode.name}
+                            href={`/xem-phim/${data.video.slug}?ep=${episode.slug}`}
+                            className={buttonVariants({
+                              className: "col-span-1",
+                              size: "sm",
+                            })}
+                          >
+                            {episode.name}
+                          </Link>
+                        ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+              <div className="col-span-12">
+                <div className="text-lg font-medium">Nội dung</div>
+                <div className="">{parseHtmlString(data.video.content)}</div>
               </div>
               {data.video.trailer && (
                 <div className="col-span-12">

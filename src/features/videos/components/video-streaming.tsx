@@ -16,9 +16,11 @@ import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-video
 import VideoDetailsSkeleton from "@/features/videos/skeletons/video-details-skeleton";
 import { parseHtmlString, shortenServerName } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type VideoStreamingProps = {
   slug: string;
@@ -32,10 +34,52 @@ export default function VideoStreaming({
   slug,
   searchParams,
 }: VideoStreamingProps) {
+  const router = useRouter();
+
   const { data } = useGetVideo(slug);
+
+  const divPlayerRef = useRef<HTMLDivElement | null>(null);
 
   const [currentServer, setCurrentServer] = useState<VideoServer>();
   const [currentEpisode, setCurrentEpisode] = useState<Episode>();
+
+  const handleSelectPreviousEpisode = () => {
+    if (!currentServer || !currentEpisode) return;
+
+    const currentIndex = currentServer.episodes.findIndex(
+      ({ slug }) => slug === currentEpisode.slug
+    );
+
+    if (currentIndex === -1) return;
+
+    const newIndex =
+      (currentIndex - 1 + currentServer.episodes.length) %
+      currentServer.episodes.length;
+
+    router.push(
+      `/xem-phim/${data?.video?.slug}?ep=${
+        currentServer.episodes[newIndex].slug
+      }&ser=${shortenServerName(currentServer.name)}`
+    );
+  };
+
+  const handleSelectNextEpisode = () => {
+    if (!currentServer || !currentEpisode) return;
+
+    const currentIndex = currentServer.episodes.findIndex(
+      ({ slug }) => slug === currentEpisode.slug
+    );
+
+    if (currentIndex === -1) return;
+
+    const newIndex = (currentIndex + 1) % currentServer.episodes.length;
+
+    router.push(
+      `/xem-phim/${data?.video?.slug}?ep=${
+        currentServer.episodes[newIndex].slug
+      }&ser=${shortenServerName(currentServer.name)}`
+    );
+  };
 
   useEffect(() => {
     if (!data || !data.video) return;
@@ -56,6 +100,12 @@ export default function VideoStreaming({
 
     setCurrentEpisode(episode);
   }, [data, searchParams]);
+
+  useEffect(() => {
+    if (divPlayerRef.current) {
+      divPlayerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentEpisode]);
 
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
@@ -125,17 +175,35 @@ export default function VideoStreaming({
                   {parseHtmlString(data.video.content)}
                 </div>
               </div>
-              <div className="col-span-12 space-y-4 mt-4">
+              <div ref={divPlayerRef} className="col-span-12 space-y-4 mt-4">
                 {currentEpisode && (
-                  <div className="text-xl font-medium">
-                    {currentEpisode.filename}
-                  </div>
+                  <>
+                    <div className="text-xl font-medium">
+                      {data.video.name} - {data.video.originName} -{" "}
+                      {data.video.year} - {currentEpisode.name}
+                    </div>
+                    <iframe
+                      src={currentEpisode.link_embed}
+                      allowFullScreen
+                      className="w-full aspect-video"
+                    ></iframe>
+                    <div className="flex items-center justify-center gap-4">
+                      <Button
+                        variant="secondary"
+                        onClick={handleSelectPreviousEpisode}
+                      >
+                        <ChevronLeft className="translate-y-[2px]" /> Tập trước
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={handleSelectNextEpisode}
+                      >
+                        Tập tiếp
+                        <ChevronRight className="translate-y-[2px]" />
+                      </Button>
+                    </div>
+                  </>
                 )}
-                <iframe
-                  src={currentEpisode?.link_embed}
-                  allowFullScreen
-                  className="w-full aspect-video"
-                ></iframe>
                 {currentServer && (
                   <Tabs defaultValue={currentServer.name} className="w-full">
                     <TabsList>
