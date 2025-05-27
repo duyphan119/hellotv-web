@@ -64,6 +64,7 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
                   Quốc gia:{" "}
                   {data.video.countries.map((item) => item.name).join(", ")}
                 </div>
+                <div className="">Năm: {data.video.year}</div>
                 <div className="">
                   Thể loại:{" "}
                   {data.video.categories.map((item) => item.name).join(", ")}
@@ -85,13 +86,15 @@ export default function VideoDetails({ slug }: VideoDetailsProps) {
                   </Link>
                 </div>
               </div>
-              <div className="col-span-12">
-                <div className="text-lg font-medium">Trailer</div>
-                <iframe
-                  src={data.video.trailer.replace("watch?v=", "embed/")}
-                  className="w-full aspect-video"
-                ></iframe>
-              </div>
+              {data.video.trailer && (
+                <div className="col-span-12">
+                  <div className="text-lg font-medium">Trailer</div>
+                  <iframe
+                    src={data.video.trailer.replace("watch?v=", "embed/")}
+                    className="w-full aspect-video"
+                  ></iframe>
+                </div>
+              )}
             </div>
           </div>
         </>

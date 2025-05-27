@@ -77,6 +77,11 @@ export default function SearchForm() {
                       <Link
                         key={video.slug}
                         href={`/phim/${video.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setVisible(false);
+                          window.location.href = `/phim/${video.slug}`;
+                        }}
                         className="grid grid-cols-3 gap-4 hover:text-yellow-600"
                       >
                         <div className="col-span-1">

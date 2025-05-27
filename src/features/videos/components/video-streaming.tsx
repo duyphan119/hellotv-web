@@ -113,6 +113,7 @@ export default function VideoStreaming({
                   Quốc gia:{" "}
                   {data.video.countries.map((item) => item.name).join(", ")}
                 </div>
+                <div className="">Năm: {data.video.year}</div>
                 <div className="">
                   Thể loại:{" "}
                   {data.video.categories.map((item) => item.name).join(", ")}
