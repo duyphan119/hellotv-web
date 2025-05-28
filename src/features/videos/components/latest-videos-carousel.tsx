@@ -5,7 +5,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { LatestVideo } from "@/data/video";
+import { LatestVideo } from "@/features/videos/data";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
 import Thumbnail from "./thumbnail";

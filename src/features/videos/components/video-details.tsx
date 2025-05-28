@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Video, VideoServer } from "@/data/video";
+import { Video, VideoServer } from "@/features/videos/data";
 import { parseHtmlString } from "@/lib/utils";
 import Link from "next/link";
 import Poster from "./poster";
@@ -45,14 +45,14 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
       </Breadcrumb>
       <div className="col-span-12 lg:col-span-9">
         <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 sm:col-span-6 md:col-span-4">
+          <div className="col-span-12 sm:col-span-6 xl:col-span-4">
             <Poster
               src={video.poster}
               fallbackSrc={video.thumbnail}
               alt={video.slug}
             />
           </div>
-          <div className="col-span-12 sm:col-span-6 md:col-span-8">
+          <div className="col-span-12 sm:col-span-6 xl:col-span-8">
             <div className="text-3xl font-medium">{video.name}</div>
             <div className="text-neutral-400">{video.originName}</div>
             <div className="mt-2">Đạo diễn: {video.director}</div>
@@ -77,8 +77,8 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
             </div>
             <div className="">
               <div className="mb-2">Danh sách tập</div>
-              <ScrollArea className="h-36 bg-neutral-900 p-2 rounded-md">
-                <div className="grid grid-cols-5  sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-4">
+              <ScrollArea className="bg-neutral-900 rounded-md">
+                <div className="max-h-[9rem] xl:max-h-[11.75rem] grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 p-3">
                   {[...servers[0].episodes].reverse().map((episode) => (
                     <Link
                       key={episode.name}

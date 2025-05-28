@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Episode, Video, VideoServer } from "@/data/video";
+import { Episode, Video, VideoServer } from "@/features/videos/data";
 import { parseHtmlString, shortenServerName } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type VideoStreamingProps = {
   video: Video;
@@ -180,39 +181,40 @@ export default function VideoStreaming({
                 </TabsList>
                 {servers.map((server) => (
                   <TabsContent key={server.name} value={server.name}>
-                    <div className="grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
-                      {server.episodes.map((episode) => {
-                        const isActive =
-                          episode && episode.filename === episode.filename;
-                        const variant = isActive ? "green" : "default";
-                        const className =
-                          "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
-                        if (isActive)
+                    <ScrollArea className="">
+                      <div className="max-h-[10.75rem] grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+                        {server.episodes.map((item) => {
+                          const isActive = episode.filename === item.filename;
+                          const variant = isActive ? "green" : "default";
+                          const className =
+                            "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
+                          if (isActive)
+                            return (
+                              <Button
+                                key={item.slug}
+                                variant={variant}
+                                className={className}
+                              >
+                                {item.name}
+                              </Button>
+                            );
                           return (
-                            <Button
-                              key={episode.slug}
-                              variant={variant}
-                              className={className}
+                            <Link
+                              key={item.slug}
+                              href={`/xem-phim/${video.slug}?ep=${
+                                item.slug
+                              }&ser=${shortenServerName(server.name)}`}
+                              className={buttonVariants({
+                                variant,
+                                className,
+                              })}
                             >
-                              {episode.name}
-                            </Button>
+                              {item.name}
+                            </Link>
                           );
-                        return (
-                          <Link
-                            key={episode.slug}
-                            href={`/xem-phim/${video.slug}?ep=${
-                              episode.slug
-                            }&ser=${shortenServerName(server.name)}`}
-                            className={buttonVariants({
-                              variant,
-                              className,
-                            })}
-                          >
-                            {episode.name}
-                          </Link>
-                        );
-                      })}
-                    </div>
+                        })}
+                      </div>
+                    </ScrollArea>
                   </TabsContent>
                 ))}
               </Tabs>

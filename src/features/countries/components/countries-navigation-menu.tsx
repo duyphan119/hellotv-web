@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Country } from "@/data/country";
+import { Country } from "@/features/countries/data";
 import Link from "next/link";
 
 type CountriesNavigationMenuProps = {

@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Category } from "@/data/category";
+import { Category } from "@/features/categories/data";
 import Link from "next/link";
 
 type CategoriesNavigationMenuProps = {

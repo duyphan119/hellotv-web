@@ -1,6 +1,6 @@
 "use client";
 
-import { LatestVideo } from "@/data/video";
+import { LatestVideo } from "@/features/videos/data";
 import VideosSkeleton from "@/features/videos/skeletons/videos-skeleton";
 import VideoCard from "./video-card";
 

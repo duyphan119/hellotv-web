@@ -12,7 +12,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { typeList } from "@/data/video";
+import { typeList } from "@/features/videos/data";
 import CategoriesNavigationMenu from "@/features/categories/components/categories-navigation-menu";
 import useGetCategories from "@/features/categories/hooks/useGetCategories";
 import CountriesNavigationMenu from "@/features/countries/components/countries-navigation-menu";

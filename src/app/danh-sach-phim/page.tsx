@@ -13,7 +13,7 @@ import {
   getVideosByCountry,
   getVideosByTypeList,
   VideosParams,
-} from "@/data/video";
+} from "@/features/videos/data";
 import Videos from "@/features/videos/components/videos";
 import VideosPagination from "@/features/videos/components/videos-pagination";
 import { Metadata } from "next";

@@ -1,4 +1,4 @@
-import { searchVideos, SearchVideosParams } from "@/data/video";
+import { searchVideos, SearchVideosParams } from "@/features/videos/data";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useSearchVideos(params: SearchVideosParams) {

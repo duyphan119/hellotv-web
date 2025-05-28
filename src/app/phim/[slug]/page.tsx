@@ -1,4 +1,4 @@
-import { getVideo } from "@/data/video";
+import { getVideo } from "@/features/videos/data";
 import { Metadata } from "next";
 import VideoDetailsPage from "@/features/videos/components/video-details";
 import { notFound } from "next/navigation";

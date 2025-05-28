@@ -8,7 +8,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Pagination as PaginationResponse, VideosParams } from "@/data/video";
+import {
+  Pagination as PaginationResponse,
+  VideosParams,
+} from "@/features/videos/data";
 import { usePathname } from "next/navigation";
 import qs from "query-string";
 

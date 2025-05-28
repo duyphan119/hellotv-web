@@ -2,7 +2,7 @@ import {
   getLatestVideos,
   getVideosByCountry,
   getVideosByTypeList,
-} from "@/data/video";
+} from "@/features/videos/data";
 import LatestVideosCarousel from "@/features/videos/components/latest-videos-carousel";
 import Videos from "@/features/videos/components/videos";
 import Link from "next/link";

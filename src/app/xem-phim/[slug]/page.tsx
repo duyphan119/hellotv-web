@@ -1,4 +1,4 @@
-import { Episode, getVideo, VideoServer } from "@/data/video";
+import { Episode, getVideo, VideoServer } from "@/features/videos/data";
 import VideoStreamingPage from "@/features/videos/components/video-streaming";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";

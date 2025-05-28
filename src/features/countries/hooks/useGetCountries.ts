@@ -1,4 +1,4 @@
-import { getCountries } from "@/data/country";
+import { getCountries } from "@/features/countries/data";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useGetCountries() {

@@ -19,7 +19,7 @@ export default function Thumbnail({
         fallbackSrc={fallbackSrc}
         alt={alt}
         fill
-        className="rounded-md"
+        className="rounded-md object-cover"
         sizes="(max-width:1000px) 50vw, 100vw"
         priority={true}
       />

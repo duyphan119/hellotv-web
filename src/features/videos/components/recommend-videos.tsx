@@ -1,6 +1,6 @@
 "use client";
 
-import { Country } from "@/data/country";
+import { Country } from "@/features/countries/data";
 import Link from "next/link";
 import Thumbnail from "./thumbnail";
 import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";

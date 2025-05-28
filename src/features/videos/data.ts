@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Category } from "./category";
-import { Country } from "./country";
+import { Category } from "@/features/categories/data";
+import { Country } from "@/features/countries/data";
 
 export type LatestVideo = {
   id: string;
