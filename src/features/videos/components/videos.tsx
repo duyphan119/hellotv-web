@@ -1,7 +1,7 @@
 "use client";
 
 import { LatestVideo } from "@/data/video";
-import VideosSkeleton from "../skeletons/videos-skeleton";
+import VideosSkeleton from "@/features/videos/skeletons/videos-skeleton";
 import VideoCard from "./video-card";
 
 type VideosProps = {

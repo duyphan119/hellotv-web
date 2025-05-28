@@ -2,12 +2,12 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import useSearchVideos from "@/features/videos/hooks/useSearchVideos";
 import { Loader2, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
-import useSearchVideos from "../hooks/useSearchVideos";
 import Thumbnail from "./thumbnail";
 
 export default function SearchForm() {
@@ -71,32 +71,29 @@ export default function SearchForm() {
             <>
               <ScrollArea className="h-[360px]">
                 <div className="space-y-4">
-                  {data.pages
-                    .map(({ items }) => items)
-                    .flat()
-                    .map((video) => (
-                      <Link
-                        key={video.slug}
-                        href={`/phim/${video.slug}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setVisible(false);
-                          window.location.href = `/phim/${video.slug}`;
-                        }}
-                        className="grid grid-cols-3 gap-4 hover:text-yellow-600"
-                      >
-                        <div className="col-span-1">
-                          <Thumbnail
-                            src={video.thumbnail}
-                            fallbackSrc={video.poster}
-                            alt={video.slug}
-                          />
-                        </div>
-                        <div className="col-span-2">
-                          <div className="">{video.name}</div>
-                        </div>
-                      </Link>
-                    ))}
+                  {data.items.map((video) => (
+                    <Link
+                      key={video.slug}
+                      href={`/phim/${video.slug}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setVisible(false);
+                        window.location.href = `/phim/${video.slug}`;
+                      }}
+                      className="grid grid-cols-3 gap-4 hover:text-yellow-600"
+                    >
+                      <div className="col-span-1">
+                        <Thumbnail
+                          src={video.thumbnail}
+                          fallbackSrc={video.poster}
+                          alt={video.slug}
+                        />
+                      </div>
+                      <div className="col-span-2">
+                        <div className="">{video.name}</div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </ScrollArea>
               <Separator />

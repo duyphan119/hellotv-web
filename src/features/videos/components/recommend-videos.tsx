@@ -2,9 +2,9 @@
 
 import { Country } from "@/data/country";
 import Link from "next/link";
-import useGetVideosByTypeList from "../hooks/useGetVideosByTypeList";
 import Thumbnail from "./thumbnail";
-import RecommendVideosSkeleton from "../skeletons/recommend-videos-skeleton";
+import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
+import useGetVideosByTypeList from "@/features/videos/hooks/useGetVideosByTypeList";
 
 type RecommendVideosProps = {
   slug: string;

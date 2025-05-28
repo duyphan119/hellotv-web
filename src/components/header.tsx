@@ -62,7 +62,7 @@ export default function Header() {
                   <AccordionItem value="country">
                     <AccordionTrigger>Quốc gia</AccordionTrigger>
                     <AccordionContent>
-                      <div className="grid grid-cols-3 bg-neutral-900">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 bg-neutral-900">
                         {countriesData?.map((country) => (
                           <Link
                             key={country.name}
@@ -81,7 +81,7 @@ export default function Header() {
                   <AccordionItem value="category">
                     <AccordionTrigger>Thể loại</AccordionTrigger>
                     <AccordionContent>
-                      <div className="grid grid-cols-3 bg-neutral-900">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 bg-neutral-900">
                         {categoriesData?.map((category) => (
                           <Link
                             key={category.name}
