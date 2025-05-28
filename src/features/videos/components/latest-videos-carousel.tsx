@@ -5,17 +5,18 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import useGetLatestVideos from "@/features/videos/hooks/useGetLatestVideos";
-import LatestVideosCarouselSkeleton from "@/features/videos/skeletons/latest-videos-carousel-skeleton";
+import { LatestVideo } from "@/data/video";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
 import Thumbnail from "./thumbnail";
 
-export default function LatestVideosCarousel() {
-  const { data } = useGetLatestVideos();
+type LatestVideosCarouselProps = {
+  videos: LatestVideo[];
+};
 
-  if (!data) return <LatestVideosCarouselSkeleton />;
-
+export default function LatestVideosCarousel({
+  videos,
+}: LatestVideosCarouselProps) {
   return (
     <Carousel
       plugins={[
@@ -25,7 +26,7 @@ export default function LatestVideosCarousel() {
       ]}
     >
       <CarouselContent>
-        {data.pages[0].items.map((item) => {
+        {videos.map((item) => {
           return (
             <CarouselItem
               key={item.id}

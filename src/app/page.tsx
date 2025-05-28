@@ -1,17 +1,31 @@
-import ChinaVideos from "@/features/videos/components/china-videos";
-import KoreaVideos from "@/features/videos/components/korea-videos";
+import {
+  getLatestVideos,
+  getVideosByCountry,
+  getVideosByTypeList,
+} from "@/data/video";
 import LatestVideosCarousel from "@/features/videos/components/latest-videos-carousel";
-import SeriesVideos from "@/features/videos/components/series-videos";
+import Videos from "@/features/videos/components/videos";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const results = await Promise.allSettled([
+    getLatestVideos(),
+    getVideosByCountry("han-quoc"),
+    getVideosByCountry("trung-quoc"),
+    getVideosByTypeList("phim-bo"),
+    getVideosByTypeList("phim-le"),
+  ]);
   return (
     <div className="p-4 space-y-8">
       <div className="space-y-4">
         <Link href={`/danh-sach-phim`} className="hover:text-yellow-600">
           PHIM MỚI CẬP NHẬT
         </Link>
-        <LatestVideosCarousel />
+        <LatestVideosCarousel
+          videos={
+            results[0].status === "fulfilled" ? results[0].value.items : []
+          }
+        />
       </div>
       <div className="space-y-4">
         <Link
@@ -20,7 +34,11 @@ export default function Home() {
         >
           HÀN QUỐC
         </Link>
-        <KoreaVideos />
+        <Videos
+          videos={
+            results[1].status === "fulfilled" ? results[1].value.items : []
+          }
+        />
       </div>
       <div className="space-y-4">
         <Link
@@ -29,7 +47,11 @@ export default function Home() {
         >
           TRUNG QUỐC
         </Link>
-        <ChinaVideos />
+        <Videos
+          videos={
+            results[2].status === "fulfilled" ? results[2].value.items : []
+          }
+        />
       </div>
       <div className="space-y-4">
         <Link
@@ -38,7 +60,24 @@ export default function Home() {
         >
           PHIM BỘ
         </Link>
-        <SeriesVideos />
+        <Videos
+          videos={
+            results[3].status === "fulfilled" ? results[3].value.items : []
+          }
+        />
+      </div>
+      <div className="space-y-4">
+        <Link
+          href={`/danh-sach-phim?typelist=phim-bo`}
+          className="hover:text-yellow-600"
+        >
+          PHIM LẺ
+        </Link>
+        <Videos
+          videos={
+            results[4].status === "fulfilled" ? results[4].value.items : []
+          }
+        />
       </div>
     </div>
   );

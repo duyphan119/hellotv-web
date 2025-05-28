@@ -10,262 +10,218 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Episode, VideoServer } from "@/data/video";
-import useGetVideo from "@/features/videos/hooks/useGetVideo";
-import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
-import VideoDetailsSkeleton from "@/features/videos/skeletons/video-details-skeleton";
+import { Episode, Video, VideoServer } from "@/data/video";
 import { parseHtmlString, shortenServerName } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 type VideoStreamingProps = {
-  slug: string;
-  searchParams: {
-    ep: string;
-    ser: string;
-  };
+  video: Video;
+  servers: VideoServer[];
+  server: VideoServer;
+  episode: Episode;
 };
 
 export default function VideoStreaming({
-  slug,
-  searchParams,
+  episode,
+  server,
+  servers,
+  video,
 }: VideoStreamingProps) {
   const router = useRouter();
 
-  const { data } = useGetVideo(slug);
-
   const divPlayerRef = useRef<HTMLDivElement | null>(null);
 
-  const [currentServer, setCurrentServer] = useState<VideoServer>();
-  const [currentEpisode, setCurrentEpisode] = useState<Episode>();
-
   const handleSelectPreviousEpisode = () => {
-    if (!currentServer || !currentEpisode) return;
+    if (!server || !episode) return;
 
-    const currentIndex = currentServer.episodes.findIndex(
-      ({ slug }) => slug === currentEpisode.slug
+    const currentIndex = server.episodes.findIndex(
+      ({ slug }) => slug === episode.slug
     );
 
     if (currentIndex === -1) return;
 
     const newIndex =
-      (currentIndex - 1 + currentServer.episodes.length) %
-      currentServer.episodes.length;
+      (currentIndex - 1 + server.episodes.length) % server.episodes.length;
 
     router.push(
-      `/xem-phim/${data?.video?.slug}?ep=${
-        currentServer.episodes[newIndex].slug
-      }&ser=${shortenServerName(currentServer.name)}`
+      `/xem-phim/${video.slug}?ep=${
+        server.episodes[newIndex].slug
+      }&ser=${shortenServerName(server.name)}`
     );
   };
 
   const handleSelectNextEpisode = () => {
-    if (!currentServer || !currentEpisode) return;
+    if (!server || !episode) return;
 
-    const currentIndex = currentServer.episodes.findIndex(
-      ({ slug }) => slug === currentEpisode.slug
+    const currentIndex = server.episodes.findIndex(
+      ({ slug }) => slug === episode.slug
     );
 
     if (currentIndex === -1) return;
 
-    const newIndex = (currentIndex + 1) % currentServer.episodes.length;
+    const newIndex = (currentIndex + 1) % server.episodes.length;
 
     router.push(
-      `/xem-phim/${data?.video?.slug}?ep=${
-        currentServer.episodes[newIndex].slug
-      }&ser=${shortenServerName(currentServer.name)}`
+      `/xem-phim/${video.slug}?ep=${
+        server.episodes[newIndex].slug
+      }&ser=${shortenServerName(server.name)}`
     );
   };
-
-  useEffect(() => {
-    if (!data || !data.video) return;
-
-    const server: VideoServer | undefined = searchParams.ser
-      ? data.servers.find(({ name }) => name.includes(searchParams.ser))
-      : data.servers[0];
-
-    if (!server) return;
-
-    setCurrentServer(server);
-
-    const episode: Episode | undefined = searchParams.ep
-      ? server.episodes.find(({ slug }) => searchParams.ep === slug)
-      : server.episodes[0];
-
-    if (!episode) return;
-
-    setCurrentEpisode(episode);
-  }, [data, searchParams]);
 
   useEffect(() => {
     if (divPlayerRef.current) {
       divPlayerRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [currentEpisode]);
+  }, [episode]);
 
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
-      {data && data.video ? (
-        <>
-          <Breadcrumb className="col-span-12">
-            <BreadcrumbList>
+      <Breadcrumb className="col-span-12">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Trang chủ</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/danh-sach-phim">Danh sách phim</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          {episode ? (
+            <>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/">Trang chủ</Link>
+                  <Link href={`/phim/${video.slug}`}>{video.name}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="/danh-sach-phim">Danh sách phim</Link>
-                </BreadcrumbLink>
+                <BreadcrumbPage>{episode.name}</BreadcrumbPage>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              {currentEpisode ? (
-                <>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                      <Link href={`/phim/${data.video.slug}`}>
-                        {data.video.name}
-                      </Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{currentEpisode.name}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </>
-              ) : (
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{data.video.name}</BreadcrumbPage>
-                </BreadcrumbItem>
-              )}
-            </BreadcrumbList>
-          </Breadcrumb>
-          <div className="col-span-12 md:col-span-9">
-            <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-12 md:col-span-4">
-                <Poster
-                  src={data.video.poster}
-                  fallbackSrc={data.video.thumbnail}
-                  alt={data.video.slug}
-                />
-              </div>
-              <div className="col-span-12 md:col-span-8">
-                <div className="text-3xl font-medium">{data.video.name}</div>
-                <div className="text-neutral-400">{data.video.originName}</div>
-                <div className="mt-2">Đạo diễn: {data.video.director}</div>
-                <div className="">
-                  Quốc gia:{" "}
-                  {data.video.countries.map((item) => item.name).join(", ")}
-                </div>
-                <div className="">Năm: {data.video.year}</div>
-                <div className="">
-                  Thể loại:{" "}
-                  {data.video.categories.map((item) => item.name).join(", ")}
-                </div>
-                <div className="mb-2">
-                  Diễn viên: {data.video.actors.slice(0, 5).join(", ")}
-                </div>
-                <div className="mb-2">
-                  {parseHtmlString(data.video.content)}
-                </div>
-              </div>
-              <div ref={divPlayerRef} className="col-span-12 space-y-4 mt-4">
-                {currentEpisode && (
-                  <>
-                    <div className="text-xl font-medium">
-                      {data.video.name} - {data.video.originName} -{" "}
-                      {data.video.year} - {currentEpisode.name}
-                    </div>
-                    <iframe
-                      src={currentEpisode.link_embed}
-                      allowFullScreen
-                      className="w-full aspect-video"
-                    ></iframe>
-                    <div className="flex items-center justify-center gap-4">
-                      <Button
-                        variant="secondary"
-                        onClick={handleSelectPreviousEpisode}
-                      >
-                        <ChevronLeft className="translate-y-[2px]" /> Tập trước
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        onClick={handleSelectNextEpisode}
-                      >
-                        Tập tiếp
-                        <ChevronRight className="translate-y-[2px]" />
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {currentServer && (
-                  <Tabs defaultValue={currentServer.name} className="w-full">
-                    <TabsList>
-                      {data.servers.map((server) => (
-                        <TabsTrigger key={server.name} value={server.name}>
-                          {shortenServerName(server.name)}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                    {data.servers.map((server) => (
-                      <TabsContent key={server.name} value={server.name}>
-                        <div className="grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
-                          {server.episodes.map((episode) => {
-                            const isActive =
-                              currentEpisode &&
-                              currentEpisode.filename === episode.filename;
-                            const variant = isActive ? "green" : "default";
-                            const className =
-                              "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
-                            if (isActive)
-                              return (
-                                <Button
-                                  key={episode.slug}
-                                  variant={variant}
-                                  className={className}
-                                >
-                                  {episode.name}
-                                </Button>
-                              );
-                            return (
-                              <Link
-                                key={episode.slug}
-                                href={`/xem-phim/${data.video.slug}?ep=${
-                                  episode.slug
-                                }&ser=${shortenServerName(server.name)}`}
-                                className={buttonVariants({
-                                  variant,
-                                  className,
-                                })}
-                              >
-                                {episode.name}
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </TabsContent>
-                    ))}
-                  </Tabs>
-                )}
-              </div>
-            </div>
+            </>
+          ) : (
+            <BreadcrumbItem>
+              <BreadcrumbPage>{video.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          )}
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="col-span-12 lg:col-span-9">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 sm:col-span-6 md:col-span-4 md:order-1 order-2">
+            <Poster
+              src={video.poster}
+              fallbackSrc={video.thumbnail}
+              alt={video.slug}
+            />
           </div>
-        </>
-      ) : (
-        <VideoDetailsSkeleton />
-      )}
-      <div className="col-span-12 md:col-span-3">
-        {data && data.video ? (
-          <RecommendVideos slug={slug} country={data.video.countries[0]} />
-        ) : (
-          <RecommendVideosSkeleton />
-        )}
+          <div className="col-span-12 sm:col-span-6 md:col-span-8 md:order-2 order-3">
+            <div className="text-3xl font-medium">{video.name}</div>
+            <div className="text-neutral-400">{video.originName}</div>
+            <div className="mt-2">Đạo diễn: {video.director}</div>
+            <div className="">
+              Quốc gia: {video.countries.map((item) => item.name).join(", ")}
+            </div>
+            <div className="">Năm: {video.year}</div>
+            <div className="">
+              Thể loại: {video.categories.map((item) => item.name).join(", ")}
+            </div>
+            <div className="mb-2">Diễn viên: {video.actors.join(", ")}</div>
+          </div>
+          <div className="col-span-12 md:order-3 order-4">
+            <div className="text-xl font-medium">Nội dung</div>
+            <div className="">{parseHtmlString(video.content)}</div>
+          </div>
+          <div
+            ref={divPlayerRef}
+            className="col-span-12 space-y-4 md:order-4 order-1"
+          >
+            {episode && (
+              <>
+                <div className="text-xl font-medium">
+                  {video.name} - {video.originName} - {video.year} -{" "}
+                  {episode.name}
+                </div>
+                <iframe
+                  src={episode.link_embed}
+                  allowFullScreen
+                  className="w-full aspect-video"
+                ></iframe>
+                <div className="flex items-center justify-center gap-4">
+                  <Button
+                    variant="secondary"
+                    onClick={handleSelectPreviousEpisode}
+                  >
+                    <ChevronLeft className="translate-y-[2px]" /> Tập trước
+                  </Button>
+                  <Button variant="secondary" onClick={handleSelectNextEpisode}>
+                    Tập tiếp
+                    <ChevronRight className="translate-y-[2px]" />
+                  </Button>
+                </div>
+              </>
+            )}
+            {server && (
+              <Tabs defaultValue={server.name} className="w-full">
+                <TabsList>
+                  {servers.map((server) => (
+                    <TabsTrigger key={server.name} value={server.name}>
+                      {shortenServerName(server.name)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                {servers.map((server) => (
+                  <TabsContent key={server.name} value={server.name}>
+                    <div className="grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+                      {server.episodes.map((episode) => {
+                        const isActive =
+                          episode && episode.filename === episode.filename;
+                        const variant = isActive ? "green" : "default";
+                        const className =
+                          "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
+                        if (isActive)
+                          return (
+                            <Button
+                              key={episode.slug}
+                              variant={variant}
+                              className={className}
+                            >
+                              {episode.name}
+                            </Button>
+                          );
+                        return (
+                          <Link
+                            key={episode.slug}
+                            href={`/xem-phim/${video.slug}?ep=${
+                              episode.slug
+                            }&ser=${shortenServerName(server.name)}`}
+                            className={buttonVariants({
+                              variant,
+                              className,
+                            })}
+                          >
+                            {episode.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </TabsContent>
+                ))}
+              </Tabs>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="col-span-12 lg:col-span-3">
+        <RecommendVideos slug={video.slug} country={video.countries[0]} />
       </div>
     </div>
   );

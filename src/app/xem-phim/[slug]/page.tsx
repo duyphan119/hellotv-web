@@ -1,6 +1,7 @@
-import { getVideo } from "@/data/video";
+import { Episode, getVideo, VideoServer } from "@/data/video";
 import VideoStreamingPage from "@/features/videos/components/video-streaming";
 import { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
 
 type VideoStreamingProps = {
   params: Promise<{
@@ -21,14 +22,13 @@ export const generateMetadata = async ({
     const { video, servers } = await getVideo(slug);
     const { ep, ser } = await searchParams;
     if (video) {
-      const episode = servers
-        .find(({ name }) => name.includes(ser))
-        ?.episodes?.find(({ slug }) => slug === ep);
+      const server =
+        servers.find(({ name }) => name.includes(ser)) || servers[0];
+      const episode =
+        server?.episodes?.find(({ slug }) => slug === ep) ||
+        server?.episodes?.[0];
       return {
-        title: `Hellotv | Xem phim ${video.name}`.replace(
-          "|",
-          episode ? `| ${episode.name} |` : "|"
-        ),
+        title: `Hellotv ${episode ? `| ${episode.name} |` : "|"} ${video.name}`,
       };
     }
   } catch (error) {
@@ -45,6 +45,27 @@ export default async function VideoStreaming({
 }: VideoStreamingProps) {
   const { slug } = await params;
   const awaitedSearchParams = await searchParams;
+  const { video, servers } = await getVideo(slug);
+  if (!video) return notFound();
 
-  return <VideoStreamingPage slug={slug} searchParams={awaitedSearchParams} />;
+  const server: VideoServer | undefined = awaitedSearchParams.ser
+    ? servers.find(({ name }) => name.includes(awaitedSearchParams.ser))
+    : servers[0];
+
+  if (!server) return redirect(`/phim/${video.slug}`);
+
+  const episode: Episode | undefined = awaitedSearchParams.ep
+    ? server.episodes.find(({ slug }) => awaitedSearchParams.ep === slug)
+    : server.episodes[0];
+
+  if (!episode) return redirect(`/phim/${video.slug}`);
+
+  return (
+    <VideoStreamingPage
+      video={video}
+      servers={servers}
+      server={server}
+      episode={episode}
+    />
+  );
 }

@@ -11,17 +11,19 @@ type RecommendVideosProps = {
   country?: Country;
 };
 
+const LIMIT = 9;
+
 export default function RecommendVideos({
   slug,
   country,
 }: RecommendVideosProps) {
   const { data: seriesData } = useGetVideosByTypeList("phim-bo", {
     country: country?.slug,
-    limit: 8,
+    limit: LIMIT,
   });
   const { data: movieData } = useGetVideosByTypeList("phim-le", {
     country: country?.slug,
-    limit: 8,
+    limit: LIMIT,
   });
 
   if (!seriesData || !movieData) return <RecommendVideosSkeleton />;
@@ -39,11 +41,11 @@ export default function RecommendVideos({
       <div className="space-y-4 mt-4">
         {seriesData.pages[0].items
           .filter((item) => item.slug !== slug)
-          .slice(0, 7)
+
           .map((video) => (
             <div key={video.slug} className="group">
               <Link
-                href={`/xem-phim/${video.slug}`}
+                href={`/phim/${video.slug}`}
                 className="grid grid-cols-12 gap-4"
               >
                 <div className="col-span-12 md:col-span-4">
@@ -73,7 +75,6 @@ export default function RecommendVideos({
       <div className="space-y-4 mt-4">
         {movieData.pages[0].items
           .filter((item) => item.slug !== slug)
-          .slice(0, 7)
           .map((video) => (
             <div key={video.slug} className="group">
               <Link
