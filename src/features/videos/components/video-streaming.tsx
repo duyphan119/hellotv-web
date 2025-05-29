@@ -9,6 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Episode, Video, VideoServer } from "@/features/videos/data";
 import { parseHtmlString, shortenServerName } from "@/lib/utils";
@@ -18,48 +19,51 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 type VideoStreamingProps = {
   video: Video;
   servers: VideoServer[];
-  server: VideoServer;
+  indexServer: number;
   episode: Episode;
 };
 
 export default function VideoStreaming({
   episode,
-  server,
+  indexServer,
   servers,
   video,
 }: VideoStreamingProps) {
   const router = useRouter();
 
   const divPlayerRef = useRef<HTMLDivElement | null>(null);
+  const buttonEpisodeRef = useRef<HTMLButtonElement | null>(null);
 
   const handleSelectPreviousEpisode = () => {
-    if (!server || !episode) return;
+    if (!episode) return;
 
-    const currentIndex = server.episodes.findIndex(
+    const server = servers[indexServer];
+    const { episodes } = server;
+
+    const currentIndex = episodes.findIndex(
       ({ slug }) => slug === episode.slug
     );
 
     if (currentIndex === -1) return;
 
-    const newIndex =
-      (currentIndex - 1 + server.episodes.length) % server.episodes.length;
+    const newIndex = (currentIndex - 1 + episodes.length) % episodes.length;
 
     router.push(
-      `/xem-phim/${video.slug}?ep=${
-        server.episodes[newIndex].slug
-      }&ser=${shortenServerName(server.name)}`
+      `/xem-phim/${video.slug}?ep=${servers[indexServer].episodes[newIndex].slug}&ser=${indexServer}`
     );
   };
 
   const handleSelectNextEpisode = () => {
-    if (!server || !episode) return;
+    if (!episode) return;
 
-    const currentIndex = server.episodes.findIndex(
+    const server = servers[indexServer];
+    const { episodes } = server;
+
+    const currentIndex = episodes.findIndex(
       ({ slug }) => slug === episode.slug
     );
 
@@ -68,15 +72,21 @@ export default function VideoStreaming({
     const newIndex = (currentIndex + 1) % server.episodes.length;
 
     router.push(
-      `/xem-phim/${video.slug}?ep=${
-        server.episodes[newIndex].slug
-      }&ser=${shortenServerName(server.name)}`
+      `/xem-phim/${video.slug}?ep=${server.episodes[newIndex].slug}&ser=${indexServer}`
     );
   };
 
   useEffect(() => {
-    if (divPlayerRef.current) {
-      divPlayerRef.current.scrollIntoView({ behavior: "smooth" });
+    if (buttonEpisodeRef.current) {
+      buttonEpisodeRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      if (divPlayerRef.current) {
+        divPlayerRef.current.scrollIntoView({
+          behavior: "smooth",
+        });
+      }
     }
   }, [episode]);
 
@@ -170,55 +180,52 @@ export default function VideoStreaming({
                 </div>
               </>
             )}
-            {server && (
-              <Tabs defaultValue={server.name} className="w-full">
-                <TabsList>
-                  {servers.map((server) => (
-                    <TabsTrigger key={server.name} value={server.name}>
-                      {shortenServerName(server.name)}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
+            <Tabs defaultValue={servers[indexServer].name} className="w-full">
+              <TabsList>
                 {servers.map((server) => (
-                  <TabsContent key={server.name} value={server.name}>
-                    <ScrollArea className="">
-                      <div className="max-h-[10.75rem] grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
-                        {server.episodes.map((item) => {
-                          const isActive = episode.filename === item.filename;
-                          const variant = isActive ? "green" : "default";
-                          const className =
-                            "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
-                          if (isActive)
-                            return (
-                              <Button
-                                key={item.slug}
-                                variant={variant}
-                                className={className}
-                              >
-                                {item.name}
-                              </Button>
-                            );
+                  <TabsTrigger key={server.name} value={server.name}>
+                    {shortenServerName(server.name)}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {servers.map((server, index) => (
+                <TabsContent key={server.name} value={server.name}>
+                  <ScrollArea className="">
+                    <div className="max-h-[10.75rem] grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+                      {server.episodes.map((item) => {
+                        const isActive = episode.filename === item.filename;
+                        const variant = isActive ? "green" : "default";
+                        const className =
+                          "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
+                        if (isActive)
                           return (
-                            <Link
+                            <Button
                               key={item.slug}
-                              href={`/xem-phim/${video.slug}?ep=${
-                                item.slug
-                              }&ser=${shortenServerName(server.name)}`}
-                              className={buttonVariants({
-                                variant,
-                                className,
-                              })}
+                              ref={buttonEpisodeRef}
+                              variant={variant}
+                              className={className}
                             >
                               {item.name}
-                            </Link>
+                            </Button>
                           );
-                        })}
-                      </div>
-                    </ScrollArea>
-                  </TabsContent>
-                ))}
-              </Tabs>
-            )}
+                        return (
+                          <Link
+                            key={item.slug}
+                            href={`/xem-phim/${video.slug}?ep=${item.slug}&ser=${index}`}
+                            className={buttonVariants({
+                              variant,
+                              className,
+                            })}
+                          >
+                            {item.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+              ))}
+            </Tabs>
           </div>
         </div>
       </div>

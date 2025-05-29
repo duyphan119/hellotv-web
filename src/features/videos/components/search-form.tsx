@@ -69,8 +69,8 @@ export default function SearchForm() {
         <div className="absolute top-full right-0 left-0 bg-neutral-950 border border-neutral-600 z-10 rounded-md">
           {!isLoading && data ? (
             <>
-              <ScrollArea className="h-[360px]">
-                <div className="space-y-4">
+              <ScrollArea className="">
+                <div className="space-y-4 max-h-64 p-4">
                   {data.items.map((video) => (
                     <Link
                       key={video.slug}
@@ -80,7 +80,7 @@ export default function SearchForm() {
                         setVisible(false);
                         window.location.href = `/phim/${video.slug}`;
                       }}
-                      className="grid grid-cols-3 gap-4 hover:text-yellow-600"
+                      className="grid grid-cols-4 gap-4 hover:text-yellow-600"
                     >
                       <div className="col-span-1">
                         <Thumbnail
@@ -89,7 +89,7 @@ export default function SearchForm() {
                           alt={video.slug}
                         />
                       </div>
-                      <div className="col-span-2">
+                      <div className="col-span-3">
                         <div className="">{video.name}</div>
                       </div>
                     </Link>

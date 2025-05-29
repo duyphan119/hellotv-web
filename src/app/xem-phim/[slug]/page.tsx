@@ -1,5 +1,5 @@
-import { Episode, getVideo, VideoServer } from "@/features/videos/data";
 import VideoStreamingPage from "@/features/videos/components/video-streaming";
+import { Episode, getVideo } from "@/features/videos/data";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
@@ -22,8 +22,7 @@ export const generateMetadata = async ({
     const { video, servers } = await getVideo(slug);
     const { ep, ser } = await searchParams;
     if (video) {
-      const server =
-        servers.find(({ name }) => name.includes(ser)) || servers[0];
+      const server = servers[Number(ser) || 0];
       const episode =
         server?.episodes?.find(({ slug }) => slug === ep) ||
         server?.episodes?.[0];
@@ -48,15 +47,13 @@ export default async function VideoStreaming({
   const { video, servers } = await getVideo(slug);
   if (!video) return notFound();
 
-  const server: VideoServer | undefined = awaitedSearchParams.ser
-    ? servers.find(({ name }) => name.includes(awaitedSearchParams.ser))
-    : servers[0];
+  const { ser, ep } = awaitedSearchParams;
 
-  if (!server) return redirect(`/phim/${video.slug}`);
+  const indexServer = Number(ser) || 0;
 
-  const episode: Episode | undefined = awaitedSearchParams.ep
-    ? server.episodes.find(({ slug }) => awaitedSearchParams.ep === slug)
-    : server.episodes[0];
+  const episode: Episode | undefined = ep
+    ? servers[indexServer].episodes.find(({ slug }) => ep === slug)
+    : servers[indexServer].episodes[0];
 
   if (!episode) return redirect(`/phim/${video.slug}`);
 
@@ -64,7 +61,7 @@ export default async function VideoStreaming({
     <VideoStreamingPage
       video={video}
       servers={servers}
-      server={server}
+      indexServer={indexServer}
       episode={episode}
     />
   );
