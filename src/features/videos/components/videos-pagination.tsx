@@ -34,6 +34,8 @@ export default function VideosPagination({
     })}`;
   };
 
+  if (pagination.totalPages <= 1) return null;
+
   return (
     <Pagination className={className}>
       <PaginationContent>
