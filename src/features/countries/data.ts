@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export type Country = {
   id: string;
   name: string;
@@ -8,7 +6,8 @@ export type Country = {
 
 export const getCountries = async () => {
   try {
-    const { data } = await axios.get("https://phimapi.com/quoc-gia");
+    const response = await fetch("https://phimapi.com/quoc-gia");
+    const data = await response.json();
     return data as Country[];
   } catch (error) {
     console.log("getCountries error", error);

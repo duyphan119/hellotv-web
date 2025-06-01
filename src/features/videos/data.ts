@@ -1,6 +1,6 @@
-import axios from "axios";
 import { Category } from "@/features/categories/data";
 import { Country } from "@/features/countries/data";
+import qs from "query-string";
 
 export type LatestVideo = {
   id: string;
@@ -48,13 +48,21 @@ type SeoOnPage = {
   og_url: string;
 };
 
-export const getLatestVideos = async (params?: LatestVideoParams) => {
+export const getLatestVideos = async (params: LatestVideoParams = {}) => {
   try {
-    const {
-      data: { items, pagination },
-    } = await axios.get("https://phimapi.com/danh-sach/phim-moi-cap-nhat-v3", {
-      params,
-    });
+    const response = await fetch(
+      `https://phimapi.com/danh-sach/phim-moi-cap-nhat-v3?${qs.stringify(
+        params
+      )}`,
+      {
+        next: {
+          revalidate: 3600,
+          tags: ["latestVideos"],
+        },
+      }
+    );
+
+    const { items, pagination } = await response.json();
 
     const latestVideos: LatestVideo[] = items.map((item: LatestVideoRaw) => ({
       id: item._id,
@@ -137,10 +145,14 @@ const DEFAULT_VIDEOS_RESPONSE: {
 
 export const getVideo = async (slug: string) => {
   try {
-    const {
-      data: { movie, episodes },
-    } = await axios.get(`https://phimapi.com/phim/${slug}`);
+    const response = await fetch(`https://phimapi.com/phim/${slug}`, {
+      next: {
+        revalidate: 3600,
+        tags: ["video", slug],
+      },
+    });
 
+    const { movie, episodes } = await response.json();
     const video: Video = {
       id: movie._id,
       name: movie.name,
@@ -215,23 +227,29 @@ export type VideosParams = Partial<{
 
 export const getVideosByTypeList = async (
   typeList: TypeList,
-  params?: VideosParams
+  params: VideosParams = {}
 ) => {
   try {
+    const response = await fetch(
+      `https://phimapi.com/v1/api/danh-sach/${typeList}?${qs.stringify(
+        params
+      )}`,
+      {
+        next: {
+          revalidate: 3600,
+          tags: ["videosByTypeList", typeList],
+        },
+      }
+    );
     const {
       data: {
-        data: {
-          items,
-          APP_DOMAIN_CDN_IMAGE,
-          params: { pagination },
-          titlePage,
-          seoOnPage,
-        },
+        items,
+        APP_DOMAIN_CDN_IMAGE,
+        params: { pagination },
+        titlePage,
+        seoOnPage,
       },
-    } = await axios.get(`https://phimapi.com/v1/api/danh-sach/${typeList}`, {
-      params,
-    });
-
+    } = await response.json();
     return {
       titlePage,
       seoOnPage: seoOnPage as SeoOnPage,
@@ -259,23 +277,29 @@ export const getVideosByTypeList = async (
 
 export const getVideosByCountry = async (
   countrySlug: string,
-  params?: Omit<VideosParams, "country">
+  params: Omit<VideosParams, "country"> = {}
 ) => {
   try {
+    const response = await fetch(
+      `https://phimapi.com/v1/api/quoc-gia/${countrySlug}?${qs.stringify(
+        params
+      )}`,
+      {
+        next: {
+          revalidate: 3600,
+          tags: ["videosByCountry", countrySlug],
+        },
+      }
+    );
     const {
       data: {
-        data: {
-          items,
-          APP_DOMAIN_CDN_IMAGE,
-          params: { pagination },
-          titlePage,
-          seoOnPage,
-        },
+        items,
+        APP_DOMAIN_CDN_IMAGE,
+        params: { pagination },
+        titlePage,
+        seoOnPage,
       },
-    } = await axios.get(`https://phimapi.com/v1/api/quoc-gia/${countrySlug}`, {
-      params,
-    });
-
+    } = await response.json();
     return {
       titlePage,
       seoOnPage: seoOnPage as SeoOnPage,
@@ -303,23 +327,29 @@ export const getVideosByCountry = async (
 
 export const getVideosByCategory = async (
   categorySlug: string,
-  params?: Omit<VideosParams, "category">
+  params: Omit<VideosParams, "category"> = {}
 ) => {
   try {
+    const response = await fetch(
+      `https://phimapi.com/v1/api/the-loai/${categorySlug}?${qs.stringify(
+        params
+      )}`,
+      {
+        next: {
+          revalidate: 3600,
+          tags: ["videosByCategory", categorySlug],
+        },
+      }
+    );
     const {
       data: {
-        data: {
-          items,
-          APP_DOMAIN_CDN_IMAGE,
-          params: { pagination },
-          titlePage,
-          seoOnPage,
-        },
+        items,
+        APP_DOMAIN_CDN_IMAGE,
+        params: { pagination },
+        titlePage,
+        seoOnPage,
       },
-    } = await axios.get(`https://phimapi.com/v1/api/the-loai/${categorySlug}`, {
-      params,
-    });
-
+    } = await response.json();
     return {
       titlePage,
       seoOnPage: seoOnPage as SeoOnPage,
@@ -351,19 +381,24 @@ export type SearchVideosParams = VideosParams & { keyword: string };
 export const searchVideos = async (params: SearchVideosParams) => {
   if (params.keyword) {
     try {
+      const response = await fetch(
+        `https://phimapi.com/v1/api/tim-kiem?${qs.stringify(params)}`,
+        {
+          next: {
+            revalidate: 3600,
+            tags: ["search", params.keyword],
+          },
+        }
+      );
       const {
         data: {
-          data: {
-            items,
-            APP_DOMAIN_CDN_IMAGE,
-            params: { pagination },
-            titlePage,
-            seoOnPage,
-          },
+          items,
+          APP_DOMAIN_CDN_IMAGE,
+          params: { pagination },
+          titlePage,
+          seoOnPage,
         },
-      } = await axios.get(`https://phimapi.com/v1/api/tim-kiem`, {
-        params,
-      });
+      } = await response.json();
       return {
         titlePage,
         seoOnPage: seoOnPage as SeoOnPage,
