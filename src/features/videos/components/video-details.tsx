@@ -11,7 +11,7 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Video, VideoServer } from "@/features/videos/data";
-import { cn, parseHtmlString } from "@/lib/utils";
+import { parseHtmlString } from "@/lib/utils";
 import Link from "next/link";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
