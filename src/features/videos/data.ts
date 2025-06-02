@@ -1,6 +1,7 @@
 import { Category } from "@/features/categories/data";
 import { Country } from "@/features/countries/data";
 import qs from "query-string";
+import { TypeList } from "../typelist/data";
 
 export type LatestVideo = {
   id: string;
@@ -56,7 +57,7 @@ export const getLatestVideos = async (params: LatestVideoParams = {}) => {
       )}`,
       {
         next: {
-          revalidate: 3600,
+          revalidate: 60,
           tags: ["latestVideos"],
         },
       }
@@ -147,7 +148,7 @@ export const getVideo = async (slug: string) => {
   try {
     const response = await fetch(`https://phimapi.com/phim/${slug}`, {
       next: {
-        revalidate: 3600,
+        revalidate: 60,
         tags: ["video", slug],
       },
     });
@@ -192,27 +193,6 @@ export const getVideo = async (slug: string) => {
   }
 };
 
-export type TypeList = "phim-bo" | "phim-le" | "tv-shows" | "hoat-hinh";
-
-export const typeList = [
-  {
-    name: "Phim bộ",
-    slug: "phim-bo",
-  },
-  {
-    name: "Phim lẻ",
-    slug: "phim-le",
-  },
-  {
-    name: "Hoạt hình",
-    slug: "hoat-hinh",
-  },
-  {
-    name: "TV Shows",
-    slug: "tv-shows",
-  },
-];
-
 export type VideosParams = Partial<{
   page: number | string;
   sort_field: string;
@@ -236,7 +216,7 @@ export const getVideosByTypeList = async (
       )}`,
       {
         next: {
-          revalidate: 3600,
+          revalidate: 60,
           tags: ["videosByTypeList", typeList],
         },
       }
@@ -286,7 +266,7 @@ export const getVideosByCountry = async (
       )}`,
       {
         next: {
-          revalidate: 3600,
+          revalidate: 60,
           tags: ["videosByCountry", countrySlug],
         },
       }
@@ -336,7 +316,7 @@ export const getVideosByCategory = async (
       )}`,
       {
         next: {
-          revalidate: 3600,
+          revalidate: 60,
           tags: ["videosByCategory", categorySlug],
         },
       }
@@ -385,7 +365,7 @@ export const searchVideos = async (params: SearchVideosParams) => {
         `https://phimapi.com/v1/api/tim-kiem?${qs.stringify(params)}`,
         {
           next: {
-            revalidate: 3600,
+            revalidate: 60,
             tags: ["search", params.keyword],
           },
         }

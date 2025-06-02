@@ -166,18 +166,23 @@ export default function VideoStreaming({
                   allowFullScreen
                   className="w-full aspect-video"
                 ></iframe>
-                <div className="flex items-center justify-center gap-4">
-                  <Button
-                    variant="secondary"
-                    onClick={handleSelectPreviousEpisode}
-                  >
-                    <ChevronLeft className="translate-y-[2px]" /> Tập trước
-                  </Button>
-                  <Button variant="secondary" onClick={handleSelectNextEpisode}>
-                    Tập tiếp
-                    <ChevronRight className="translate-y-[2px]" />
-                  </Button>
-                </div>
+                {servers[indexServer].episodes.length > 1 && (
+                  <div className="flex items-center justify-center gap-4">
+                    <Button
+                      variant="secondary"
+                      onClick={handleSelectPreviousEpisode}
+                    >
+                      <ChevronLeft className="translate-y-[2px]" /> Tập trước
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={handleSelectNextEpisode}
+                    >
+                      Tập tiếp
+                      <ChevronRight className="translate-y-[2px]" />
+                    </Button>
+                  </div>
+                )}
               </>
             )}
             <Tabs defaultValue={servers[indexServer].name} className="w-full">
@@ -194,7 +199,7 @@ export default function VideoStreaming({
                     <div className="max-h-[10.75rem] grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
                       {server.episodes.map((item) => {
                         const isActive = episode.filename === item.filename;
-                        const variant = isActive ? "green" : "default";
+                        const variant = isActive ? "default" : "secondary";
                         const className =
                           "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
                         if (isActive)

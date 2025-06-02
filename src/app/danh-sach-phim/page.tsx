@@ -6,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
 import {
   getLatestVideos,
   getVideosByCategory,
@@ -24,14 +23,20 @@ type VideosProps = {
 };
 
 const getVideos = async (searchParams: VideosParams) => {
-  if (searchParams?.typelist)
-    return getVideosByTypeList(searchParams.typelist, searchParams);
-  if (searchParams?.country)
-    return getVideosByCountry(searchParams.country, searchParams);
-  if (searchParams?.category)
-    return getVideosByCategory(searchParams.category, searchParams);
-
-  return getLatestVideos({ page: searchParams.page });
+  if (searchParams?.typelist) {
+    const { typelist, ...others } = searchParams;
+    return getVideosByTypeList(typelist, others);
+  } else {
+    if (searchParams?.country) {
+      const { country, ...others } = searchParams;
+      return getVideosByCountry(country, others);
+    }
+    if (searchParams?.category) {
+      const { category, ...others } = searchParams;
+      return getVideosByCategory(category, others);
+    }
+    return getLatestVideos({ page: searchParams.page });
+  }
 };
 
 export const generateMetadata = async ({

@@ -8,13 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Video, VideoServer } from "@/features/videos/data";
-import { parseHtmlString } from "@/lib/utils";
+import { cn, parseHtmlString } from "@/lib/utils";
 import Link from "next/link";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
+import { useRef } from "react";
 
 type VideoDetailsProps = {
   video: Video;
@@ -22,6 +23,7 @@ type VideoDetailsProps = {
 };
 
 export default function VideoDetails({ servers, video }: VideoDetailsProps) {
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
       <Breadcrumb className="col-span-12">
@@ -64,12 +66,25 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
               Thể loại: {video.categories.map((item) => item.name).join(", ")}
             </div>
             <div className="">Diễn viên: {video.actors.join(", ")}</div>
-            <div className="my-2">
+            <div className="my-2 space-x-2">
+              {video.trailer && (
+                <Button
+                  size="xl"
+                  variant="red"
+                  onClick={() => {
+                    iframeRef.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }}
+                >
+                  XEM TRAILER
+                </Button>
+              )}
               <Link
                 href={`/xem-phim/${video.slug}`}
                 className={buttonVariants({
                   size: "xl",
-                  variant: "green",
                 })}
               >
                 XEM PHIM
@@ -86,6 +101,7 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
                       className={buttonVariants({
                         className: "col-span-1",
                         size: "sm",
+                        variant: "secondary",
                       })}
                     >
                       {episode.name}
@@ -103,6 +119,7 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
             <div className="col-span-12">
               <div className="text-lg font-medium">Trailer</div>
               <iframe
+                ref={iframeRef}
                 src={video.trailer.replace("watch?v=", "embed/")}
                 className="w-full aspect-video"
               ></iframe>

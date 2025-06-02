@@ -1,6 +1,6 @@
 "use client";
 
-import { typeList } from "@/features/videos/data";
+import { typeList } from "@/features/typelist/data";
 import Link from "next/link";
 
 export default function Footer() {

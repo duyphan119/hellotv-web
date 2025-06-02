@@ -35,7 +35,7 @@ export default function RecommendVideos({
           href={`/danh-sach-phim?typelist=phim-bo`}
           className="hover:text-yellow-600"
         >
-          PHIM BỘ
+          CÓ THỂ BẠN THÍCH
         </Link>
       </div>
       <div className="space-y-4 mt-4">
@@ -63,16 +63,6 @@ export default function RecommendVideos({
               </Link>
             </div>
           ))}
-      </div>
-      <div className="text-lg font-medium mt-8">
-        <Link
-          href={`/danh-sach-phim?typelist=phim-le`}
-          className="hover:text-yellow-600"
-        >
-          PHIM LẺ
-        </Link>
-      </div>
-      <div className="space-y-4 mt-4">
         {movieData.pages[0].items
           .filter((item) => item.slug !== slug)
           .map((video) => (
