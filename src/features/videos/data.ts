@@ -57,7 +57,7 @@ export const getLatestVideos = async (params: LatestVideoParams = {}) => {
       )}`,
       {
         next: {
-          revalidate: 60,
+          revalidate: 1,
           tags: ["latestVideos"],
         },
       }
@@ -148,7 +148,7 @@ export const getVideo = async (slug: string) => {
   try {
     const response = await fetch(`https://phimapi.com/phim/${slug}`, {
       next: {
-        revalidate: 60,
+        revalidate: 1,
         tags: ["video", slug],
       },
     });
@@ -216,7 +216,7 @@ export const getVideosByTypeList = async (
       )}`,
       {
         next: {
-          revalidate: 60,
+          revalidate: 1,
           tags: ["videosByTypeList", typeList],
         },
       }
@@ -266,7 +266,7 @@ export const getVideosByCountry = async (
       )}`,
       {
         next: {
-          revalidate: 60,
+          revalidate: 1,
           tags: ["videosByCountry", countrySlug],
         },
       }
@@ -316,7 +316,7 @@ export const getVideosByCategory = async (
       )}`,
       {
         next: {
-          revalidate: 60,
+          revalidate: 1,
           tags: ["videosByCategory", categorySlug],
         },
       }
@@ -365,7 +365,7 @@ export const searchVideos = async (params: SearchVideosParams) => {
         `https://phimapi.com/v1/api/tim-kiem?${qs.stringify(params)}`,
         {
           next: {
-            revalidate: 60,
+            revalidate: 1,
             tags: ["search", params.keyword],
           },
         }

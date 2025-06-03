@@ -20,7 +20,7 @@ export default function Poster({
         alt={alt}
         fill
         className="rounded-md object-cover"
-        sizes="(max-width:1000px) 50vw, 100vw"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         priority={true}
       />
     </AspectRatio>
