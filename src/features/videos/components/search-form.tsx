@@ -83,11 +83,7 @@ export default function SearchForm() {
                       className="grid grid-cols-4 gap-4 hover:text-yellow-600"
                     >
                       <div className="col-span-1">
-                        <Thumbnail
-                          src={video.thumbnail}
-                          fallbackSrc={video.poster}
-                          alt={video.slug}
-                        />
+                        <Thumbnail src={video.thumbnail} alt={video.slug} />
                       </div>
                       <div className="col-span-3">
                         <div className="">{video.name}</div>

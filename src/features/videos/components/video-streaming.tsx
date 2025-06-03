@@ -128,11 +128,7 @@ export default function VideoStreaming({
       <div className="col-span-12 lg:col-span-9">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 sm:col-span-6 md:col-span-4 md:order-1 order-2">
-            <Poster
-              src={video.poster}
-              fallbackSrc={video.thumbnail}
-              alt={video.slug}
-            />
+            <Poster src={video.poster} alt={video.slug} />
           </div>
           <div className="col-span-12 sm:col-span-6 md:col-span-8 md:order-2 order-3">
             <div className="text-3xl font-medium">{video.name}</div>

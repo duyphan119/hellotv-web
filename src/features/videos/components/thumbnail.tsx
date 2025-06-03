@@ -3,13 +3,13 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type ThumbnailProps = {
   src: string;
-  fallbackSrc: string;
+  fallbackSrc?: string;
   alt?: string;
 };
 
 export default function Thumbnail({
   src,
-  fallbackSrc = "",
+  fallbackSrc = "https://placehold.co/1600x900?text=Thumbnail",
   alt = "thumbnail",
 }: ThumbnailProps) {
   return (

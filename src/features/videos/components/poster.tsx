@@ -3,13 +3,13 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 type PosterProps = {
   src: string;
-  fallbackSrc: string;
+  fallbackSrc?: string;
   alt?: string;
 };
 
 export default function Poster({
   src,
-  fallbackSrc = "",
+  fallbackSrc = "https://placehold.co/900x1200?text=Poster",
   alt = "poster",
 }: PosterProps) {
   return (

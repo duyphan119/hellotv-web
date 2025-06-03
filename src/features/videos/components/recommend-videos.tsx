@@ -49,11 +49,7 @@ export default function RecommendVideos({
                 className="grid grid-cols-12 gap-4"
               >
                 <div className="col-span-12 md:col-span-4">
-                  <Thumbnail
-                    src={video.thumbnail}
-                    fallbackSrc={video.poster}
-                    alt={video.slug}
-                  />
+                  <Thumbnail src={video.thumbnail} alt={video.slug} />
                 </div>
                 <div className="col-span-12 md:col-span-8">
                   <div className="group-hover:text-yellow-600">
@@ -72,11 +68,7 @@ export default function RecommendVideos({
                 className="grid grid-cols-12 gap-4"
               >
                 <div className="col-span-12 md:col-span-4">
-                  <Thumbnail
-                    src={video.thumbnail}
-                    fallbackSrc={video.poster}
-                    alt={video.slug}
-                  />
+                  <Thumbnail src={video.thumbnail} alt={video.slug} />
                 </div>
                 <div className="col-span-12 md:col-span-8">
                   <div className="group-hover:text-yellow-600">

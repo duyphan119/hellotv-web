@@ -48,11 +48,7 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
       <div className="col-span-12 lg:col-span-9">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 sm:col-span-6 xl:col-span-4">
-            <Poster
-              src={video.poster}
-              fallbackSrc={video.thumbnail}
-              alt={video.slug}
-            />
+            <Poster src={video.poster} alt={video.slug} />
           </div>
           <div className="col-span-12 sm:col-span-6 xl:col-span-8">
             <div className="text-3xl font-medium">{video.name}</div>
