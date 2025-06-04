@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
-import Thumbnail from "./thumbnail";
+import FallbackImage from "@/components/fallback-image";
 
 export default function SearchForm() {
   const router = useRouter();
@@ -83,7 +83,11 @@ export default function SearchForm() {
                       className="grid grid-cols-4 gap-4 hover:text-yellow-600"
                     >
                       <div className="col-span-1">
-                        <Thumbnail src={video.thumbnail} alt={video.slug} />
+                        <FallbackImage
+                          aspectRatio={16 / 9}
+                          src={video.thumbnail}
+                          alt={video.slug}
+                        />
                       </div>
                       <div className="col-span-3">
                         <div className="">{video.name}</div>

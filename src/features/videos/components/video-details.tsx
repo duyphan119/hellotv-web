@@ -1,14 +1,14 @@
 "use client";
 
+import Breadcrumb from "@/components/breadcrumb";
+import FallbackImage from "@/components/fallback-image";
 import { buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Video, VideoServer } from "@/features/videos/data";
 import { parseHtmlString } from "@/lib/utils";
 import Link from "next/link";
-import Poster from "./poster";
-import RecommendVideos from "./recommend-videos";
 import { useRef } from "react";
-import Breadcrumb from "@/components/breadcrumb";
+import RecommendVideos from "./recommend-videos";
 import VideoInfo from "./video-info";
 
 type VideoDetailsProps = {
@@ -35,7 +35,11 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
       <div className="col-span-12 lg:col-span-9">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 sm:col-span-6 xl:col-span-4">
-            <Poster src={video.poster} alt={video.slug} />
+            <FallbackImage
+              aspectRatio={3 / 4}
+              src={video.poster}
+              alt={video.slug}
+            />
           </div>
           <div className="col-span-12 sm:col-span-6 xl:col-span-8">
             <VideoInfo

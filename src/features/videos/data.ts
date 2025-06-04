@@ -77,7 +77,6 @@ export const getLatestVideos = async (params: LatestVideoParams = {}) => {
       categories: item.category,
       language: item.lang,
     }));
-
     return {
       seoOnPage: DEFAULT_VIDEOS_RESPONSE.seoOnPage,
       titlePage: "Phim mới cập nhật",

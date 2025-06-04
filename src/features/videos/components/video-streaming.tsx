@@ -1,5 +1,6 @@
 "use client";
 
+import Breadcrumb from "@/components/breadcrumb";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,10 +10,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
-import Breadcrumb from "@/components/breadcrumb";
 import VideoInfo from "./video-info";
+import FallbackImage from "@/components/fallback-image";
 
 type VideoStreamingProps = {
   video: Video;
@@ -104,7 +104,11 @@ export default function VideoStreaming({
       <div className="col-span-12 lg:col-span-9">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 sm:col-span-6 md:col-span-4 md:order-1 order-2">
-            <Poster src={video.poster} alt={video.slug} />
+            <FallbackImage
+              aspectRatio={3 / 4}
+              src={video.poster}
+              alt={video.slug}
+            />
           </div>
           <div className="col-span-12 sm:col-span-6 md:col-span-8 md:order-2 order-3">
             <VideoInfo video={video} />

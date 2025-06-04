@@ -2,8 +2,8 @@
 
 import { LatestVideo } from "@/features/videos/data";
 import Link from "next/link";
-import Thumbnail from "./thumbnail";
 import { cn } from "@/lib/utils";
+import FallbackImage from "@/components/fallback-image";
 
 type VideoCardProps = {
   video: LatestVideo;
@@ -14,7 +14,11 @@ export default function VideoCard({ video, className }: VideoCardProps) {
   return (
     <Link href={`/phim/${video.slug}`} className={cn("group", className)}>
       <div className="relative">
-        <Thumbnail src={video.thumbnail} alt={video.slug} />
+        <FallbackImage
+          aspectRatio={16 / 9}
+          src={video.thumbnail}
+          alt={video.slug}
+        />
         <div className="absolute right-0 bottom-0 bg-yellow-600/80 text-xs p-1 rounded-ss-sm">
           {video.episodeCurrent}
         </div>

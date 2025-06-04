@@ -1,5 +1,6 @@
 "use client";
 
+import FallbackImage from "@/components/fallback-image";
 import {
   Carousel,
   CarouselContent,
@@ -8,7 +9,6 @@ import {
 import { LatestVideo } from "@/features/videos/data";
 import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
-import Thumbnail from "./thumbnail";
 
 type LatestVideosCarouselProps = {
   videos: LatestVideo[];
@@ -33,7 +33,11 @@ export default function LatestVideosCarousel({
               className="sm:basis-1/2 xl:basis-1/4 md:basis-1/3"
             >
               <Link href={`/phim/${item.slug}`} className="relative">
-                <Thumbnail src={item.thumbnail} fallbackSrc={item.poster} />
+                <FallbackImage
+                  aspectRatio={16 / 9}
+                  src={item.thumbnail}
+                  alt={item.slug}
+                />
                 <h5 className="absolute right-2 left-2 bottom-2 bg-neutral-800/70 text-sm p-2">
                   {item.name}
                 </h5>

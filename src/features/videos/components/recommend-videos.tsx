@@ -1,10 +1,10 @@
 "use client";
 
+import FallbackImage from "@/components/fallback-image";
 import { Country } from "@/features/countries/data";
-import Link from "next/link";
-import Thumbnail from "./thumbnail";
-import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
 import useGetVideosByTypeList from "@/features/videos/hooks/useGetVideosByTypeList";
+import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
+import Link from "next/link";
 
 type RecommendVideosProps = {
   slug: string;
@@ -49,7 +49,11 @@ export default function RecommendVideos({
                 className="grid grid-cols-12 gap-4"
               >
                 <div className="col-span-12 md:col-span-4">
-                  <Thumbnail src={video.thumbnail} alt={video.slug} />
+                  <FallbackImage
+                    aspectRatio={16 / 9}
+                    src={video.thumbnail}
+                    alt={video.slug}
+                  />
                 </div>
                 <div className="col-span-12 md:col-span-8">
                   <div className="group-hover:text-yellow-600">
@@ -68,7 +72,11 @@ export default function RecommendVideos({
                 className="grid grid-cols-12 gap-4"
               >
                 <div className="col-span-12 md:col-span-4">
-                  <Thumbnail src={video.thumbnail} alt={video.slug} />
+                  <FallbackImage
+                    aspectRatio={16 / 9}
+                    src={video.thumbnail}
+                    alt={video.slug}
+                  />
                 </div>
                 <div className="col-span-12 md:col-span-8">
                   <div className="group-hover:text-yellow-600">

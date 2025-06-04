@@ -6,6 +6,7 @@ import {
 import LatestVideosCarousel from "@/features/videos/components/latest-videos-carousel";
 import Videos from "@/features/videos/components/videos";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function Home() {
   const results = await Promise.allSettled([
@@ -21,13 +22,15 @@ export default async function Home() {
         <Link href={`/danh-sach-phim`} className="hover:text-yellow-600">
           PHIM MỚI CẬP NHẬT
         </Link>
-        <LatestVideosCarousel
-          videos={
-            results[0].status === "fulfilled" ? results[0].value.items : []
-          }
-        />
+        <Suspense fallback={<p>Loading...</p>}>
+          <LatestVideosCarousel
+            videos={
+              results[0].status === "fulfilled" ? results[0].value.items : []
+            }
+          />
+        </Suspense>
       </div>
-      <div className="space-y-4">
+      {/* <div className="space-y-4">
         <Link
           href={`/danh-sach-phim?country=han-quoc`}
           className="hover:text-yellow-600"
@@ -52,7 +55,7 @@ export default async function Home() {
             results[2].status === "fulfilled" ? results[2].value.items : []
           }
         />
-      </div>
+      </div> */}
       <div className="space-y-4">
         <Link
           href={`/danh-sach-phim?typelist=phim-bo`}
