@@ -30,7 +30,7 @@ export default async function Home() {
           />
         </Suspense>
       </div>
-      {/* <div className="space-y-4">
+      <div className="space-y-4">
         <Link
           href={`/danh-sach-phim?country=han-quoc`}
           className="hover:text-yellow-600"
@@ -55,7 +55,7 @@ export default async function Home() {
             results[2].status === "fulfilled" ? results[2].value.items : []
           }
         />
-      </div> */}
+      </div>
       <div className="space-y-4">
         <Link
           href={`/danh-sach-phim?typelist=phim-bo`}

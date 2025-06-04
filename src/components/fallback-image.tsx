@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { ImageProps } from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AspectRatio } from "./ui/aspect-ratio";
 
 interface ImageWithFallbackProps extends ImageProps {
@@ -11,6 +11,11 @@ interface ImageWithFallbackProps extends ImageProps {
 export default function FallbackImage(props: ImageWithFallbackProps) {
   const { src, aspectRatio, alt, ...rest } = props;
   const [imgSrc, setImgSrc] = useState(src);
+
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
+
   return (
     <AspectRatio ratio={aspectRatio || 1}>
       <Image
@@ -21,6 +26,11 @@ export default function FallbackImage(props: ImageWithFallbackProps) {
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         fill
         unoptimized
+        onLoadingComplete={(result) => {
+          if (result.naturalWidth === 0) {
+            setImgSrc("/image.PNG");
+          }
+        }}
         onError={() => {
           setImgSrc("/image.PNG");
         }}
