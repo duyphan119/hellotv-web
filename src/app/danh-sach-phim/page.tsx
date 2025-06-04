@@ -1,12 +1,4 @@
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
   getLatestVideos,
   getVideosByCategory,
   getVideosByCountry,
@@ -16,7 +8,7 @@ import {
 import Videos from "@/features/videos/components/videos";
 import VideosPagination from "@/features/videos/components/videos-pagination";
 import { Metadata } from "next";
-import Link from "next/link";
+import Breadcrumb from "@/components/breadcrumb";
 
 type VideosProps = {
   searchParams: Promise<VideosParams>;
@@ -62,31 +54,17 @@ export default async function VideosPage({ searchParams }: VideosProps) {
   });
   return (
     <div className="p-4">
-      <Breadcrumb className="mb-4">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Trang chủ</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          {(awaitedSearchParams.typelist ||
-            awaitedSearchParams.category ||
-            awaitedSearchParams.country) && (
-            <>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="/danh-sach-phim">Phim</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </>
-          )}
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{titlePage}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <Breadcrumb
+        items={[
+          ...(awaitedSearchParams.typelist ||
+          awaitedSearchParams.category ||
+          awaitedSearchParams.country
+            ? [{ href: "/danh-sach-phim", text: "Danh sách Phim" }]
+            : []),
+          { text: titlePage },
+        ]}
+        className="mb-4"
+      ></Breadcrumb>
       <Videos videos={items} />
       <VideosPagination
         pagination={pagination}

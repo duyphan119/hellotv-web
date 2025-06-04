@@ -1,13 +1,5 @@
 "use client";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Poster from "./poster";
 import RecommendVideos from "./recommend-videos";
+import Breadcrumb from "@/components/breadcrumb";
+import VideoInfo from "./video-info";
 
 type VideoStreamingProps = {
   video: Video;
@@ -92,56 +86,28 @@ export default function VideoStreaming({
 
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
-      <Breadcrumb className="col-span-12">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Trang chủ</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/danh-sach-phim">Danh sách phim</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          {episode ? (
-            <>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href={`/phim/${video.slug}`}>{video.name}</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{episode.name}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </>
-          ) : (
-            <BreadcrumbItem>
-              <BreadcrumbPage>{video.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          )}
-        </BreadcrumbList>
-      </Breadcrumb>
+      <Breadcrumb
+        items={[
+          {
+            href: "/danh-sach-phim",
+            text: "Danh sách phim",
+          },
+          ...(episode
+            ? [
+                { href: `/phim/${video.slug}`, text: video.name },
+                { text: episode.name },
+              ]
+            : [{ text: video.name }]),
+        ]}
+        className="col-span-12"
+      />
       <div className="col-span-12 lg:col-span-9">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 sm:col-span-6 md:col-span-4 md:order-1 order-2">
             <Poster src={video.poster} alt={video.slug} />
           </div>
           <div className="col-span-12 sm:col-span-6 md:col-span-8 md:order-2 order-3">
-            <div className="text-3xl font-medium">{video.name}</div>
-            <div className="text-neutral-400">{video.originName}</div>
-            <div className="mt-2">Đạo diễn: {video.director}</div>
-            <div className="">
-              Quốc gia: {video.countries.map((item) => item.name).join(", ")}
-            </div>
-            <div className="">Năm: {video.year}</div>
-            <div className="">
-              Thể loại: {video.categories.map((item) => item.name).join(", ")}
-            </div>
-            <div className="mb-2">Diễn viên: {video.actors.join(", ")}</div>
+            <VideoInfo video={video} />
           </div>
           <div className="col-span-12 md:order-3 order-4">
             <div className="text-xl font-medium">Nội dung</div>

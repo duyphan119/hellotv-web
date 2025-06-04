@@ -1,16 +1,8 @@
 import { searchVideos, SearchVideosParams } from "@/features/videos/data";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { Metadata } from "next";
-import Link from "next/link";
 import Videos from "@/features/videos/components/videos";
 import VideosPagination from "@/features/videos/components/videos-pagination";
+import Breadcrumb from "@/components/breadcrumb";
 
 type SearchVideosProps = {
   searchParams: Promise<SearchVideosParams>;
@@ -41,19 +33,7 @@ export default async function Search({ searchParams }: SearchVideosProps) {
   console.log(pagination);
   return (
     <div className="p-4">
-      <Breadcrumb className="mb-4">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <Link href="/">Trang chủ</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{titlePage}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <Breadcrumb items={[{ text: titlePage }]} className="mb-4" />
       <Videos videos={items} />
       <VideosPagination
         pagination={pagination}

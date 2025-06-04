@@ -15,7 +15,7 @@ export default function Videos({ isLoading, videos }: VideosProps) {
     <div className="grid grid-cols-12 xl:grid-cols-10 gap-4">
       {videos.map((video) => (
         <VideoCard
-          key={video.slug}
+          key={video.id}
           video={video}
           className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2"
         />
