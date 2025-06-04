@@ -17,6 +17,9 @@ export default function FallbackImage(props: ImageWithFallbackProps) {
         {...rest}
         alt={alt}
         src={imgSrc}
+        className="rounded-md object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        fill
         onError={() => {
           setImgSrc("/image.png");
         }}
