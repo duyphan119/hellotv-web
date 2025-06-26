@@ -1,7 +1,6 @@
 import { getVideo } from "@/features/videos/data";
 import { Metadata } from "next";
 import VideoDetailsPage from "@/features/videos/components/video-details";
-import { notFound } from "next/navigation";
 
 type VideoDetailsProps = {
   params: Promise<{
@@ -30,7 +29,6 @@ export const generateMetadata = async ({
 
 export default async function VideoDetails({ params }: VideoDetailsProps) {
   const { slug } = await params;
-  const { video, servers } = await getVideo(slug);
-  if (!video) return notFound();
-  return <VideoDetailsPage video={video} servers={servers} />;
+
+  return <VideoDetailsPage slug={slug} />;
 }

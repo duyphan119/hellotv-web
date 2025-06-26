@@ -17,7 +17,7 @@ export default function VideoInfo({ video, onClickTrailer }: VideoInfoProps) {
       <div className="">
         Quốc gia:{" "}
         {video.countries.map((item, index) => (
-          <Fragment key={item.id}>
+          <Fragment key={index}>
             {index > 0 && <span>, </span>}
             <Link
               href={`/danh-sach-phim?country=${item.slug}`}
@@ -32,7 +32,7 @@ export default function VideoInfo({ video, onClickTrailer }: VideoInfoProps) {
       <div className="">
         Thể loại:{" "}
         {video.categories.map((item, index) => (
-          <Fragment key={item.id}>
+          <Fragment key={index}>
             {index > 0 && <span>, </span>}
             <Link
               href={`/danh-sach-phim?category=${item.slug}`}

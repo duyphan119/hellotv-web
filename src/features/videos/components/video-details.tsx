@@ -10,13 +10,27 @@ import Link from "next/link";
 import { useRef } from "react";
 import RecommendVideos from "./recommend-videos";
 import VideoInfo from "./video-info";
+import { useGetVideo } from "../hooks/useGetVideo";
 
 type VideoDetailsProps = {
+  slug: string;
+};
+
+export default function VideoDetails({ slug }: VideoDetailsProps) {
+  const { data } = useGetVideo(slug);
+  if (!data || !data.video) return null;
+  return <VideoDetailsContent servers={data.servers} video={data.video} />;
+}
+
+type VideoDetailsContentProps = {
   video: Video;
   servers: VideoServer[];
 };
 
-export default function VideoDetails({ servers, video }: VideoDetailsProps) {
+export function VideoDetailsContent({
+  servers,
+  video,
+}: VideoDetailsContentProps) {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
@@ -55,9 +69,9 @@ export default function VideoDetails({ servers, video }: VideoDetailsProps) {
               <div className="mb-2">Danh sách tập</div>
               <ScrollArea className="bg-neutral-900 rounded-md">
                 <div className="max-h-[9rem] xl:max-h-[11.75rem] grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-3 p-3">
-                  {[...servers[0].episodes].reverse().map((episode) => (
+                  {[...servers[0].episodes].reverse().map((episode, index) => (
                     <Link
-                      key={episode.name}
+                      key={index}
                       href={`/xem-phim/${video.slug}?ep=${episode.slug}`}
                       className={buttonVariants({
                         className: "col-span-1",

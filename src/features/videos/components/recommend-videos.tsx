@@ -42,8 +42,8 @@ export default function RecommendVideos({
         {seriesData.pages[0].items
           .filter((item) => item.slug !== slug)
 
-          .map((video) => (
-            <div key={video.slug} className="group">
+          .map((video, index) => (
+            <div key={index} className="group">
               <Link
                 href={`/phim/${video.slug}`}
                 className="grid grid-cols-12 gap-4"
@@ -65,8 +65,8 @@ export default function RecommendVideos({
           ))}
         {movieData.pages[0].items
           .filter((item) => item.slug !== slug)
-          .map((video) => (
-            <div key={video.slug} className="group">
+          .map((video, index) => (
+            <div key={index} className="group">
               <Link
                 href={`/xem-phim/${video.slug}`}
                 className="grid grid-cols-12 gap-4"
