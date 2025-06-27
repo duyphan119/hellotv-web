@@ -1,8 +1,6 @@
+import SearchPage from "@/components/pages/search";
 import { searchVideos, SearchVideosParams } from "@/features/videos/data";
 import { Metadata } from "next";
-import Videos from "@/features/videos/components/videos";
-import VideosPagination from "@/features/videos/components/videos-pagination";
-import Breadcrumb from "@/components/breadcrumb";
 
 type SearchVideosProps = {
   searchParams: Promise<SearchVideosParams>;
@@ -26,19 +24,5 @@ export const generateMetadata = async ({
 
 export default async function Search({ searchParams }: SearchVideosProps) {
   const awaitedSearchParams = await searchParams;
-  const { items, pagination, titlePage } = await searchVideos({
-    ...awaitedSearchParams,
-    limit: 30,
-  });
-  console.log(pagination);
-  return (
-    <div className="p-4">
-      <Breadcrumb items={[{ text: titlePage }]} className="mb-4" />
-      <Videos videos={items} />
-      <VideosPagination
-        pagination={pagination}
-        searchParams={awaitedSearchParams}
-      />
-    </div>
-  );
+  return <SearchPage searchParams={awaitedSearchParams} />;
 }

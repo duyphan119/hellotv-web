@@ -55,6 +55,7 @@ export default function Home() {
           HÀN QUỐC
         </Link>
         <Videos
+          totalItems={10}
           isLoading={results[1].isLoading}
           videos={results[1].data?.items || []}
         />
@@ -67,6 +68,7 @@ export default function Home() {
           TRUNG QUỐC
         </Link>
         <Videos
+          totalItems={10}
           isLoading={results[2].isLoading}
           videos={results[2].data?.items || []}
         />
@@ -79,6 +81,7 @@ export default function Home() {
           PHIM BỘ
         </Link>
         <Videos
+          totalItems={10}
           isLoading={results[3].isLoading}
           videos={results[3].data?.items || []}
         />
@@ -91,6 +94,7 @@ export default function Home() {
           PHIM LẺ
         </Link>
         <Videos
+          totalItems={10}
           isLoading={results[4].isLoading}
           videos={results[4].data?.items || []}
         />

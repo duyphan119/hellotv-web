@@ -7,10 +7,15 @@ import VideoCard from "./video-card";
 type VideosProps = {
   isLoading?: boolean;
   videos: LatestVideo[];
+  totalItems?: number;
 };
 
-export default function Videos({ isLoading, videos }: VideosProps) {
-  if (isLoading) return <VideosSkeleton />;
+export default function Videos({
+  isLoading,
+  videos,
+  totalItems = 15,
+}: VideosProps) {
+  if (isLoading) return <VideosSkeleton totalItems={totalItems} />;
   return (
     <div className="grid grid-cols-12 xl:grid-cols-10 gap-4">
       {videos.map((video) => (
