@@ -1,3 +1,5 @@
+"use client";
+
 import Breadcrumb from "@/components/breadcrumb";
 import VideoList from "@/features/videos/components/videos";
 import VideosPagination from "@/features/videos/components/videos-pagination";

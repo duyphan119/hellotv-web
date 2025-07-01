@@ -1,3 +1,5 @@
+"use client";
+
 import { SearchVideosParams } from "@/features/videos/data";
 import useSearchVideos from "@/features/videos/hooks/useSearchVideos";
 import Breadcrumb from "../breadcrumb";
