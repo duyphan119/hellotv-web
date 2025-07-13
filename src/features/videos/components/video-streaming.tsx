@@ -1,8 +1,8 @@
 "use client";
 
 import Breadcrumb from "@/components/breadcrumb";
+import FallbackImage from "@/components/fallback-image";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Episode, Video, VideoServer } from "@/features/videos/data";
 import { parseHtmlString, shortenServerName } from "@/lib/utils";
@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import RecommendVideos from "./recommend-videos";
 import VideoInfo from "./video-info";
-import FallbackImage from "@/components/fallback-image";
 
 type VideoStreamingProps = {
   video: Video;
@@ -161,39 +160,37 @@ export default function VideoStreaming({
               </TabsList>
               {servers.map((server, index) => (
                 <TabsContent key={server.name} value={server.name}>
-                  <ScrollArea className="">
-                    <div className="max-h-[10.75rem] grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
-                      {server.episodes.map((item) => {
-                        const isActive = episode.filename === item.filename;
-                        const variant = isActive ? "default" : "secondary";
-                        const className =
-                          "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
-                        if (isActive)
-                          return (
-                            <Button
-                              key={item.slug}
-                              ref={buttonEpisodeRef}
-                              variant={variant}
-                              className={className}
-                            >
-                              {item.name}
-                            </Button>
-                          );
+                  <div className="grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+                    {server.episodes.map((item) => {
+                      const isActive = episode.filename === item.filename;
+                      const variant = isActive ? "default" : "secondary";
+                      const className =
+                        "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
+                      if (isActive)
                         return (
-                          <Link
+                          <Button
                             key={item.slug}
-                            href={`/xem-phim/${video.slug}?ep=${item.slug}&ser=${index}`}
-                            className={buttonVariants({
-                              variant,
-                              className,
-                            })}
+                            ref={buttonEpisodeRef}
+                            variant={variant}
+                            className={className}
                           >
                             {item.name}
-                          </Link>
+                          </Button>
                         );
-                      })}
-                    </div>
-                  </ScrollArea>
+                      return (
+                        <Link
+                          key={item.slug}
+                          href={`/xem-phim/${video.slug}?ep=${item.slug}&ser=${index}`}
+                          className={buttonVariants({
+                            variant,
+                            className,
+                          })}
+                        >
+                          {item.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </TabsContent>
               ))}
             </Tabs>
