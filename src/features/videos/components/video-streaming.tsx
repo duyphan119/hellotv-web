@@ -160,12 +160,11 @@ export default function VideoStreaming({
               </TabsList>
               {servers.map((server, index) => (
                 <TabsContent key={server.name} value={server.name}>
-                  <div className="grid grid-cols-12 lg:grid-cols-10 xl:grid-cols-12 gap-4">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
                     {server.episodes.map((item) => {
                       const isActive = episode.filename === item.filename;
                       const variant = isActive ? "default" : "secondary";
-                      const className =
-                        "col-span-6 sm:col-span-3 md:col-span-2 lg:col-span-1";
+                      const className = "col-span-1 sm:text-sm text-xs";
                       if (isActive)
                         return (
                           <Button

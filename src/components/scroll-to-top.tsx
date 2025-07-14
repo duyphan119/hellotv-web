@@ -3,8 +3,11 @@
 import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 export default function ScrollToTop() {
+  const pathname = usePathname();
+
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -26,6 +29,10 @@ export default function ScrollToTop() {
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="fixed bottom-4 right-4 z-20 md:block hidden">

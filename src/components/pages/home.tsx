@@ -2,11 +2,7 @@
 
 import LatestVideosCarousel from "@/features/videos/components/latest-videos-carousel";
 import Videos from "@/features/videos/components/videos";
-import {
-  getLatestVideos,
-  getVideosByCountry,
-  getVideosByTypeList,
-} from "@/features/videos/data";
+import { getLatestVideos, getVideosByCountry } from "@/features/videos/data";
 import { useQueries } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -19,19 +15,15 @@ export default function Home() {
       },
       {
         queryKey: ["videos", "han-quoc"],
-        queryFn: () => getVideosByCountry("han-quoc"),
+        queryFn: () => getVideosByCountry("han-quoc", { limit: 18 }),
       },
       {
         queryKey: ["videos", "trung-quoc"],
-        queryFn: () => getVideosByCountry("trung-quoc"),
+        queryFn: () => getVideosByCountry("trung-quoc", { limit: 18 }),
       },
       {
-        queryKey: ["videos", "phim-bo"],
-        queryFn: () => getVideosByTypeList("phim-bo"),
-      },
-      {
-        queryKey: ["videos", "phim-le"],
-        queryFn: () => getVideosByTypeList("phim-le"),
+        queryKey: ["videos", "nhat-ban"],
+        queryFn: () => getVideosByCountry("nhat-ban", { limit: 18 }),
       },
     ],
   });
@@ -75,28 +67,15 @@ export default function Home() {
       </div>
       <div className="space-y-4">
         <Link
-          href={`/danh-sach-phim?typelist=phim-bo`}
+          href={`/danh-sach-phim?country=nhat-ban`}
           className="hover:text-yellow-600"
         >
-          PHIM BỘ
+          NHẬT BẢN
         </Link>
         <Videos
           totalItems={10}
           isLoading={results[3].isLoading}
           videos={results[3].data?.items || []}
-        />
-      </div>
-      <div className="space-y-4">
-        <Link
-          href={`/danh-sach-phim?typelist=phim-bo`}
-          className="hover:text-yellow-600"
-        >
-          PHIM LẺ
-        </Link>
-        <Videos
-          totalItems={10}
-          isLoading={results[4].isLoading}
-          videos={results[4].data?.items || []}
         />
       </div>
     </div>

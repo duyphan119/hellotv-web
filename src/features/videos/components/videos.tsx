@@ -17,13 +17,9 @@ export default function Videos({
 }: VideosProps) {
   if (isLoading) return <VideosSkeleton totalItems={totalItems} />;
   return (
-    <div className="grid grid-cols-12 xl:grid-cols-10 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
       {videos.map((video) => (
-        <VideoCard
-          key={video.id}
-          video={video}
-          className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2"
-        />
+        <VideoCard key={video.id} video={video} className="col-span-1" />
       ))}
     </div>
   );
