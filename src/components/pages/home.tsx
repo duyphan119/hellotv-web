@@ -3,8 +3,11 @@
 import LatestVideosCarousel from "@/features/videos/components/latest-videos-carousel";
 import Videos from "@/features/videos/components/videos";
 import { getLatestVideos, getVideosByCountry } from "@/features/videos/data";
+import WatchedVideoCard from "@/features/watched-videos/components/watched-video-card";
+import { getWatchedVideos, WatchedVideo } from "@/features/watched-videos/data";
 import { useQueries } from "@tanstack/react-query";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const results = useQueries({
@@ -28,6 +31,12 @@ export default function Home() {
     ],
   });
 
+  const [watchedVideos, setWatchedVideos] = useState<WatchedVideo[]>([]);
+
+  useEffect(() => {
+    setWatchedVideos(getWatchedVideos());
+  }, []);
+
   return (
     <div className="p-4 space-y-8">
       <div className="space-y-4">
@@ -39,6 +48,22 @@ export default function Home() {
           videos={results[0].data?.items || []}
         />
       </div>
+      {watchedVideos.length > 0 && (
+        <div className="space-y-4">
+          <Link href={`/da-xem`} className="hover:text-yellow-600">
+            ĐÃ XEM
+          </Link>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {watchedVideos.map((video) => (
+              <WatchedVideoCard
+                key={video.id}
+                video={video}
+                className="col-span-1"
+              />
+            ))}
+          </div>
+        </div>
+      )}
       <div className="space-y-4">
         <Link
           href={`/danh-sach-phim?country=han-quoc`}

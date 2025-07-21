@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import RecommendVideos from "./recommend-videos";
 import VideoInfo from "./video-info";
+import { saveWatchedVideo } from "@/features/watched-videos/data";
 
 type VideoStreamingProps = {
   video: Video;
@@ -82,6 +83,18 @@ export default function VideoStreaming({
       }
     }
   }, [episode]);
+
+  useEffect(() => {
+    saveWatchedVideo({
+      id: video.id,
+      name: video.name,
+      slug: video.slug,
+      thumbnail: video.thumbnail,
+      episodeSlug: episode.slug,
+      server: indexServer,
+      time: new Date().getTime(),
+    });
+  }, [video, episode, servers, indexServer]);
 
   return (
     <div className="grid grid-cols-12 gap-4 p-4">
