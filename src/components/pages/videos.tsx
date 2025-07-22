@@ -5,6 +5,7 @@ import VideoList from "@/features/videos/components/videos";
 import VideosPagination from "@/features/videos/components/videos-pagination";
 import { VideosParams } from "@/features/videos/data";
 import { useGetVideos } from "@/features/videos/hooks/useGetVideos";
+import { useEffect } from "react";
 
 type VideosProps = {
   searchParams: VideosParams;
@@ -12,6 +13,14 @@ type VideosProps = {
 
 export default function Videos({ searchParams }: VideosProps) {
   const { data } = useGetVideos({ ...searchParams, limit: 30 });
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }, [searchParams]);
+
   if (!data) return null;
   return (
     <div className="p-4">
