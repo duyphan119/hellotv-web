@@ -103,6 +103,9 @@ export default function DrawerMenu({ categories, countries }: DrawerMenuProps) {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            <Link href="/da-xem" className="block px-4 py-2">
+              Đã xem
+            </Link>
           </div>
         </ScrollArea>
       </DrawerContent>

@@ -35,6 +35,12 @@ export default function Header() {
         ))}
         <CategoriesNavigationMenu categories={categoriesData || []} />
         <CountriesNavigationMenu countries={countriesData || []} />
+        <Link
+          href="/da-xem"
+          className="block text-sm h-9 font-medium px-4 py-2"
+        >
+          Đã xem
+        </Link>
       </div>
       <SearchForm />
     </header>

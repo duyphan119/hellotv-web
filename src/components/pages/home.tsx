@@ -54,7 +54,7 @@ export default function Home() {
             ĐÃ XEM
           </Link>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {watchedVideos.map((video) => (
+            {watchedVideos.slice(0, 18).map((video) => (
               <WatchedVideoCard
                 key={video.id}
                 video={video}

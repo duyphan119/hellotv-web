@@ -5,13 +5,15 @@ import { Separator } from "@/components/ui/separator";
 import useSearchVideos from "@/features/videos/hooks/useSearchVideos";
 import { Loader2, Search } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 import FallbackImage from "@/components/fallback-image";
 
 export default function SearchForm() {
   const router = useRouter();
+
+  const pathname = usePathname();
 
   const [keyword, setKeyword] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
@@ -30,6 +32,10 @@ export default function SearchForm() {
     inputRef.current?.blur();
     router.push(`/tim-kiem?keyword=${keyword}`);
   };
+
+  useEffect(() => {
+    setVisible(false);
+  }, [pathname]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
