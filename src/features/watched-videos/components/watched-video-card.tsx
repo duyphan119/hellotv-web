@@ -16,7 +16,7 @@ export default function WatchedVideoCard({
 }: WatchedVideoCardProps) {
   return (
     <Link
-      href={`/xem-phim/${video.slug}?ep=${video.slug}&ser=${video.server}`}
+      href={`/xem-phim/${video.slug}?ep=${video.episodeSlug}&ser=${video.server}`}
       className={cn("group", className)}
     >
       <div className="relative">
