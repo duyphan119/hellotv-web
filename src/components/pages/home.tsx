@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import LatestVideosCarousel from "@/features/videos/components/latest-videos-carousel";
 import Videos from "@/features/videos/components/videos";
 import { getLatestVideos, getVideosByCountry } from "@/features/videos/data";
@@ -8,13 +13,6 @@ import { getWatchedVideos, WatchedVideo } from "@/features/watched-videos/data";
 import { useQueries } from "@tanstack/react-query";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 export default function Home() {
   const results = useQueries({
@@ -71,8 +69,6 @@ export default function Home() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselNext />
-            <CarouselPrevious />
           </Carousel>
         </div>
       )}
