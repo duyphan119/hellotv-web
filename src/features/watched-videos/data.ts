@@ -29,12 +29,9 @@ export const saveWatchedVideo = (input: WatchedVideo) => {
 
   const index = watchedVideos.findIndex(({ id }) => id === input.id);
 
-  if (index === -1) {
-    watchedVideos.unshift(input);
-  } else {
-    watchedVideos[index].episodeSlug = input.episodeSlug;
-    watchedVideos[index].server = input.server;
-    watchedVideos[index].time = input.time;
+  if (index !== -1) {
+    watchedVideos.splice(index, 1);
   }
+  watchedVideos.unshift(input);
   localStorage.setItem("watched", JSON.stringify(watchedVideos));
 };

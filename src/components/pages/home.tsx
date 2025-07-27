@@ -8,6 +8,13 @@ import { getWatchedVideos, WatchedVideo } from "@/features/watched-videos/data";
 import { useQueries } from "@tanstack/react-query";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function Home() {
   const results = useQueries({
@@ -53,15 +60,20 @@ export default function Home() {
           <Link href={`/da-xem`} className="hover:text-yellow-600">
             ĐÃ XEM
           </Link>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {watchedVideos.slice(0, 18).map((video) => (
-              <WatchedVideoCard
-                key={video.id}
-                video={video}
-                className="col-span-1"
-              />
-            ))}
-          </div>
+          <Carousel>
+            <CarouselContent>
+              {watchedVideos.slice(0, 18).map((video) => (
+                <CarouselItem
+                  key={video.id}
+                  className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/6"
+                >
+                  <WatchedVideoCard video={video} className="col-span-1" />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselNext />
+            <CarouselPrevious />
+          </Carousel>
         </div>
       )}
       <div className="space-y-4">
