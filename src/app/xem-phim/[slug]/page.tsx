@@ -1,7 +1,6 @@
 import VideoStreamingPage from "@/features/videos/components/video-streaming";
-import { Episode, getVideo } from "@/features/videos/data";
+import { getVideo } from "@/features/videos/data";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
 
 type VideoStreamingProps = {
   params: Promise<{
@@ -43,26 +42,15 @@ export default async function VideoStreaming({
   searchParams,
 }: VideoStreamingProps) {
   const { slug } = await params;
-  const awaitedSearchParams = await searchParams;
-  const { video, servers } = await getVideo(slug);
-  if (!video) return notFound();
-
-  const { ser, ep } = awaitedSearchParams;
+  const { ep, ser } = await searchParams;
 
   const indexServer = Number(ser) || 0;
 
-  const episode: Episode | undefined = ep
-    ? servers[indexServer].episodes.find(({ slug }) => ep === slug)
-    : servers[indexServer].episodes[0];
-
-  if (!episode) return redirect(`/phim/${video.slug}`);
-
   return (
     <VideoStreamingPage
-      video={video}
-      servers={servers}
       indexServer={indexServer}
-      episode={episode}
+      episodeSlug={ep}
+      slug={slug}
     />
   );
 }

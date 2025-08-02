@@ -26,8 +26,8 @@ export default function FallbackImage(props: ImageWithFallbackProps) {
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         fill
         unoptimized
-        onLoadingComplete={(result) => {
-          if (result.naturalWidth === 0) {
+        onLoad={(result) => {
+          if (result.currentTarget.naturalWidth === 0) {
             setImgSrc("/image.PNG");
           }
         }}
