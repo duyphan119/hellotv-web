@@ -17,10 +17,13 @@ export function parseHtmlString(htmlString: string) {
 
 export function shortenServerName(serverName: string) {
   return shortenVideoLanguage(
-    serverName.replace("#Hà Nội (", "").replace(")", "")
+    serverName?.replace("#Hà Nội (", "").replace(")", "") || serverName
   );
 }
 
 export function shortenVideoLanguage(videoLanguage: string) {
-  return videoLanguage.replace("Thuyết Minh", "TM").replace("Lồng Tiếng", "LT");
+  return (
+    videoLanguage?.replace("Thuyết Minh", "TM").replace("Lồng Tiếng", "LT") ||
+    videoLanguage
+  );
 }
