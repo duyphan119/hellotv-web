@@ -5,10 +5,15 @@ import { buttonVariants } from "@/components/ui/button";
 import { shortenServerName } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { getWatchedVideos } from "../data";
+import { getWatchedVideos, WatchedVideo } from "../data";
+import { useEffect, useState } from "react";
 
 export default function WatchedVideosSection() {
-  const watchedVideos = getWatchedVideos();
+  const [watchedVideos, setWatchedVideos] = useState<WatchedVideo[]>([]);
+
+  useEffect(() => {
+    setWatchedVideos(getWatchedVideos());
+  }, []);
 
   if (watchedVideos.length === 0) return null;
 

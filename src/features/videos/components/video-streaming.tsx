@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { saveWatchedVideo, WatchedVideo } from "@/features/watched-videos/data";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { Episode } from "../data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import queryString from "query-string";
-import { WatchedVideo } from "@/features/watched-videos/data";
-import { useSaveWatchedVideo } from "@/features/watched-videos/hooks/use-save-watched-video";
+import { useEffect } from "react";
+import { Episode } from "../data";
 
 type Props = {
   embedUrl: string;
@@ -26,7 +26,15 @@ export default function VideoStreaming({
 
   const searchParams = useSearchParams();
 
-  useSaveWatchedVideo(watchedVideoInput);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveWatchedVideo(watchedVideoInput);
+    }, 4567);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [watchedVideoInput]);
 
   const handleSelectPreviousEpisode = () => {
     if (!previousEpisode) return;

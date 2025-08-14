@@ -1,11 +1,14 @@
 "use client";
 
 import Breadcrumb from "@/components/breadcrumb";
-import WatchedVideoCard from "@/features/watched-videos/components/watched-video-card";
+import { Badge } from "@/components/ui/badge";
 import {
   getWatchedVideos,
   WatchedVideo as WatchedVideoType,
 } from "@/features/watched-videos/data";
+import { shortenServerName } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function WatchedVideo() {
@@ -23,12 +26,46 @@ export default function WatchedVideo() {
           items={[{ text: "Video đã xem" }]}
           className="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-6"
         />
-        {watchedVideos.map((video) => (
-          <WatchedVideoCard
-            key={video.id}
-            video={video}
-            className="col-span-1"
-          />
+        {watchedVideos.map((item) => (
+          <div key={item.id} className="col-span-1">
+            <Link
+              href={`/phim/${item.slug}`}
+              className="relative block w-full aspect-video select-none"
+            >
+              <Image
+                src={item.thumbnail}
+                alt="Poster"
+                fill
+                sizes="(max-width: 1200px) 50vw, 100vw"
+                className="object-cover rounded-md shadow"
+              />
+
+              <Badge
+                variant="watchedEpisode"
+                className="absolute top-0 right-0 "
+              >
+                {item.episodeName}
+              </Badge>
+              <Badge variant="language" className="absolute bottom-0 left-0 ">
+                {shortenServerName(item.serverName)}
+              </Badge>
+            </Link>
+            <div className="mt-2">
+              <Link
+                href={`/phim/${item.slug}`}
+                title={item.name}
+                className="font-medium line-clamp-2 hover:text-primary hover:underline hover:underline-offset-2"
+              >
+                {item.name}
+              </Link>
+              <p
+                title={item.originName}
+                className="text-muted-foreground text-sm line-clamp-2"
+              >
+                {item.originName}
+              </p>
+            </div>
+          </div>
         ))}
       </div>
     </>
