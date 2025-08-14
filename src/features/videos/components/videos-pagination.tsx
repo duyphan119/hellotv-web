@@ -42,7 +42,8 @@ export default function VideosPagination({
     if (inputRef.current) {
       const { value } = inputRef.current;
       inputRef.current.blur();
-      router.push(getHref(Number(value)));
+      const page = Math.max(1, Math.min(Number(value), pagination.totalPages));
+      router.push(getHref(page));
     }
   };
 

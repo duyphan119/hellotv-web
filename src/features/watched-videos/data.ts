@@ -3,9 +3,12 @@ export type WatchedVideo = {
   slug: string;
   name: string;
   thumbnail: string;
-  episodeSlug: string;
-  server: number;
+  episodeName: string;
+  serverName: string;
   time: number;
+  originName: string;
+  query: string;
+  otherWatchedEpisodes: string[];
 };
 
 export const getWatchedVideos = () => {
@@ -30,8 +33,13 @@ export const saveWatchedVideo = (input: WatchedVideo) => {
   const index = watchedVideos.findIndex(({ id }) => id === input.id);
 
   if (index !== -1) {
+    input.otherWatchedEpisodes = [
+      ...watchedVideos[index].otherWatchedEpisodes,
+      input.episodeName,
+    ];
     watchedVideos.splice(index, 1);
   }
   watchedVideos.unshift(input);
+
   localStorage.setItem("watched", JSON.stringify(watchedVideos));
 };

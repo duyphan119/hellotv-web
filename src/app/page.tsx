@@ -6,6 +6,7 @@ import {
   getVideosByCategory,
   getVideosByCountry,
 } from "@/features/videos/data";
+import WatchedVideosSection from "@/features/watched-videos/components/watched-videos-section";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -41,6 +42,8 @@ export default async function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4">
       <LatestVideosCarousel videos={latestVideos} />
+
+      <WatchedVideosSection />
 
       <div className="mt-12 p-4 rounded-md bg-gradient-to-b from-neutral-900 to-zinc-800 space-y-8">
         <VideosCountrySection

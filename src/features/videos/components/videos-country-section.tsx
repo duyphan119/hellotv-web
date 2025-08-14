@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { LatestVideo } from "../data";
-import { cn } from "@/lib/utils";
+import { cn, shortenVideoLanguage } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 type Props = {
@@ -71,7 +71,7 @@ export default function VideosCountrySection({
                     variant="language"
                     className="absolute bottom-0 left-0 "
                   >
-                    {video.language}
+                    {shortenVideoLanguage(video.language)}
                   </Badge>
                 </Link>
                 <div className="mt-2">

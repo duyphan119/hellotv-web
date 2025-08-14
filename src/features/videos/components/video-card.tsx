@@ -2,7 +2,7 @@
 
 import { LatestVideo } from "@/features/videos/data";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, shortenVideoLanguage } from "@/lib/utils";
 import FallbackImage from "@/components/fallback-image";
 
 type VideoCardProps = {
@@ -23,7 +23,7 @@ export default function VideoCard({ video, className }: VideoCardProps) {
           {video.episodeCurrent}
         </div>
         <div className="absolute left-0 top-0 bg-red-600/80 text-xs p-1 rounded-ee-sm">
-          {video.language}
+          {shortenVideoLanguage(video.language)}
         </div>
       </div>
       <div className="block pt-2 group-hover:text-yellow-600">{video.name}</div>

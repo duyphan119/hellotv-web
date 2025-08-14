@@ -21,6 +21,8 @@ const badgeVariants = cva(
           "border-transparent bg-gradient-to-br from-yellow-500/70 to-orange-500/70",
         language:
           "border-transparent bg-gradient-to-br from-green-500/70 to-emerald-500/70",
+        watchedEpisode:
+          "border-transparent bg-gradient-to-br from-red-500/70 to-rose-500/70",
       },
     },
     defaultVariants: {

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import VideosPagination from "@/features/videos/components/videos-pagination";
 import { VideosParams } from "@/features/videos/data";
 import { getVideos } from "@/features/videos/hooks/useGetVideos";
+import { shortenVideoLanguage } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -66,7 +67,7 @@ export default async function VideosPage({ searchParams }: VideosPageProps) {
                 {video.episodeCurrent}
               </Badge>
               <Badge variant="language" className="absolute bottom-0 left-0 ">
-                {video.language}
+                {shortenVideoLanguage(video.language)}
               </Badge>
             </Link>
             <div className="mt-2">

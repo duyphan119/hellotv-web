@@ -103,6 +103,18 @@ export default async function VideoStreamingPage({
                       previousEpisode={
                         currentServer.episodes[indexPreviousEpisode]
                       }
+                      watchedVideoInput={{
+                        id: video.id,
+                        name: video.name,
+                        originName: video.originName,
+                        slug: video.slug,
+                        thumbnail: video.thumbnail,
+                        serverName: currentServer.name,
+                        episodeName: currentEpisode.name,
+                        query: `?ep=${currentEpisode.slug}&ser=${indexServer}`,
+                        time: new Date().getTime(),
+                        otherWatchedEpisodes: [],
+                      }}
                     />
                   </>
                 )}

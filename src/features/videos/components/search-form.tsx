@@ -1,14 +1,15 @@
 "use client";
 
+import { buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import useSearchVideos from "@/features/videos/hooks/useSearchVideos";
 import { Loader2, Search } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
-import FallbackImage from "@/components/fallback-image";
 
 export default function SearchForm() {
   const router = useRouter();
@@ -86,13 +87,15 @@ export default function SearchForm() {
                         setVisible(false);
                         window.location.href = `/phim/${video.slug}`;
                       }}
-                      className="grid grid-cols-4 gap-4 hover:text-yellow-600"
+                      className="grid grid-cols-4 gap-4 hover:text-primary hover:underline hover:underline-offset-2"
                     >
-                      <div className="col-span-1">
-                        <FallbackImage
-                          aspectRatio={16 / 9}
+                      <div className="col-span-1 relative aspect-video">
+                        <Image
                           src={video.thumbnail}
-                          alt={video.slug}
+                          alt="Poster"
+                          fill
+                          sizes="(max-width: 1200px) 50vw, 100vw"
+                          className="object-cover rounded-md shadow"
                         />
                       </div>
                       <div className="col-span-3">
@@ -103,12 +106,17 @@ export default function SearchForm() {
                 </div>
               </ScrollArea>
               <Separator />
-              <Link
-                href={`/tim-kiem?keyword=${keyword}`}
-                className="block text-center p-4 hover:text-yellow-600"
-              >
-                Xem tất cả
-              </Link>
+              <div className="text-center">
+                <Link
+                  href={`/tim-kiem?keyword=${keyword}`}
+                  onClick={() => setVisible(false)}
+                  className={buttonVariants({
+                    variant: "link",
+                  })}
+                >
+                  Xem tất cả
+                </Link>
+              </div>
             </>
           ) : (
             <div className="flex items-center p-4 gap-4">

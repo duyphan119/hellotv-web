@@ -16,5 +16,11 @@ export function parseHtmlString(htmlString: string) {
 }
 
 export function shortenServerName(serverName: string) {
-  return serverName.slice(9, -1);
+  return shortenVideoLanguage(
+    serverName.replace("#Hà Nội (", "").replace(")", "")
+  );
+}
+
+export function shortenVideoLanguage(videoLanguage: string) {
+  return videoLanguage.replace("Thuyết Minh", "TM").replace("Lồng Tiếng", "LT");
 }

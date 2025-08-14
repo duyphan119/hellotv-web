@@ -5,22 +5,28 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Episode } from "../data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import queryString from "query-string";
+import { WatchedVideo } from "@/features/watched-videos/data";
+import { useSaveWatchedVideo } from "@/features/watched-videos/hooks/use-save-watched-video";
 
 type Props = {
   embedUrl: string;
   nextEpisode?: Episode;
   previousEpisode?: Episode;
+  watchedVideoInput: WatchedVideo;
 };
 
 export default function VideoStreaming({
   embedUrl,
   nextEpisode,
   previousEpisode,
+  watchedVideoInput,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
+
+  useSaveWatchedVideo(watchedVideoInput);
 
   const handleSelectPreviousEpisode = () => {
     if (!previousEpisode) return;
