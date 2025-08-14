@@ -28,16 +28,16 @@ export default function VideosCountrySection({
   return (
     <section className="grid grid-cols-5 gap-4">
       <div className="col-span-1 flex flex-col justify-center">
-        <h5
+        <h6
           className={cn(
-            "font-medium text-xl bg-gradient-to-r text-transparent bg-clip-text",
+            "font-medium text-lg bg-gradient-to-r text-transparent bg-clip-text",
             titleColor === "red" && "from-rose-500 to-rose-200",
             titleColor === "blue" && "from-sky-500 to-sky-200",
             titleColor === "yellow" && "from-amber-500 to-amber-200"
           )}
         >
           {title}
-        </h5>
+        </h6>
         <Link
           href={href}
           className={buttonVariants({

@@ -1,15 +1,19 @@
-import VideosPage from "@/components/pages/videos";
+import Breadcrumb from "@/components/breadcrumb";
+import { Badge } from "@/components/ui/badge";
+import VideosPagination from "@/features/videos/components/videos-pagination";
 import { VideosParams } from "@/features/videos/data";
 import { getVideos } from "@/features/videos/hooks/useGetVideos";
 import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-type VideosProps = {
+type VideosPageProps = {
   searchParams: Promise<VideosParams>;
 };
 
 export const generateMetadata = async ({
   searchParams,
-}: VideosProps): Promise<Metadata> => {
+}: VideosPageProps): Promise<Metadata> => {
   const awaitedSearchParams = await searchParams;
   try {
     const { seoOnPage } = await getVideos(awaitedSearchParams);
@@ -22,8 +26,71 @@ export const generateMetadata = async ({
   }
   return { title: "Hellorv | Danh sách phim" };
 };
-export default async function Videos({ searchParams }: VideosProps) {
+export default async function VideosPage({ searchParams }: VideosPageProps) {
   const awaitedSearchParams = await searchParams;
 
-  return <VideosPage searchParams={awaitedSearchParams} />;
+  const { titlePage, items, pagination } = await getVideos({
+    ...awaitedSearchParams,
+    limit: 30,
+  });
+
+  return (
+    <div className="max-w-5xl mx-auto px-4 py-4">
+      <Breadcrumb
+        items={[
+          ...(awaitedSearchParams.typelist ||
+          awaitedSearchParams.category ||
+          awaitedSearchParams.country
+            ? [{ href: "/danh-sach-phim", text: "Danh sách Phim" }]
+            : []),
+          { text: titlePage },
+        ]}
+        className="mb-4"
+      ></Breadcrumb>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {items.map((video) => (
+          <div key={video.id} className="col-span-1">
+            <Link
+              href={`/phim/${video.slug}`}
+              className="relative block w-full aspect-[23/35] select-none"
+            >
+              <Image
+                src={video.poster}
+                alt="Poster"
+                fill
+                sizes="(max-width: 1200px) 50vw, 100vw"
+                className="object-cover rounded-md shadow"
+              />
+
+              <Badge variant="episode" className="absolute top-0 right-0 ">
+                {video.episodeCurrent}
+              </Badge>
+              <Badge variant="language" className="absolute bottom-0 left-0 ">
+                {video.language}
+              </Badge>
+            </Link>
+            <div className="mt-2">
+              <Link
+                href={`/phim/${video.slug}`}
+                title={video.name}
+                className="font-medium line-clamp-2 hover:text-primary hover:underline hover:underline-offset-2"
+              >
+                {video.name}
+              </Link>
+              <p
+                title={video.originName}
+                className="text-muted-foreground text-sm line-clamp-2"
+              >
+                {video.originName}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <VideosPagination
+        pagination={pagination}
+        searchParams={awaitedSearchParams}
+      />
+    </div>
+  );
 }

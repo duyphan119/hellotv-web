@@ -54,10 +54,7 @@ export const getLatestVideos = async (params: LatestVideoParams = {}) => {
     const response = await fetch(
       `https://phimapi.com/danh-sach/phim-moi-cap-nhat-v3?${qs.stringify(
         params
-      )}`,
-      {
-        cache: "no-cache",
-      }
+      )}`
     );
 
     const { items, pagination } = await response.json();
@@ -204,12 +201,7 @@ export const getVideosByTypeList = async (
 ) => {
   try {
     const response = await fetch(
-      `https://phimapi.com/v1/api/danh-sach/${typeList}?${qs.stringify(
-        params
-      )}`,
-      {
-        cache: "no-cache",
-      }
+      `https://phimapi.com/v1/api/danh-sach/${typeList}?${qs.stringify(params)}`
     );
     const {
       data: {
@@ -303,10 +295,7 @@ export const getVideosByCategory = async (
     const response = await fetch(
       `https://phimapi.com/v1/api/the-loai/${categorySlug}?${qs.stringify(
         params
-      )}`,
-      {
-        cache: "no-cache",
-      }
+      )}`
     );
     const {
       data: {

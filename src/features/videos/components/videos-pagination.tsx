@@ -4,7 +4,6 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -12,8 +11,9 @@ import {
   Pagination as PaginationResponse,
   VideosParams,
 } from "@/features/videos/data";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import qs from "query-string";
+import { ChangeEvent, useRef } from "react";
 
 type VideosPaginationProps = {
   pagination: PaginationResponse;
@@ -27,11 +27,23 @@ export default function VideosPagination({
   searchParams,
 }: VideosPaginationProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const getHref = (page: number) => {
     return `${pathname}?${qs.stringify({
       ...searchParams,
       page: page,
     })}`;
+  };
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (inputRef.current) {
+      const { value } = inputRef.current;
+      inputRef.current.blur();
+      router.push(getHref(Number(value)));
+    }
   };
 
   if (pagination.totalPages <= 1) return null;
@@ -45,20 +57,35 @@ export default function VideosPagination({
             href={getHref(pagination.currentPage - 1)}
           />
         </PaginationItem>
-        {Array(pagination.currentPage > 2 ? 5 : 7)
+        <form
+          onSubmit={handleSubmit}
+          className="flex items-center gap-1 rounded-3xl h-12 px-4 bg-secondary"
+        >
+          Trang
+          <input
+            ref={inputRef}
+            type="number"
+            min={1}
+            max={pagination.totalPages}
+            defaultValue={pagination.currentPage}
+            className="w-14 px-1.5 py-0.5 bg-transparent outline-none border border-neutral-500 rounded-md h-8"
+          />
+          &nbsp;/&nbsp;{pagination.totalPages}
+        </form>
+        {/* {Array(pagination.currentPage > 2 ? 5 : 7)
           .fill(pagination.currentPage - 2)
           .map((value, index) => {
             const page = value + index;
-            const disabled = page === pagination.currentPage;
+            const isActive = page === pagination.currentPage;
             if (page < 1 || page > pagination.totalPages) return null;
             return (
               <PaginationItem key={index}>
-                <PaginationLink disabled={disabled} href={getHref(page)}>
+                <PaginationLink isActive={isActive} href={getHref(page)}>
                   {value + index}
                 </PaginationLink>
               </PaginationItem>
             );
-          })}
+          })} */}
         <PaginationItem>
           <PaginationNext
             disabled={pagination.currentPage === pagination.totalPages}
