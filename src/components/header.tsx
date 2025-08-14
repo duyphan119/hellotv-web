@@ -1,48 +1,39 @@
 "use client";
 
 import CategoriesNavigationMenu from "@/features/categories/components/categories-navigation-menu";
-import useGetCategories from "@/features/categories/hooks/useGetCategories";
 import CountriesNavigationMenu from "@/features/countries/components/countries-navigation-menu";
-import useGetCountries from "@/features/countries/hooks/useGetCountries";
-import TypeListNavigationMenu from "@/features/typelist/components/typelist-navigation-menu";
-import { typeList } from "@/features/typelist/data";
 import SearchForm from "@/features/videos/components/search-form";
 import Link from "next/link";
 import DrawerMenu from "./drawer-menu";
 
 export default function Header() {
-  const { data: categoriesData } = useGetCategories();
-  const { data: countriesData } = useGetCountries();
-
   return (
-    <header className="bg-neutral-950 px-4 flex items-center h-16 gap-4">
-      <div className="block translate-y-1 lg:hidden">
-        <DrawerMenu
-          categories={categoriesData || []}
-          countries={countriesData || []}
-        />
+    <header className="bg-background text-foreground sticky top-0 z-10">
+      <div className="flex items-center gap-4 h-16 max-w-5xl mx-auto px-4">
+        <div className="block translate-y-1 lg:hidden">
+          <DrawerMenu />
+        </div>
+        <div className="text-xl">
+          <Link href="/">Hellotv</Link>
+        </div>
+        <div className="hidden lg:flex items-center">
+          <Link
+            href="/danh-sach-phim?typelist=phim-bo"
+            className="block text-sm h-9 font-medium px-4 py-2"
+          >
+            Phim bộ
+          </Link>
+          <Link
+            href="/danh-sach-phim?typelist=phim-le"
+            className="block text-sm h-9 font-medium px-4 py-2"
+          >
+            Phim lẻ
+          </Link>
+          <CategoriesNavigationMenu />
+          <CountriesNavigationMenu />
+        </div>
+        <SearchForm />
       </div>
-      <div className="text-xl">
-        <Link href="/">Hellotv</Link>
-      </div>
-      <div className="hidden lg:flex items-center">
-        {typeList.map((item) => (
-          <TypeListNavigationMenu
-            key={item.name}
-            countries={countriesData || []}
-            {...item}
-          />
-        ))}
-        <CategoriesNavigationMenu categories={categoriesData || []} />
-        <CountriesNavigationMenu countries={countriesData || []} />
-        <Link
-          href="/da-xem"
-          className="block text-sm h-9 font-medium px-4 py-2"
-        >
-          Đã xem
-        </Link>
-      </div>
-      <SearchForm />
     </header>
   );
 }

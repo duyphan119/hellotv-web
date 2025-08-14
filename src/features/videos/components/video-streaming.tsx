@@ -1,239 +1,73 @@
 "use client";
 
-import Breadcrumb from "@/components/breadcrumb";
-import FallbackImage from "@/components/fallback-image";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Episode } from "@/features/videos/data";
-import { saveWatchedVideo } from "@/features/watched-videos/data";
-import { parseHtmlString, shortenServerName } from "@/lib/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useGetVideo } from "../hooks/useGetVideo";
-import RecommendVideos from "./recommend-videos";
-import VideoInfo from "./video-info";
+import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { Episode } from "../data";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import queryString from "query-string";
 
-type VideoStreamingProps = {
-  indexServer: number;
-  episodeSlug: string;
-  slug: string;
+type Props = {
+  embedUrl: string;
+  nextEpisode?: Episode;
+  previousEpisode?: Episode;
 };
 
 export default function VideoStreaming({
-  indexServer,
-  slug,
-  episodeSlug,
-}: VideoStreamingProps) {
+  embedUrl,
+  nextEpisode,
+  previousEpisode,
+}: Props) {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const divPlayerRef = useRef<HTMLDivElement | null>(null);
-  const buttonEpisodeRef = useRef<HTMLButtonElement | null>(null);
-
-  const { data } = useGetVideo(slug);
-
-  const [episode, setEpisode] = useState<Episode>();
+  const searchParams = useSearchParams();
 
   const handleSelectPreviousEpisode = () => {
-    if (!episode || !data || !data.video) return;
-
-    const server = data.servers[indexServer];
-    const { episodes } = server;
-
-    const currentIndex = episodes.findIndex(
-      ({ slug }) => slug === episode.slug
-    );
-
-    if (currentIndex === -1) return;
-
-    const newIndex = (currentIndex - 1 + episodes.length) % episodes.length;
-
-    router.push(
-      `/xem-phim/${data.video.slug}?ep=${data.servers[indexServer].episodes[newIndex].slug}&ser=${indexServer}`
-    );
+    if (!previousEpisode) return;
+    const indexServer = Number(searchParams.get("ser")) || 0;
+    const url = queryString.stringifyUrl({
+      url: pathname,
+      query: {
+        ep: previousEpisode.slug,
+        ser: indexServer,
+      },
+    });
+    router.push(url);
   };
 
   const handleSelectNextEpisode = () => {
-    if (!episode || !data || !data.video) return;
-
-    const server = data.servers[indexServer];
-    const { episodes } = server;
-
-    const currentIndex = episodes.findIndex(
-      ({ slug }) => slug === episode.slug
-    );
-
-    if (currentIndex === -1) return;
-
-    const newIndex = (currentIndex + 1) % server.episodes.length;
-
-    router.push(
-      `/xem-phim/${data.video.slug}?ep=${server.episodes[newIndex].slug}&ser=${indexServer}`
-    );
+    if (!nextEpisode) return;
+    const indexServer = Number(searchParams.get("ser")) || 0;
+    const url = queryString.stringifyUrl({
+      url: pathname,
+      query: {
+        ep: nextEpisode.slug,
+        ser: indexServer,
+      },
+    });
+    router.push(url);
   };
 
-  useEffect(() => {
-    if (buttonEpisodeRef.current) {
-      buttonEpisodeRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-    if (divPlayerRef.current) {
-      divPlayerRef.current.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (data && data.video) {
-      const currentEpsisode: Episode | undefined = episodeSlug
-        ? data.servers[indexServer].episodes.find(
-            ({ slug }) => episodeSlug === slug
-          )
-        : data.servers[indexServer].episodes[0];
-      if (currentEpsisode) {
-        saveWatchedVideo({
-          id: data.video.id,
-          name: data.video.name,
-          slug: data.video.slug,
-          thumbnail: data.video.thumbnail,
-          episodeSlug: currentEpsisode.slug,
-          server: indexServer,
-          time: new Date().getTime(),
-        });
-        setEpisode(currentEpsisode);
-      }
-    }
-  }, [data, episodeSlug, indexServer]);
-
-  if (!data || !data.video) return null;
-
   return (
-    <div className="grid grid-cols-12 gap-4 p-4">
-      <Breadcrumb
-        items={[
-          {
-            href: "/danh-sach-phim",
-            text: "Danh sách phim",
-          },
-          ...(episode
-            ? [
-                { href: `/phim/${data.video.slug}`, text: data.video.name },
-                { text: episode.name },
-              ]
-            : [{ text: data.video.name }]),
-        ]}
-        className="col-span-12"
-      />
-      <div className="col-span-12 lg:col-span-9">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 sm:col-span-6 md:col-span-4 md:order-1 order-2">
-            <FallbackImage
-              aspectRatio={3 / 4}
-              src={data.video.poster}
-              alt={data.video.slug}
-            />
-          </div>
-          <div className="col-span-12 sm:col-span-6 md:col-span-8 md:order-2 order-3">
-            <VideoInfo video={data.video} />
-          </div>
-          <div className="col-span-12 md:order-3 order-4">
-            <div className="text-xl font-medium">Nội dung</div>
-            <div className="">{parseHtmlString(data.video.content)}</div>
-          </div>
-          <div
-            ref={divPlayerRef}
-            className="col-span-12 space-y-4 md:order-4 order-1"
-          >
-            {episode && (
-              <>
-                <div className="text-xl font-medium">
-                  {data.video.name} - {data.video.originName} -{" "}
-                  {data.video.year} - {episode.name}
-                </div>
-                <iframe
-                  src={episode.link_embed}
-                  allowFullScreen
-                  className="w-full aspect-video"
-                ></iframe>
-                {data.servers[indexServer].episodes.length > 1 && (
-                  <div className="flex items-center justify-center gap-4">
-                    <Button
-                      variant="secondary"
-                      onClick={handleSelectPreviousEpisode}
-                    >
-                      <ChevronLeft className="translate-y-[2px]" /> Tập trước
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={handleSelectNextEpisode}
-                    >
-                      Tập tiếp
-                      <ChevronRight className="translate-y-[2px]" />
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
-            <Tabs
-              defaultValue={data.servers[indexServer].name}
-              className="w-full"
-            >
-              <TabsList>
-                {data.servers.map((server) => (
-                  <TabsTrigger key={server.name} value={server.name}>
-                    {shortenServerName(server.name)}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              {episode &&
-                data.servers.map((server, index) => (
-                  <TabsContent key={server.name} value={server.name}>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
-                      {server.episodes.map((item) => {
-                        const isActive = episode.filename === item.filename;
-                        const variant = isActive ? "default" : "secondary";
-                        const className = "col-span-1 sm:text-sm text-xs";
-                        if (isActive)
-                          return (
-                            <Button
-                              key={item.slug}
-                              ref={buttonEpisodeRef}
-                              variant={variant}
-                              className={className}
-                            >
-                              {item.name}
-                            </Button>
-                          );
-                        return (
-                          <Link
-                            key={item.slug}
-                            href={`/xem-phim/${data.video.slug}?ep=${item.slug}&ser=${index}`}
-                            className={buttonVariants({
-                              variant,
-                              className,
-                            })}
-                          >
-                            {item.name}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </TabsContent>
-                ))}
-            </Tabs>
-          </div>
-        </div>
+    <>
+      <iframe
+        src={embedUrl}
+        allowFullScreen
+        className="w-full aspect-video"
+      ></iframe>
+      <div className="flex items-center justify-center gap-4">
+        {previousEpisode && (
+          <Button variant="secondary" onClick={handleSelectPreviousEpisode}>
+            <ChevronLeftIcon className="translate-y-[2px]" /> Tập trước
+          </Button>
+        )}
+        {nextEpisode && (
+          <Button variant="secondary" onClick={handleSelectNextEpisode}>
+            Tập tiếp
+            <ChevronRightIcon className="translate-y-[2px]" />
+          </Button>
+        )}
       </div>
-      <div className="col-span-12 lg:col-span-3">
-        <RecommendVideos
-          slug={data.video.slug}
-          country={data.video.countries[0]}
-        />
-      </div>
-    </div>
+    </>
   );
 }

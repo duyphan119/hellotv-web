@@ -7,16 +7,10 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Country } from "@/features/countries/data";
 import Link from "next/link";
+import { countries } from "../data";
 
-type CountriesNavigationMenuProps = {
-  countries: Country[];
-};
-
-export default function CountriesNavigationMenu({
-  countries,
-}: CountriesNavigationMenuProps) {
+export default function CountriesNavigationMenu() {
   return (
     <NavigationMenu>
       <NavigationMenuList>

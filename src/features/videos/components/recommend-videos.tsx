@@ -1,9 +1,9 @@
 "use client";
 
-import FallbackImage from "@/components/fallback-image";
 import { Country } from "@/features/countries/data";
 import useGetVideosByTypeList from "@/features/videos/hooks/useGetVideosByTypeList";
 import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
+import Image from "next/image";
 import Link from "next/link";
 
 type RecommendVideosProps = {
@@ -44,46 +44,60 @@ export default function RecommendVideos({
 
           .map((video, index) => (
             <div key={index} className="group">
-              <Link
-                href={`/phim/${video.slug}`}
-                className="grid grid-cols-12 gap-4"
-              >
-                <div className="col-span-12 md:col-span-4">
-                  <FallbackImage
-                    aspectRatio={16 / 9}
-                    src={video.thumbnail}
-                    alt={video.slug}
-                  />
-                </div>
-                <div className="col-span-12 md:col-span-8">
-                  <div className="group-hover:text-yellow-600">
-                    {video.name}
+              <div className="grid grid-cols-12 gap-4">
+                <Link
+                  href={`/phim/${video.slug}`}
+                  className="col-span-12 md:col-span-4"
+                >
+                  <div className="relative aspect-video">
+                    <Image
+                      src={video.thumbnail}
+                      alt="Thumbnail"
+                      fill
+                      sizes="(max-width: 1200px) 50vw, 100vw"
+                      className="object-cover rounded-md shadow"
+                    />
                   </div>
+                </Link>
+                <div className="col-span-12 md:col-span-8">
+                  <Link
+                    href={`/phim/${video.slug}`}
+                    className="group-hover:text-yellow-600 text-sm line-clamp-2"
+                  >
+                    {video.name}
+                  </Link>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         {movieData.pages[0].items
           .filter((item) => item.slug !== slug)
           .map((video, index) => (
             <div key={index} className="group">
-              <Link
-                href={`/xem-phim/${video.slug}`}
-                className="grid grid-cols-12 gap-4"
-              >
-                <div className="col-span-12 md:col-span-4">
-                  <FallbackImage
-                    aspectRatio={16 / 9}
-                    src={video.thumbnail}
-                    alt={video.slug}
-                  />
-                </div>
-                <div className="col-span-12 md:col-span-8">
-                  <div className="group-hover:text-yellow-600">
-                    {video.name}
+              <div className="grid grid-cols-12 gap-4">
+                <Link
+                  href={`/xem-phim/${video.slug}`}
+                  className="col-span-12 md:col-span-4"
+                >
+                  <div className="relative aspect-video">
+                    <Image
+                      src={video.thumbnail}
+                      alt="Thumbnail"
+                      fill
+                      sizes="(max-width: 1200px) 50vw, 100vw"
+                      className="object-cover rounded-md shadow"
+                    />
                   </div>
+                </Link>
+                <div className="col-span-12 md:col-span-8">
+                  <Link
+                    href={`/xem-phim/${video.slug}`}
+                    className="group-hover:text-yellow-600 text-sm line-clamp-2"
+                  >
+                    {video.name}
+                  </Link>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
       </div>

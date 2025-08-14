@@ -56,10 +56,7 @@ export const getLatestVideos = async (params: LatestVideoParams = {}) => {
         params
       )}`,
       {
-        next: {
-          revalidate: 30,
-          tags: ["latestVideos"],
-        },
+        cache: "no-cache",
       }
     );
 
@@ -146,10 +143,7 @@ const DEFAULT_VIDEOS_RESPONSE: {
 export const getVideo = async (slug: string) => {
   try {
     const response = await fetch(`https://phimapi.com/phim/${slug}`, {
-      next: {
-        revalidate: 30,
-        tags: ["video", slug],
-      },
+      cache: "no-cache",
     });
 
     const { movie, episodes } = await response.json();
@@ -214,10 +208,7 @@ export const getVideosByTypeList = async (
         params
       )}`,
       {
-        next: {
-          revalidate: 30,
-          tags: ["videosByTypeList", typeList],
-        },
+        cache: "no-cache",
       }
     );
     const {
@@ -314,10 +305,7 @@ export const getVideosByCategory = async (
         params
       )}`,
       {
-        next: {
-          revalidate: 30,
-          tags: ["videosByCategory", categorySlug],
-        },
+        cache: "no-cache",
       }
     );
     const {
@@ -363,10 +351,7 @@ export const searchVideos = async (params: SearchVideosParams) => {
       const response = await fetch(
         `https://phimapi.com/v1/api/tim-kiem?${qs.stringify(params)}`,
         {
-          next: {
-            revalidate: 30,
-            tags: ["search", params.keyword],
-          },
+          cache: "no-cache",
         }
       );
       const {

@@ -11,7 +11,7 @@ export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => {
-    if (window.scrollY > 0) {
+    if (window.scrollY > 40) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -42,8 +42,9 @@ export default function ScrollToTop() {
           size="icon"
           className="opacity-85"
           title="Cuộn lên đầu trang"
+          variant="gradientBluePurple"
         >
-          <ArrowUp className="h-4 w-4" />
+          <ArrowUp />
         </Button>
       )}
     </div>

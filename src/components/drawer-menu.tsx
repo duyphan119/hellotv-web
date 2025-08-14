@@ -12,20 +12,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Category } from "@/features/categories/data";
-import { Country } from "@/features/countries/data";
+import { categories } from "@/features/categories/data";
+import { countries } from "@/features/countries/data";
 import { typeList } from "@/features/typelist/data";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { MouseEvent, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 
-type DrawerMenuProps = {
-  countries: Country[];
-  categories: Category[];
-};
-
-export default function DrawerMenu({ categories, countries }: DrawerMenuProps) {
+export default function DrawerMenu() {
   const [visible, setVisible] = useState<boolean>(false);
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {

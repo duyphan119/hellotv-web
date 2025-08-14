@@ -1,20 +1,23 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Video } from "@/features/videos/data";
 import Link from "next/link";
 import { Fragment } from "react";
 
 type VideoInfoProps = {
   video: Video;
-  onClickTrailer?: () => void;
+  buttonPlayVisible?: boolean;
 };
 
-export default function VideoInfo({ video, onClickTrailer }: VideoInfoProps) {
+export default function VideoInfo({
+  video,
+  buttonPlayVisible = false,
+}: VideoInfoProps) {
   return (
     <div>
       <div className="text-3xl font-medium">{video.name}</div>
       <div className="text-neutral-400">{video.originName}</div>
-      <div className="mt-2">Đạo diễn: {video.director}</div>
-      <div className="">
+      <div className="text-sm mt-4">Đạo diễn: {video.director}</div>
+      <div className="text-sm">
         Quốc gia:{" "}
         {video.countries.map((item, index) => (
           <Fragment key={index}>
@@ -28,8 +31,8 @@ export default function VideoInfo({ video, onClickTrailer }: VideoInfoProps) {
           </Fragment>
         ))}
       </div>
-      <div className="">Năm: {video.year}</div>
-      <div className="">
+      <div className="text-sm">Năm: {video.year}</div>
+      <div className="text-sm">
         Thể loại:{" "}
         {video.categories.map((item, index) => (
           <Fragment key={index}>
@@ -43,20 +46,20 @@ export default function VideoInfo({ video, onClickTrailer }: VideoInfoProps) {
           </Fragment>
         ))}
       </div>
-      <div className="">Diễn viên: {video.actors.join(", ")}</div>
-      <div className="my-2 space-x-2">
-        {video.trailer && (
-          <Button size="xl" variant="red" onClick={onClickTrailer}>
-            XEM TRAILER
-          </Button>
-        )}
-        <Link
-          href={`/xem-phim/${video.slug}`}
-          className={buttonVariants({ size: "xl" })}
-        >
-          XEM PHIM
-        </Link>
-      </div>
+      <div className="text-sm">Diễn viên: {video.actors.join(", ")}</div>
+      {buttonPlayVisible && (
+        <div className="mt-4">
+          <Link
+            href={`/xem-phim/${video.slug}`}
+            className={buttonVariants({
+              size: "xl",
+              variant: "gradientYellowRed",
+            })}
+          >
+            XEM NGAY
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
