@@ -27,7 +27,7 @@ export default function VideosCategorySection({ title, videos, href }: Props) {
           Xem tất cả
         </Link>
       </div>
-      <div className="grid grid-cols-5 gap-4 mt-4">
+      <div className="grid md:grid-cols-6 grid-cols-3 gap-4 mt-4">
         {videos.map((video) => (
           <div key={video.id} className="col-span-1">
             <Link

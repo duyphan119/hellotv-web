@@ -19,9 +19,9 @@ export default async function Home() {
     getVideosByCountry("han-quoc"),
     getVideosByCountry("trung-quoc"),
     getVideosByCountry("nhat-ban"),
-    getVideosByCategory("hai-huoc", { limit: 5 }),
-    getVideosByCategory("phieu-luu", { limit: 5 }),
-    getVideosByCategory("hoc-duong", { limit: 5 }),
+    getVideosByCategory("hai-huoc", { limit: 6 }),
+    getVideosByCategory("phieu-luu", { limit: 6 }),
+    getVideosByCategory("hoc-duong", { limit: 6 }),
   ]);
 
   const latestVideos =

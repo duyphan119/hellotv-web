@@ -27,7 +27,7 @@ export default function VideosCountrySection({
 }: Props) {
   return (
     <section className="grid grid-cols-5 gap-4">
-      <div className="col-span-1 flex flex-col justify-center">
+      <div className="col-span-5 md:col-span-1 flex md:flex-col md:justify-center justify-between">
         <h6
           className={cn(
             "font-medium text-lg bg-gradient-to-r text-transparent bg-clip-text",
@@ -48,11 +48,11 @@ export default function VideosCountrySection({
           Xem tất cả
         </Link>
       </div>
-      <div className="col-span-4">
+      <div className="col-span-5 md:col-span-4">
         <Carousel>
           <CarouselContent>
             {videos.map((video) => (
-              <CarouselItem key={video.id} className="basis-1/3">
+              <CarouselItem key={video.id} className="basis-1/2 md:basis-1/3">
                 <Link
                   href={`/phim/${video.slug}`}
                   className="relative block w-full aspect-video select-none"
@@ -92,8 +92,8 @@ export default function VideosCountrySection({
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="size-8 -left-4 [&_svg]:size-4 bg-foreground/70 text-background" />
-          <CarouselNext className="size-8 -right-4 [&_svg]:size-4 bg-foreground/70 text-background" />
+          <CarouselPrevious className="!size-8 -left-4 [&_svg]:!size-4 bg-foreground/70 text-background" />
+          <CarouselNext className="!size-8 -right-4 [&_svg]:!size-4 bg-foreground/70 text-background" />
         </Carousel>
       </div>
     </section>

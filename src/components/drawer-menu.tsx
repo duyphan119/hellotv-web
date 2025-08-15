@@ -17,18 +17,14 @@ import { countries } from "@/features/countries/data";
 import { typeList } from "@/features/typelist/data";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { MouseEvent, useState } from "react";
+import { useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 
 export default function DrawerMenu() {
   const [visible, setVisible] = useState<boolean>(false);
 
-  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-
+  const handleClick = () => {
     setVisible(false);
-
-    window.location.href = e.currentTarget.getAttribute("href") + "";
   };
   return (
     <Drawer direction="left" open={visible} onOpenChange={setVisible}>
@@ -39,27 +35,19 @@ export default function DrawerMenu() {
         <DrawerTitle className="sr-only">Menu</DrawerTitle>
         <ScrollArea className="py-2 h-full">
           <div className="space-y-4">
-            {typeList.map((item) => (
-              <Accordion type="single" collapsible key={item.name}>
-                <AccordionItem value={item.slug}>
-                  <AccordionTrigger>{item.name}</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="grid grid-cols-2 bg-neutral-900">
-                      {countries.map((country) => (
-                        <Link
-                          key={country.name}
-                          href={`/danh-sach-phim?typelist=${item.slug}&country=${country.slug}`}
-                          onClick={handleClick}
-                          className="col-span-1 text-sm font-medium px-4 py-2 hover:text-yellow-600"
-                        >
-                          {item.name} {country.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+            {typeList.slice(0, 2).map((item) => (
+              <Link
+                key={item.name}
+                href={`/danh-sach-phim?typelist=${item.slug}`}
+                onClick={handleClick}
+                className="block px-4 py-2"
+              >
+                {item.name}
+              </Link>
             ))}
+            <Link href="/da-xem" className="block px-4 py-2">
+              Đã xem
+            </Link>
             <Accordion type="single" collapsible>
               <AccordionItem value="country">
                 <AccordionTrigger>Quốc gia</AccordionTrigger>
@@ -98,9 +86,6 @@ export default function DrawerMenu() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            <Link href="/da-xem" className="block px-4 py-2">
-              Đã xem
-            </Link>
           </div>
         </ScrollArea>
       </DrawerContent>

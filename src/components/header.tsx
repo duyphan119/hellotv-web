@@ -29,6 +29,12 @@ export default function Header() {
           >
             Phim lẻ
           </Link>
+          <Link
+            href="/da-xem"
+            className="block text-sm h-9 font-medium px-4 py-2"
+          >
+            Đã xem
+          </Link>
           <CategoriesNavigationMenu />
           <CountriesNavigationMenu />
         </div>

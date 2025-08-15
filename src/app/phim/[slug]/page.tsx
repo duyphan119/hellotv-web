@@ -1,14 +1,13 @@
-import { getVideo } from "@/features/videos/data";
-import { Metadata } from "next";
-import RecommendVideos from "@/features/videos/components/recommend-videos";
-import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/breadcrumb";
-import Image from "next/image";
-import VideoInfo from "@/features/videos/components/video-info";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { parseHtmlString } from "@/lib/utils";
+import RecommendVideos from "@/features/videos/components/recommend-videos";
+import VideoInfo from "@/features/videos/components/video-info";
+import { getVideo } from "@/features/videos/data";
+import { parseHtmlString, shortenServerName } from "@/lib/utils";
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
 type VideoDetailsProps = {
   params: Promise<{
@@ -76,23 +75,28 @@ export default async function VideoDetails({ params }: VideoDetailsProps) {
             </div>
             <div className="col-span-12">
               <div className="mb-2">Danh sách tập</div>
-              <ScrollArea className="bg-neutral-900 rounded-md">
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 p-3">
-                  {[...servers[0].episodes].reverse().map((episode, index) => (
-                    <Link
-                      key={index}
-                      href={`/xem-phim/${video.slug}?ep=${episode.slug}`}
-                      className={buttonVariants({
-                        className: "col-span-1",
-                        size: "sm",
-                        variant: "secondary",
-                      })}
-                    >
-                      {episode.name}
-                    </Link>
-                  ))}
+              {servers.map((server, index) => (
+                <div key={server.name}>
+                  <div className="bg-neutral-900 inline-block p-3 -mb-3 text-sm">
+                    {shortenServerName(server.name)}
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 p-3 bg-neutral-900 rounded-md">
+                    {server.episodes.reverse().map((episode) => (
+                      <Link
+                        key={episode.name}
+                        href={`/xem-phim/${video.slug}?ep=${episode.slug}&ser=${index}`}
+                        className={buttonVariants({
+                          className: "col-span-1",
+                          size: "sm",
+                          variant: "secondary",
+                        })}
+                      >
+                        {episode.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </ScrollArea>
+              ))}
             </div>
             <div className="col-span-12">
               <div className="text-lg font-medium">Nội dung</div>
