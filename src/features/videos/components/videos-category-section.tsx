@@ -15,7 +15,7 @@ export default function VideosCategorySection({ title, videos, href }: Props) {
   return (
     <section className="mt-12">
       <div className="flex items-center justify-between gap-2 bg-neutral-800 p-4 rounded-md">
-        <h5 className="text-xl">{title}</h5>
+        <h5 className="text-xl font-medium">{title}</h5>
 
         <Link
           href={href}

@@ -44,7 +44,6 @@ export default async function Home() {
       <LatestVideosCarousel videos={latestVideos} />
 
       <WatchedVideosSection />
-
       <div className="mt-12 p-4 rounded-md bg-gradient-to-b from-neutral-900 to-zinc-800 space-y-8">
         <VideosCountrySection
           title="PHIM HÀN QUỐC"
