@@ -18,19 +18,25 @@ AccordionItem.displayName = "AccordionItem";
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+    hideIcon?: boolean;
+  }
+>(({ className, children, hideIcon, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between px-4 py-2 text-sm font-medium transition-all text-left [&[data-state=open]>svg]:rotate-180",
+        "flex items-center px-4 py-2 text-sm font-medium text-left",
+        !hideIcon &&
+          "flex-1 justify-between [&[data-state=open]>svg]:rotate-180 transition-all",
         className
       )}
       {...props}
     >
       {children}
-      <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+      {!hideIcon && (
+        <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+      )}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -38,11 +44,16 @@ AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> & {
+    noPadding?: boolean;
+  }
+>(({ className, children, noPadding, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down px-4 py-2"
+    className={cn(
+      "overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+      noPadding ? "" : "px-4 py-2"
+    )}
     {...props}
   >
     <div className={cn("pb-4 pt-0", className)}>{children}</div>

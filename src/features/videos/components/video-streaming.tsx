@@ -27,6 +27,7 @@ export default function VideoStreaming({
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (!watchedVideoInput.episodeName) return;
     const timeoutId = setTimeout(() => {
       saveWatchedVideo(watchedVideoInput);
     }, 4567);

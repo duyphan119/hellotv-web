@@ -17,8 +17,9 @@ const buttonVariants = cva(
           "bg-gradient-to-br from-yellow-500/70 to-orange-500/70 hover:from-orange-500/70 hover:to-yellow-500/70",
         gradientBluePurple:
           "bg-gradient-to-br from-blue-500 to-purple-500 hover:from-purple-500 hover:to-blue-500",
-        destructive: "",
-        outline: "",
+        destructive: "bg-destructive hover:bg-destructive/70",
+        outline: "border border-neutral-700",
+        outlinePrimary: "border border-primary",
         disabled: "",
         secondary: "bg-secondary shadow hover:bg-secondary/90",
         ghost: "hover:bg-background/10",
@@ -30,7 +31,7 @@ const buttonVariants = cva(
           "bg-primary rounded-full size-12 text-primary-foreground cursor-default",
       },
       size: {
-        default: "h-9 px-4 py-2",
+        default: "h-9 px-4 py-2 [&_svg]:size-4",
         auto: "",
         sm: "h-8 px-3 text-xs",
         lg: "h-10 px-8",

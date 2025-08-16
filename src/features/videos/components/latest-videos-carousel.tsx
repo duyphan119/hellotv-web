@@ -61,9 +61,9 @@ export default function LatestVideosCarousel({
                   </Link>
                   <div className="hidden md:flex items-center flex-wrap gap-2 mb-1 text-xs md:text-sm">
                     Quốc gia:{" "}
-                    {video.countries.map((country) => (
+                    {video.countries.map((country, index) => (
                       <Link
-                        key={country.name}
+                        key={index}
                         href={`/danh-sach-phim?country=${country.slug}`}
                         className={badgeVariants({ variant: "carousel" })}
                       >
@@ -73,9 +73,9 @@ export default function LatestVideosCarousel({
                   </div>
                   <div className="hidden md:flex items-center flex-wrap gap-2 text-xs md:text-sm">
                     Thể loại:{" "}
-                    {video.categories.map((category) => (
+                    {video.categories.map((category, index) => (
                       <Link
-                        key={category.name}
+                        key={index}
                         href={`/danh-sach-phim?category=${category.slug}`}
                         className={badgeVariants({ variant: "carousel" })}
                       >

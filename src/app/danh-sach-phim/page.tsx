@@ -1,5 +1,6 @@
 import Breadcrumb from "@/components/breadcrumb";
 import { Badge } from "@/components/ui/badge";
+import VideosFilter from "@/features/videos/components/videos-filder";
 import VideosPagination from "@/features/videos/components/videos-pagination";
 import { VideosParams } from "@/features/videos/data";
 import { getVideos } from "@/features/videos/hooks/useGetVideos";
@@ -36,7 +37,7 @@ export default async function VideosPage({ searchParams }: VideosPageProps) {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-4">
+    <div className="max-w-5xl mx-auto px-4 py-4 relative">
       <Breadcrumb
         items={[
           ...(awaitedSearchParams.typelist ||
@@ -48,6 +49,9 @@ export default async function VideosPage({ searchParams }: VideosPageProps) {
         ]}
         className="mb-4"
       ></Breadcrumb>
+      <div className="mb-4">
+        <VideosFilter searchParams={awaitedSearchParams} />
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {items.map((video) => (
           <div key={video.id} className="col-span-1">

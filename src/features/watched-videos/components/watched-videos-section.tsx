@@ -39,7 +39,7 @@ export default function WatchedVideosSection() {
           Xem tất cả
         </Link>
       </div>
-      <Carousel>
+      <Carousel className="px-4">
         <CarouselContent>
           {watchedVideos.map((item) => (
             <CarouselItem
@@ -57,7 +57,10 @@ export default function WatchedVideosSection() {
                   sizes="(max-width: 1200px) 50vw, 100vw"
                   className="object-cover rounded-md shadow"
                 />
-                <Badge variant="episode" className="absolute top-0 right-0 ">
+                <Badge
+                  variant="watchedEpisode"
+                  className="absolute top-0 right-0 "
+                >
                   {item.episodeName}
                 </Badge>
                 <Badge variant="language" className="absolute bottom-0 left-0 ">
