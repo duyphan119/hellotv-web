@@ -12,24 +12,15 @@ export type WatchedVideo = {
 };
 
 export const getWatchedVideos = () => {
-  try {
-    const watchedVideos: WatchedVideo[] = JSON.parse(
-      localStorage.getItem("watched")!
-    );
+  const watchedVideos: WatchedVideo[] = JSON.parse(
+    localStorage.getItem("watched")!
+  );
 
-    if (!watchedVideos) return [];
+  if (!watchedVideos) return [];
 
-    const filteredWatchedVideos = watchedVideos.filter(
-      ({ time }) => time + 14 * 24 * 60 * 60 * 1000 > new Date().getTime()
-    );
+  localStorage.setItem("watched", JSON.stringify(watchedVideos));
 
-    localStorage.setItem("watched", JSON.stringify(filteredWatchedVideos));
-
-    return filteredWatchedVideos;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
+  return watchedVideos;
 };
 
 export const saveWatchedVideo = (input: WatchedVideo) => {
