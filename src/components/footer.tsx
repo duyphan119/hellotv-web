@@ -2,6 +2,7 @@
 
 import { typeList } from "@/features/typelist/data";
 import Link from "next/link";
+import { Separator } from "./ui/separator";
 
 export default function Footer() {
   return (
@@ -15,7 +16,8 @@ export default function Footer() {
           Quốc, Thái Lan, Nhật Bản, Âu Mỹ… đa dạng thể loại. Khám phá nền tảng
           phim trực tuyến hay nhất {new Date().getFullYear()} chất lượng 4K!
         </p>
-        <div className="flex gap-4">
+        <Separator />
+        <div className="flex flex-wrap gap-4">
           {typeList.map((item) => (
             <Link
               key={item.slug}
@@ -26,6 +28,7 @@ export default function Footer() {
             </Link>
           ))}
         </div>
+        <Separator />
         <p className="">© 2025 Hellotv. All rights reserved.</p>
       </div>
     </footer>

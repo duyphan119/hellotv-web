@@ -22,6 +22,8 @@ const buttonVariants = cva(
         outlinePrimary: "border border-primary",
         disabled: "",
         secondary: "bg-secondary shadow hover:bg-secondary/90",
+        episode: "bg-neutral-500 hover:bg-neutral-500/90",
+        watchedEpisode: "bg-neutral-700 hover:bg-neutral-700/90",
         ghost: "hover:bg-background/10",
         link: "text-primary underline-offset-4 hover:underline !justify-start !px-0",
         primaryOpacity: "bg-primary",

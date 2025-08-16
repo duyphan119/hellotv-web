@@ -12,19 +12,24 @@ export type WatchedVideo = {
 };
 
 export const getWatchedVideos = () => {
-  const watchedVideos: WatchedVideo[] = JSON.parse(
-    localStorage.getItem("watched")!
-  );
+  try {
+    const watchedVideos: WatchedVideo[] = JSON.parse(
+      localStorage.getItem("watched")!
+    );
 
-  if (!watchedVideos) return [];
+    if (!watchedVideos) return [];
 
-  const filteredWatchedVideos = watchedVideos.filter(
-    ({ time }) => time + 7 * 24 * 60 * 60 * 1000 > new Date().getTime()
-  );
+    const filteredWatchedVideos = watchedVideos.filter(
+      ({ time }) => time + 14 * 24 * 60 * 60 * 1000 > new Date().getTime()
+    );
 
-  localStorage.setItem("watched", JSON.stringify(filteredWatchedVideos));
+    localStorage.setItem("watched", JSON.stringify(filteredWatchedVideos));
 
-  return filteredWatchedVideos;
+    return filteredWatchedVideos;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 };
 
 export const saveWatchedVideo = (input: WatchedVideo) => {
@@ -33,13 +38,25 @@ export const saveWatchedVideo = (input: WatchedVideo) => {
   const index = watchedVideos.findIndex(({ id }) => id === input.id);
 
   if (index !== -1) {
+    const watchedEpisodeString = `${input.episodeName}${input.serverName}`;
     input.otherWatchedEpisodes = [
-      ...watchedVideos[index].otherWatchedEpisodes,
-      input.episodeName,
+      ...watchedVideos[index].otherWatchedEpisodes.filter(
+        (item) => item !== watchedEpisodeString
+      ),
+      watchedEpisodeString,
     ];
     watchedVideos.splice(index, 1);
   }
   watchedVideos.unshift(input);
 
   localStorage.setItem("watched", JSON.stringify(watchedVideos));
+};
+
+export const deleteWatchedVideo = (id: string) => {
+  const watchedVideos = getWatchedVideos();
+
+  localStorage.setItem(
+    "watched",
+    JSON.stringify(watchedVideos.filter((item) => item.id !== id))
+  );
 };

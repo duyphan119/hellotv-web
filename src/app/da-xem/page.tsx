@@ -2,6 +2,7 @@
 
 import Breadcrumb from "@/components/breadcrumb";
 import { Badge } from "@/components/ui/badge";
+import ButtonDeleteWatchedVideo from "@/features/watched-videos/components/button-delete-watched-video";
 import {
   getWatchedVideos,
   WatchedVideo as WatchedVideoType,
@@ -56,10 +57,18 @@ export default function WatchedVideo() {
             </Link>
             <p
               title={item.originName}
-              className="text-muted-foreground text-sm line-clamp-2"
+              className="text-muted-foreground text-sm line-clamp-2 mb-1"
             >
               {item.originName}
             </p>
+            <ButtonDeleteWatchedVideo
+              id={item.id}
+              onSuccess={() => {
+                setWatchedVideos(
+                  watchedVideos.filter(({ id }) => item.id !== id)
+                );
+              }}
+            />
           </div>
         </div>
       ))}
