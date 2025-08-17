@@ -22,6 +22,11 @@ export default async function Home() {
     getVideosByCategory("hai-huoc", { limit: 6 }),
     getVideosByCategory("phieu-luu", { limit: 6 }),
     getVideosByCategory("hoc-duong", { limit: 6 }),
+    getVideosByCategory("the-thao", { limit: 6 }),
+    getVideosByCategory("kinh-di", { limit: 6 }),
+    getVideosByCategory("hinh-su", { limit: 6 }),
+    getVideosByCategory("vien-tuong", { limit: 6 }),
+    getVideosByCategory("vo-thuat", { limit: 6 }),
   ]);
 
   const latestVideos =
@@ -32,12 +37,6 @@ export default async function Home() {
     results[2].status === "fulfilled" ? results[2].value.items : [];
   const japanVideos =
     results[3].status === "fulfilled" ? results[3].value.items : [];
-  const comedyVideos =
-    results[4].status === "fulfilled" ? results[4].value.items : [];
-  const adventureVideos =
-    results[5].status === "fulfilled" ? results[5].value.items : [];
-  const schoolVideos =
-    results[6].status === "fulfilled" ? results[6].value.items : [];
 
   return (
     <div className="max-w-5xl mx-auto px-4">
@@ -67,21 +66,62 @@ export default async function Home() {
         />
       </div>
 
-      <VideosCategorySection
-        title="Tiếng cười sảng khoái"
-        videos={comedyVideos}
-        href="/danh-sach-phim?category=hai-huoc"
-      />
-      <VideosCategorySection
-        title="Chuyến đi mạo hiểm"
-        videos={adventureVideos}
-        href="/danh-sach-phim?category=phieu-luu"
-      />
-      <VideosCategorySection
-        title="Tuổi học trò"
-        videos={schoolVideos}
-        href="/danh-sach-phim?category=hoc-duong"
-      />
+      {results[4].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Tiếng cười sảng khoái"
+          videos={results[4].value.items}
+          href="/danh-sach-phim?category=hai-huoc"
+        />
+      )}
+      {results[5].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Chuyến đi mạo hiểm"
+          videos={results[5].value.items}
+          href="/danh-sach-phim?category=phieu-luu"
+        />
+      )}
+      {results[6].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Tuổi học trò"
+          videos={results[6].value.items}
+          href="/danh-sach-phim?category=hoc-duong"
+        />
+      )}
+      {results[7].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Sức mạnh và tốc độ"
+          videos={results[7].value.items}
+          href="/danh-sach-phim?category=the-thao"
+        />
+      )}
+      {results[8].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Rùng rợn, ám ảnh"
+          videos={results[8].value.items}
+          href="/danh-sach-phim?category=kinh-di"
+        />
+      )}
+      {results[9].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Tội ác và công lý"
+          videos={results[9].value.items}
+          href="/danh-sach-phim?category=hinh-su"
+        />
+      )}
+      {results[10].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Tương lai giả tưởng"
+          videos={results[10].value.items}
+          href="/danh-sach-phim?category=vien-tuong"
+        />
+      )}
+      {results[11].status === "fulfilled" && (
+        <VideosCategorySection
+          title="Quyền cước tinh hoa"
+          videos={results[11].value.items}
+          href="/danh-sach-phim?category=vo-thuat"
+        />
+      )}
     </div>
   );
 }

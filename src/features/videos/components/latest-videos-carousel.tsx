@@ -87,6 +87,7 @@ export default function LatestVideosCarousel({
                 <div className="hidden md:flex gap-2 items-center">
                   <Link
                     href={`/phim/${video.slug}`}
+                    title="Xem chi tiết"
                     className={buttonVariants({
                       size: "iconLg",
                       variant: "secondary",
@@ -98,6 +99,7 @@ export default function LatestVideosCarousel({
                   </Link>
                   <Link
                     href={`/xem-phim/${video.slug}`}
+                    title="Xem ngay"
                     className={buttonVariants({
                       size: "icon2Xl",
                       variant: "gradientYellowRed",
