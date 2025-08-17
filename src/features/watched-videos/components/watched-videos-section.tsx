@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { shortenServerName } from "@/lib/utils";
+import { shortenServerName, shortenVideoLanguage } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { getWatchedVideos, WatchedVideo } from "../data";
@@ -47,7 +47,7 @@ export default function WatchedVideosSection() {
               className="basis-1/2 md:basis-1/3 lg:basis-1/4"
             >
               <Link
-                href={`/phim/${item.slug}`}
+                href={`/xem-phim/${item.slug}${item.query}`}
                 className="relative block w-full aspect-video select-none"
               >
                 <Image
@@ -64,7 +64,7 @@ export default function WatchedVideosSection() {
                   {item.episodeName}
                 </Badge>
                 <Badge variant="language" className="absolute bottom-0 left-0 ">
-                  {shortenServerName(item.serverName)}
+                  {shortenVideoLanguage(shortenServerName(item.serverName))}
                 </Badge>
               </Link>
               <div className="mt-2">

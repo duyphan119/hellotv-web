@@ -16,9 +16,7 @@ export function parseHtmlString(htmlString: string) {
 }
 
 export function shortenServerName(serverName: string) {
-  return shortenVideoLanguage(
-    serverName?.replace("#Hà Nội (", "").replace(")", "") || serverName
-  );
+  return serverName?.replace("#Hà Nội (", "").replace(")", "") || serverName;
 }
 
 export function shortenVideoLanguage(videoLanguage: string) {
