@@ -13,7 +13,7 @@ import {
 } from "@/features/videos/data";
 import { usePathname, useRouter } from "next/navigation";
 import qs from "query-string";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 type VideosPaginationProps = {
   pagination: PaginationResponse;
@@ -35,17 +35,21 @@ export default function VideosPagination({
     })}`;
   };
 
+  const [page, setPage] = useState<number>(0);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputRef.current) {
-      const { value } = inputRef.current;
       inputRef.current.blur();
-      const page = Math.max(1, Math.min(Number(value), pagination.totalPages));
       router.push(getHref(page));
     }
   };
+
+  useEffect(() => {
+    setPage(pagination.currentPage);
+  }, [pagination.currentPage]);
 
   if (pagination.totalPages <= 1) return null;
 
@@ -68,7 +72,15 @@ export default function VideosPagination({
             type="number"
             min={1}
             max={pagination.totalPages}
-            defaultValue={pagination.currentPage}
+            value={page}
+            onChange={(e) =>
+              setPage(
+                Math.max(
+                  1,
+                  Math.min(Number(e.target.value), pagination.totalPages)
+                )
+              )
+            }
             className="w-14 px-1.5 py-0.5 bg-transparent outline-none border border-neutral-500 rounded-md h-8"
           />
           &nbsp;/&nbsp;{pagination.totalPages}
