@@ -12,7 +12,7 @@ import {
 import { shortenServerName, shortenVideoLanguage } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { getWatchedVideos, WatchedVideo } from "../data";
+import { getWatchedVideos, WatchedVideo } from "@/features/watched-videos/data";
 import { useEffect, useState } from "react";
 
 export default function WatchedVideosSection() {

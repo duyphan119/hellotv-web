@@ -10,7 +10,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { categories } from "@/features/categories/data";
 import { countries } from "@/features/countries/data";
 import { TypeList, typeList } from "@/features/typelist/data";
-import { ArrowRightIcon, FilterIcon, XIcon } from "lucide-react";
+import { ArrowRightIcon, FilterIcon, SortDescIcon, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { VideosParams } from "../data";
@@ -21,6 +21,8 @@ type Query = {
   country?: string;
   category?: string;
   year?: number;
+  sort_field?: string;
+  sort_type?: string;
 };
 
 type VideosFilterProps = {
@@ -40,6 +42,11 @@ export default function VideosFilter({ searchParams }: VideosFilterProps) {
       ...(searchParams.country ? { country: searchParams.country } : {}),
       ...(searchParams.typelist ? { typelist: searchParams.typelist } : {}),
       ...(searchParams.year ? { year: Number(searchParams.year) } : {}),
+      ...(searchParams.sort_field
+        ? { sort_field: searchParams.sort_field }
+        : {}),
+      ...(searchParams.sort_type ? { sort_type: searchParams.sort_type } : {}),
+      ...(searchParams.sort_lang ? { sort_lang: searchParams.sort_lang } : {}),
     });
   }, [searchParams]);
 
@@ -62,7 +69,7 @@ export default function VideosFilter({ searchParams }: VideosFilterProps) {
   };
 
   return (
-    <Accordion type="single" collapsible>
+    <Accordion type="multiple" className="space-y-4">
       <AccordionItem value="filter">
         <AccordionTrigger
           hideIcon={true}
@@ -127,7 +134,7 @@ export default function VideosFilter({ searchParams }: VideosFilterProps) {
                     size="sm"
                     variant={isActive ? "outlinePrimary" : "outline"}
                     onClick={() => {
-                      handleClick("typelist", slug);
+                      handleClick("category", slug);
                     }}
                   >
                     {name}
@@ -166,6 +173,93 @@ export default function VideosFilter({ searchParams }: VideosFilterProps) {
               className={buttonVariants({ size: "sm" })}
             >
               Lọc kết quả <ArrowRightIcon className="size-3" />
+            </AccordionTrigger>
+            <AccordionTrigger
+              hideIcon={true}
+              className={buttonVariants({ size: "sm", variant: "destructive" })}
+            >
+              <XIcon className="size-3" />
+              Đóng
+            </AccordionTrigger>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="sort">
+        <AccordionTrigger
+          hideIcon={true}
+          className="bg-secondary hover:bg-secondary/70 rounded-md"
+        >
+          <SortDescIcon className="size-4 mr-2" /> Sắp xếp
+        </AccordionTrigger>
+        <AccordionContent
+          noPadding={true}
+          className="bg-background p-4 rounded-md space-y-2"
+        >
+          <div className="flex items-start">
+            <p className="flex-shrink-0 pt-1 w-20">Xếp theo:</p>
+            <div className="flex flex-wrap items-center gap-2">
+              {[
+                {
+                  name: "Thời gian cập nhật",
+                  value: "modified.time",
+                },
+                {
+                  name: "Năm phát hành",
+                  value: "year",
+                },
+              ].map(({ name, value }) => {
+                const isActive = query.sort_field === value;
+                return (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={isActive ? "outlinePrimary" : "outline"}
+                    onClick={() => {
+                      handleClick("sort_field", value);
+                    }}
+                  >
+                    {name}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex items-start">
+            <p className="flex-shrink-0 pt-1 w-20">Cách xếp:</p>
+            <div className="flex flex-wrap items-center gap-2">
+              {[
+                {
+                  name: "Giảm dần",
+                  value: "desc",
+                },
+                {
+                  name: "Tăng dần",
+                  value: "asc",
+                },
+              ].map(({ name, value }) => {
+                const isActive = query.sort_type === value;
+                return (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={isActive ? "outlinePrimary" : "outline"}
+                    onClick={() => {
+                      handleClick("sort_type", value);
+                    }}
+                  >
+                    {name}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <AccordionTrigger
+              onClick={handleFilter}
+              hideIcon={true}
+              className={buttonVariants({ size: "sm" })}
+            >
+              Sắp xếp kết quả <ArrowRightIcon className="size-3" />
             </AccordionTrigger>
             <AccordionTrigger
               hideIcon={true}

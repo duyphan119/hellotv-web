@@ -1,7 +1,7 @@
 "use client";
 
 import Episodes from "@/features/episodes/components/episodes";
-import { VideoServer } from "@/features/videos/data";
+import { Episode, VideoServer } from "@/features/videos/data";
 import { getWatchedVideos, WatchedVideo } from "@/features/watched-videos/data";
 import { shortenServerName } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 type Props = {
   servers: VideoServer[];
   videoSlug: string;
+  currentEpisode?: Episode;
 };
 
-export default function Servers({ servers, videoSlug }: Props) {
+export default function Servers({ servers, videoSlug, currentEpisode }: Props) {
   const [watchedVideo, setWatchedVideo] = useState<WatchedVideo>();
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function Servers({ servers, videoSlug }: Props) {
             videoSlug={videoSlug}
             otherWatchedEpisodes={watchedVideo?.otherWatchedEpisodes}
             serverName={server.name}
+            currentEpisode={currentEpisode}
           />
         </div>
       ))}

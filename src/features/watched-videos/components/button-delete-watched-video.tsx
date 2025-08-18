@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Trash2Icon } from "lucide-react";
-import { deleteWatchedVideo } from "../data";
+import { deleteWatchedVideo } from "@/features/watched-videos/data";
 import { useMutation } from "@tanstack/react-query";
 
 type Props = {

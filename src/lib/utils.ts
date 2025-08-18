@@ -6,13 +6,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function parseHtmlString(htmlString: string) {
-  // const parser = new DOMParser();
-  // const doc = parser.parseFromString(htmlString, "text/html");
-  // const decoded = doc.body.textContent;
-
-  // return decoded;
-
-  return htmlString;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, "text/html");
+  const decoded = doc.body.textContent;
+  if (!decoded) return htmlString;
+  return decoded;
 }
 
 export function shortenServerName(serverName: string) {

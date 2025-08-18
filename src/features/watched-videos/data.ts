@@ -41,6 +41,8 @@ export const saveWatchedVideo = (input: WatchedVideo) => {
   watchedVideos.unshift(input);
 
   localStorage.setItem("watched", JSON.stringify(watchedVideos));
+
+  return watchedVideos;
 };
 
 export const deleteWatchedVideo = (id: string) => {

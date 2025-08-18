@@ -1,10 +1,10 @@
 import Breadcrumb from "@/components/breadcrumb";
 import Servers from "@/features/servers/components/servers";
 import RecommendVideos from "@/features/videos/components/recommend-videos";
+import VideoContent from "@/features/videos/components/video-content";
 import VideoInfo from "@/features/videos/components/video-info";
 import VideoStreaming from "@/features/videos/components/video-streaming";
 import { getVideo } from "@/features/videos/data";
-import { parseHtmlString } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
@@ -118,7 +118,11 @@ export default async function VideoStreamingPage({
             </div>
             <div className="col-span-12">
               <div className="mb-2">Danh sách tập</div>
-              <Servers servers={servers} videoSlug={video.slug} />
+              <Servers
+                servers={servers}
+                videoSlug={video.slug}
+                currentEpisode={currentEpisode}
+              />
             </div>
             <div className="col-span-12 sm:col-span-6 xl:col-span-3">
               <div className="relative w-full aspect-[23/35]">
@@ -137,7 +141,7 @@ export default async function VideoStreamingPage({
             </div>
             <div className="col-span-12">
               <div className="text-lg font-medium">Nội dung</div>
-              <div className="">{parseHtmlString(video.content)}</div>
+              <VideoContent content={video.content} />
             </div>
           </div>
         </div>

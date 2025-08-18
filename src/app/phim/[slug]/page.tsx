@@ -1,9 +1,9 @@
 import Breadcrumb from "@/components/breadcrumb";
 import Servers from "@/features/servers/components/servers";
 import RecommendVideos from "@/features/videos/components/recommend-videos";
+import VideoContent from "@/features/videos/components/video-content";
 import VideoInfo from "@/features/videos/components/video-info";
 import { getVideo } from "@/features/videos/data";
-import { parseHtmlString } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -78,7 +78,7 @@ export default async function VideoDetails({ params }: VideoDetailsProps) {
             </div>
             <div className="col-span-12">
               <div className="text-lg font-medium">Nội dung</div>
-              <div className="">{parseHtmlString(video.content)}</div>
+              <VideoContent content={video.content} />
             </div>
             {video.trailer && (
               <div className="col-span-12">
