@@ -1,21 +1,18 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/header";
 import Footer from "@/components/footer";
+import Header from "@/components/header";
 import QueryProvider from "@/components/providers/query-provider";
-import ScrollToTop from "@/components/scroll-to-top";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import ScrollToTop from "@/components/scroll-to-top";
+import type { Metadata } from "next";
+import { Roboto } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
+import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +29,10 @@ export default function RootLayout({
     <QueryProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={cn(
+            "flex flex-col min-h-screen antialiased",
+            roboto.className
+          )}
         >
           <ThemeProvider
             attribute="class"
@@ -42,9 +42,7 @@ export default function RootLayout({
           >
             <NextTopLoader color="hsl(var(--primary))" />
             <Header />
-            <main className="min-h-[calc(100vh-4rem)] bg-gray-900">
-              {children}
-            </main>
+            <main className="flex-1 bg-gray-900">{children}</main>
             <Footer />
             <ScrollToTop />
           </ThemeProvider>

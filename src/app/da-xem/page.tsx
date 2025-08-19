@@ -22,17 +22,17 @@ export default function WatchedVideo() {
   }, []);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-5xl mx-auto p-4">
-      <Breadcrumb
-        items={[{ text: "Video đã xem" }]}
-        className="col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-6"
-      />
+    <div className="grid grid-cols-12 gap-4 max-w-5xl mx-auto p-4">
+      <Breadcrumb items={[{ text: "Video đã xem" }]} className="col-span-12" />
       {watchedVideos.length > 0 ? (
         watchedVideos.map((item) => (
-          <div key={item.id} className="col-span-1">
+          <div
+            key={item.id}
+            className="col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2"
+          >
             <Link
               href={`/xem-phim/${item.slug}${item.query}`}
-              className="relative block w-full aspect-video select-none"
+              className="relative block aspect-video select-none"
             >
               <Image
                 src={item.thumbnail}
@@ -78,7 +78,7 @@ export default function WatchedVideo() {
           </div>
         ))
       ) : (
-        <div className="col-span-2 sm:col-span-3 md:col-span-4 flex flex-col items-center">
+        <div className="col-span-12 flex flex-col items-center">
           <h4 className="text-2xl">Bạn chưa xem phim nào!</h4>
           <Link
             href={`/danh-sach-phim`}
