@@ -39,6 +39,7 @@ export default function LatestVideosCarousel({
                 className="block w-full aspect-video relative"
               >
                 <Image
+                  unoptimized
                   src={video.thumbnail}
                   alt="Thumbnail"
                   fill

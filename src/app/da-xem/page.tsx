@@ -35,6 +35,7 @@ export default function WatchedVideo() {
               className="relative block aspect-video select-none"
             >
               <Image
+                unoptimized
                 src={item.thumbnail}
                 alt="Poster"
                 fill

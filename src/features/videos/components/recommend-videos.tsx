@@ -51,6 +51,7 @@ export default function RecommendVideos({
                 >
                   <div className="relative aspect-video">
                     <Image
+                      unoptimized
                       src={video.thumbnail}
                       alt="Thumbnail"
                       fill
@@ -81,6 +82,7 @@ export default function RecommendVideos({
                 >
                   <div className="relative aspect-video">
                     <Image
+                      unoptimized
                       src={video.thumbnail}
                       alt="Thumbnail"
                       fill

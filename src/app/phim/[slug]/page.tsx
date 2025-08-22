@@ -60,6 +60,7 @@ export default async function VideoDetails({ params }: VideoDetailsProps) {
             <div className="col-span-12 sm:col-span-6 xl:col-span-3">
               <div className="relative w-full aspect-[23/35]">
                 <Image
+                  unoptimized
                   src={video.poster}
                   alt="Poster"
                   fill

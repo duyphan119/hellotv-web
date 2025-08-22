@@ -91,6 +91,7 @@ export default function SearchForm() {
                     >
                       <div className="col-span-1 relative aspect-video">
                         <Image
+                          unoptimized
                           src={video.thumbnail}
                           alt="Poster"
                           fill

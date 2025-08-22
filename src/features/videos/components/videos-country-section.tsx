@@ -58,6 +58,7 @@ export default function VideosCountrySection({
                   className="relative block w-full aspect-video select-none"
                 >
                   <Image
+                    unoptimized
                     src={video.thumbnail}
                     alt="Thumbnail"
                     fill

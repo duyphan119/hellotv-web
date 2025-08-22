@@ -45,6 +45,7 @@ export default async function Search({ searchParams }: SearchVideosProps) {
               className="relative block w-full aspect-[23/35] select-none"
             >
               <Image
+                unoptimized
                 src={video.poster}
                 alt="Poster"
                 fill

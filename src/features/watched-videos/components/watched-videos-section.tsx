@@ -51,6 +51,7 @@ export default function WatchedVideosSection() {
                 className="relative block w-full aspect-video select-none"
               >
                 <Image
+                  unoptimized
                   src={item.thumbnail}
                   alt="Thumbnail"
                   fill

@@ -19,6 +19,7 @@ export default function FallbackImage(props: ImageWithFallbackProps) {
   return (
     <AspectRatio ratio={aspectRatio || 1}>
       <Image
+        unoptimized
         {...rest}
         alt={alt}
         src={imgSrc}

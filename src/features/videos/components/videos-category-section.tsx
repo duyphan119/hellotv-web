@@ -35,6 +35,7 @@ export default function VideosCategorySection({ title, videos, href }: Props) {
               className="relative block w-full aspect-[23/35] select-none"
             >
               <Image
+                unoptimized
                 src={video.poster}
                 alt="Poster"
                 fill

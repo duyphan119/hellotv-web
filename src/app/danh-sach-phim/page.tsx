@@ -60,6 +60,7 @@ export default async function VideosPage({ searchParams }: VideosPageProps) {
               className="relative block w-full aspect-[23/35] select-none"
             >
               <Image
+                unoptimized
                 src={video.poster}
                 alt="Poster"
                 fill
