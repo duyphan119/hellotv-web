@@ -1,10 +1,10 @@
 import Breadcrumb from "@/components/breadcrumb";
-import Servers from "@/features/servers/components/servers";
+import Episodes from "@/features/episodes/components/episodes";
+import videoApi from "@/features/videos/api";
 import RecommendVideos from "@/features/videos/components/recommend-videos";
-import VideoContent from "@/features/videos/components/video-content";
 import VideoInfo from "@/features/videos/components/video-info";
 import VideoStreaming from "@/features/videos/components/video-streaming";
-import { getVideo } from "@/features/videos/data";
+import { APP_DOMAIN_CDN_IMAGE } from "@/lib/constants";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
@@ -25,15 +25,17 @@ export const generateMetadata = async ({
 }: VideoStreamingPageProps): Promise<Metadata> => {
   const { slug } = await params;
   try {
-    const { video, servers } = await getVideo(slug);
+    const { movie, episodes } = await videoApi.fetchVideoDetailsData(slug);
     const { ep, ser } = await searchParams;
-    if (video) {
-      const server = servers[Number(ser) || 0];
-      const episode =
-        server?.episodes?.find(({ slug }) => slug === ep) ||
-        server?.episodes?.[0];
+    if (movie) {
+      const episode = episodes[Number(ser) || 0];
+      const serverDataItem =
+        episode?.server_data?.find(({ slug }) => slug === ep) ||
+        episode?.server_data?.[0];
       return {
-        title: `Hellotv ${episode ? `| ${episode.name} |` : "|"} ${video.name}`,
+        title: `Hellotv ${
+          serverDataItem ? `| ${serverDataItem.name} |` : "|"
+        } ${movie.name}`,
       };
     }
   } catch (error) {
@@ -51,105 +53,110 @@ export default async function VideoStreamingPage({
   const { slug } = await params;
   const { ep, ser } = await searchParams;
 
-  const indexServer = Number(ser) || 0;
+  const indexEpisode = Number(ser) || 0;
 
-  const { video, servers } = await getVideo(slug);
+  const { episodes, movie } = await videoApi.fetchVideoDetailsData(slug);
 
-  if (!video) return notFound();
+  if (!movie) return notFound();
 
-  const currentServer = servers[indexServer];
-  const indexEdpisode = currentServer.episodes.findIndex(
+  const currentEpisode = episodes[indexEpisode];
+  const indexServerDataItem = currentEpisode.server_data.findIndex(
     ({ slug }) => slug === ep
   );
-  const currentEpisode =
-    currentServer.episodes[indexEdpisode === -1 ? 0 : indexEdpisode];
+  const currentServerDataItem =
+    currentEpisode.server_data[
+      indexServerDataItem === -1 ? 0 : indexServerDataItem
+    ];
 
-  if (!currentEpisode) return redirect(`/xem-phim/${video.slug}`);
+  if (!currentServerDataItem) return redirect(`/xem-phim/${movie.slug}`);
 
-  const indexNextEpisode = (indexEdpisode + 1) % currentServer.episodes.length;
-  const indexPreviousEpisode =
-    (indexEdpisode + currentServer.episodes.length - 1) %
-    currentServer.episodes.length;
+  const serverDataLength = currentEpisode.server_data.length;
+  const indexNextServerDataItem = (indexServerDataItem + 1) % serverDataLength;
+  const indexPreviousServerDataItem =
+    (indexServerDataItem + serverDataLength - 1) % serverDataLength;
 
   return (
-    <div className="max-w-5xl mx-auto px-4">
-      <div className="grid grid-cols-12 gap-4 py-4">
-        <Breadcrumb
-          items={[
-            {
-              href: "/danh-sach-phim",
-              text: "Danh sách phim",
-            },
-            ...(currentEpisode
-              ? [
-                  { href: `/phim/${video.slug}`, text: video.name },
-                  { text: currentEpisode.name },
-                ]
-              : [{ text: video.name }]),
-          ]}
-          className="col-span-12"
-        />
-        <div className="col-span-12 lg:col-span-9">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 space-y-4">
-              {currentEpisode && (
-                <>
-                  <VideoStreaming
-                    embedUrl={currentEpisode.link_embed}
-                    nextEpisode={currentServer.episodes[indexNextEpisode]}
-                    previousEpisode={
-                      currentServer.episodes[indexPreviousEpisode]
-                    }
-                    watchedVideoInput={{
-                      id: video.id,
-                      name: video.name,
-                      originName: video.originName,
-                      slug: video.slug,
-                      thumbnail: video.thumbnail,
-                      serverName: currentServer.name,
-                      episodeName: currentEpisode.name,
-                      query: `?ep=${currentEpisode.slug}&ser=${indexServer}`,
-                      time: new Date().getTime(),
-                      otherWatchedEpisodes: [],
-                    }}
-                  />
-                </>
-              )}
-            </div>
-            <div className="col-span-12">
-              <div className="mb-2">Danh sách tập</div>
-              <Servers
-                servers={servers}
-                videoSlug={video.slug}
-                currentEpisode={currentEpisode}
+    <div className="grid grid-cols-12 gap-4">
+      <Breadcrumb
+        breadCrumb={[
+          {
+            slug: "/danh-sach",
+            name: "Danh sách phim",
+          },
+          {
+            slug: `/xem-phim/${movie.slug}`,
+            name: movie.name,
+          },
+          {
+            isCurrent: true,
+            name: currentServerDataItem.name,
+          },
+        ]}
+        className="col-span-12"
+      />
+      <div className="col-span-12 lg:col-span-9">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 space-y-4">
+            {currentServerDataItem && (
+              <>
+                <VideoStreaming
+                  embedUrl={currentServerDataItem.link_embed}
+                  nextEpisode={
+                    currentEpisode.server_data[indexNextServerDataItem]
+                  }
+                  previousEpisode={
+                    currentEpisode.server_data[indexPreviousServerDataItem]
+                  }
+                  watchedVideoInput={{
+                    id: movie._id,
+                    name: movie.name,
+                    originName: movie.origin_name,
+                    slug: movie.slug,
+                    thumbnail: movie.thumb_url.startsWith("https://")
+                      ? movie.thumb_url
+                      : `${APP_DOMAIN_CDN_IMAGE}/${movie.thumb_url}`,
+                    serverDataItemName: currentServerDataItem.name,
+                    episodeName: currentEpisode.server_name,
+                    query: `?ep=${currentServerDataItem.slug}&ser=${indexEpisode}`,
+                    time: new Date().getTime(),
+                    otherWatchedEpisodes: [],
+                  }}
+                />
+              </>
+            )}
+          </div>
+          <div className="col-span-12">
+            <div className="mb-2">Danh sách tập</div>
+            <Episodes
+              episodes={episodes}
+              videoSlug={movie.slug}
+              current={currentServerDataItem}
+            />
+          </div>
+          <div className="col-span-12 sm:col-span-6 xl:col-span-4">
+            <div className="relative w-full aspect-[23/35]">
+              <Image
+                unoptimized
+                src={`https://phimapi.com/image.php?url=${movie.poster_url}`}
+                alt="Poster"
+                fill
+                sizes="(max-width: 1200px) 50vw, 100vw"
+                className="object-cover rounded-md shadow"
+                priority
               />
             </div>
-            <div className="col-span-12 sm:col-span-6 xl:col-span-3">
-              <div className="relative w-full aspect-[23/35]">
-                <Image
-                  unoptimized
-                  src={video.poster}
-                  alt="Poster"
-                  fill
-                  sizes="(max-width: 1200px) 50vw, 100vw"
-                  className="object-cover rounded-md shadow"
-                  priority
-                />
-              </div>
-            </div>
-            <div className="col-span-12 sm:col-span-6 xl:col-span-9">
-              <VideoInfo video={video} />
-            </div>
-            <div className="col-span-12">
-              <div className="text-lg font-medium">Nội dung</div>
-              <VideoContent content={video.content} />
-            </div>
+          </div>
+          <div className="col-span-12 sm:col-span-6 xl:col-span-8">
+            <VideoInfo video={movie} />
           </div>
         </div>
-        <div className="col-span-12 lg:col-span-3">
-          <RecommendVideos slug={video.slug} country={video.countries[0]} />
-        </div>
       </div>
+
+      <RecommendVideos
+        slug={movie.slug}
+        category={movie.category}
+        videoType={movie.type}
+      />
     </div>
   );
 }

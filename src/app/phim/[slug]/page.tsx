@@ -1,14 +1,15 @@
 import Breadcrumb from "@/components/breadcrumb";
-import Servers from "@/features/servers/components/servers";
+import Actors from "@/features/actors/components/actors";
+import Episodes from "@/features/episodes/components/episodes";
+import Images from "@/features/images/components/images";
+import videoApi from "@/features/videos/api";
 import RecommendVideos from "@/features/videos/components/recommend-videos";
-import VideoContent from "@/features/videos/components/video-content";
 import VideoInfo from "@/features/videos/components/video-info";
-import { getVideo } from "@/features/videos/data";
 import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-type VideoDetailsProps = {
+type VideoStreamingPageProps = {
   params: Promise<{
     slug: string;
   }>;
@@ -16,13 +17,13 @@ type VideoDetailsProps = {
 
 export const generateMetadata = async ({
   params,
-}: VideoDetailsProps): Promise<Metadata> => {
+}: VideoStreamingPageProps): Promise<Metadata> => {
   const { slug } = await params;
   try {
-    const { video } = await getVideo(slug);
-    if (video) {
+    const { movie } = await videoApi.fetchVideoDetailsData(slug);
+    if (movie) {
       return {
-        title: `Hellotv | ${video.name}`,
+        title: `Hellotv | ${movie.name}`,
       };
     }
   } catch (error) {
@@ -33,69 +34,62 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function VideoDetails({ params }: VideoDetailsProps) {
+export default async function VideoStreamingPage({
+  params,
+}: VideoStreamingPageProps) {
   const { slug } = await params;
 
-  const { servers, video } = await getVideo(slug);
+  const { episodes, movie } = await videoApi.fetchVideoDetailsData(slug);
 
-  if (!video) return notFound();
+  if (!movie) return notFound();
 
   return (
-    <div className="max-w-5xl mx-auto px-4">
-      <div className="grid grid-cols-12 gap-4 py-4">
-        <Breadcrumb
-          items={[
-            {
-              href: "/danh-sach-phim",
-              text: "Danh sách phim",
-            },
-            {
-              text: video.name,
-            },
-          ]}
-          className="col-span-12"
-        />
-        <div className="col-span-12 lg:col-span-9">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 sm:col-span-6 xl:col-span-3">
-              <div className="relative w-full aspect-[23/35]">
-                <Image
-                  unoptimized
-                  src={video.poster}
-                  alt="Poster"
-                  fill
-                  sizes="(max-width: 1200px) 50vw, 100vw"
-                  className="object-cover rounded-md shadow"
-                  priority
-                />
-              </div>
+    <div className="grid grid-cols-12 gap-4">
+      <Breadcrumb
+        breadCrumb={[
+          {
+            slug: "/danh-sach",
+            name: "Danh sách phim",
+          },
+          {
+            name: movie.name,
+            isCurrent: true,
+          },
+        ]}
+        className="col-span-12"
+      />
+      <div className="col-span-12 lg:col-span-9">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 sm:col-span-6 xl:col-span-4">
+            <div className="relative w-full aspect-[23/35]">
+              <Image
+                unoptimized
+                src={`https://phimapi.com/image.php?url=${movie.poster_url}`}
+                alt="Poster"
+                fill
+                sizes="(max-width: 1200px) 50vw, 100vw"
+                className="object-cover rounded-md shadow"
+                priority
+              />
             </div>
-            <div className="col-span-12 sm:col-span-6 xl:col-span-9">
-              <VideoInfo video={video} buttonPlayVisible={true} />
-            </div>
-            <div className="col-span-12">
-              <div className="mb-2">Danh sách tập</div>
-              <Servers servers={servers} videoSlug={video.slug} />
-            </div>
-            <div className="col-span-12">
-              <div className="text-lg font-medium">Nội dung</div>
-              <VideoContent content={video.content} />
-            </div>
-            {video.trailer && (
-              <div className="col-span-12">
-                <div className="text-lg font-medium">Trailer</div>
-                <iframe
-                  src={video.trailer.replace("watch?v=", "embed/")}
-                  className="w-full aspect-video"
-                ></iframe>
-              </div>
-            )}
+          </div>
+          <div className="col-span-12 sm:col-span-6 xl:col-span-8">
+            <VideoInfo video={movie} buttonPlayVisible={true} />
+          </div>
+          <Actors tmdbId={movie.tmdb.id} />
+          <Images tmdbId={movie.tmdb.id} />
+          <div className="col-span-12">
+            <div className="mb-2">Danh sách tập</div>
+            <Episodes episodes={episodes} videoSlug={movie.slug} />
           </div>
         </div>
-        <div className="col-span-12 lg:col-span-3">
-          <RecommendVideos slug={video.slug} country={video.countries[0]} />
-        </div>
       </div>
+
+      <RecommendVideos
+        slug={movie.slug}
+        category={movie.category}
+        videoType={movie.type}
+      />
     </div>
   );
 }

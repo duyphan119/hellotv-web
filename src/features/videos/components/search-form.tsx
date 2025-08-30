@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import useSearchVideos from "@/features/videos/hooks/useSearchVideos";
+import { APP_DOMAIN_CDN_IMAGE, IMAGE_WEBPAGE } from "@/lib/constants";
 import { Loader2, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -78,7 +79,7 @@ export default function SearchForm() {
             <>
               <ScrollArea className="">
                 <div className="space-y-4 max-h-64 p-4">
-                  {data.items.map((video) => (
+                  {data.data.items.map((video) => (
                     <Link
                       key={video.slug}
                       href={`/phim/${video.slug}`}
@@ -92,7 +93,7 @@ export default function SearchForm() {
                       <div className="col-span-1 relative aspect-video">
                         <Image
                           unoptimized
-                          src={video.thumbnail}
+                          src={`${IMAGE_WEBPAGE}${APP_DOMAIN_CDN_IMAGE}/${video.thumb_url}`}
                           alt="Poster"
                           fill
                           sizes="(max-width: 1200px) 50vw, 100vw"

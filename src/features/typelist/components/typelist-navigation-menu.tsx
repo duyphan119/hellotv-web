@@ -7,34 +7,24 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Country } from "@/features/countries/data";
 import Link from "next/link";
+import { typeList } from "@/features/typelist/data";
 
-type TypeListNavigationMenuProps = {
-  countries: Country[];
-  name: string;
-  slug: string;
-};
-
-export default function TypeListNavigationMenu({
-  countries,
-  name,
-  slug,
-}: TypeListNavigationMenuProps) {
+export default function TypeListNavigationMenu() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>{name}</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Kiểu phim</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid grid-cols-3 lg:w-[600px] sm:w-[300px] w-screen bg-neutral-900">
-              {countries.map((country) => (
+            <div className="grid max-h-[70vh] grid-cols-3 lg:w-[600px] sm:w-[300px] w-screen bg-neutral-900">
+              {typeList.map(({ name, slug }) => (
                 <Link
-                  key={country.name}
-                  href={`/danh-sach-phim?typelist=${slug}&country=${country.slug}`}
-                  className="p-2 col-span-3 sm:col-span-2 lg:col-span-1 text-neutral-200 hover:text-yellow-600"
+                  key={name}
+                  href={`/danh-sach/${slug}`}
+                  className="p-2 col-span-1  _hover-underline hover:_text-primary"
                 >
-                  {name} {country.name}
+                  {name}
                 </Link>
               ))}
             </div>

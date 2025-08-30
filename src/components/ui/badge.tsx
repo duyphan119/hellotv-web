@@ -18,11 +18,11 @@ const badgeVariants = cva(
         carousel:
           "border-transparent bg-gradient-to-br from-neutral-500/70 to-gray-500/70",
         episode:
-          "border-transparent bg-gradient-to-br from-yellow-500/70 to-orange-500/70",
+          "rounded-none border-transparent bg-gradient-to-r from-purple-600/80 to-indigo-500/80",
         language:
-          "border-transparent bg-gradient-to-br from-green-500/70 to-emerald-500/70",
+          "rounded-none border-transparent bg-gradient-to-r from-amber-600/80 to-orange-500/80",
         watchedEpisode:
-          "border-transparent bg-gradient-to-br from-red-500/70 to-rose-500/70",
+          "rounded-none border-transparent bg-gradient-to-br from-pink-600/80 to-rose-500/80",
       },
     },
     defaultVariants: {

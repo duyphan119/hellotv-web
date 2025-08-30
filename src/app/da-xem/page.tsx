@@ -16,14 +16,17 @@ import { useEffect, useState } from "react";
 export default function WatchedVideo() {
   const [watchedVideos, setWatchedVideos] = useState<WatchedVideoType[]>([]);
   useEffect(() => {
-    document.title = "Hellotv | Video đã xem";
+    document.title = "PhimKhaHay | Video đã xem";
 
     setWatchedVideos(getWatchedVideos());
   }, []);
 
   return (
-    <div className="grid grid-cols-12 gap-4 max-w-5xl mx-auto p-4">
-      <Breadcrumb items={[{ text: "Video đã xem" }]} className="col-span-12" />
+    <div className="grid grid-cols-12 gap-4 h-full">
+      <Breadcrumb
+        breadCrumb={[{ isCurrent: true, name: "Video đã xem" }]}
+        className="col-span-12"
+      />
       {watchedVideos.length > 0 ? (
         watchedVideos.map((item) => (
           <div
@@ -35,11 +38,10 @@ export default function WatchedVideo() {
               className="relative block aspect-video select-none"
             >
               <Image
-                unoptimized
                 src={item.thumbnail}
                 alt="Poster"
                 fill
-                sizes="(max-width: 1200px) 50vw, 100vw"
+                unoptimized
                 className="object-cover rounded-md shadow"
               />
 
@@ -47,17 +49,17 @@ export default function WatchedVideo() {
                 variant="watchedEpisode"
                 className="absolute top-0 right-0 "
               >
-                {item.episodeName}
+                Tập {item.serverDataItemName}
               </Badge>
               <Badge variant="language" className="absolute bottom-0 left-0 ">
-                {shortenVideoLanguage(shortenServerName(item.serverName))}
+                {shortenVideoLanguage(shortenServerName(item.episodeName))}
               </Badge>
             </Link>
             <div className="mt-2">
               <Link
                 href={`/phim/${item.slug}`}
                 title={item.name}
-                className="font-medium line-clamp-2 hover:text-primary hover:underline hover:underline-offset-2"
+                className="font-medium line-clamp-2 hover:text-primary _hover-underline"
               >
                 {item.name}
               </Link>
@@ -81,11 +83,8 @@ export default function WatchedVideo() {
       ) : (
         <div className="col-span-12 flex flex-col items-center">
           <h4 className="text-2xl">Bạn chưa xem phim nào!</h4>
-          <Link
-            href={`/danh-sach-phim`}
-            className={buttonVariants({ variant: "link" })}
-          >
-            Chọn phim ngay
+          <Link href="/" className={buttonVariants({ variant: "link" })}>
+            Xem phim ngay
           </Link>
         </div>
       )}

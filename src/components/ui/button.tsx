@@ -10,9 +10,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-neutral-800 shadow hover:bg-primary/90",
-        green: "",
-        red: "",
-        yellow: "",
+        gradientGrayNeutral:
+          "bg-gradient-to-br from-gray-400/70 to-neutral-500/70 hover:from-neutral-500/70 hover:to-gray-400/70",
+        gradientRed:
+          "bg-gradient-to-br from-red-600/70 to-destructive/70 hover:from-destructive/70 hover:to-red-600/70",
         gradientYellowRed:
           "bg-gradient-to-br from-yellow-500/70 to-orange-500/70 hover:from-orange-500/70 hover:to-yellow-500/70",
         gradientBluePurple:
@@ -22,6 +23,7 @@ const buttonVariants = cva(
         outlinePrimary: "border border-primary",
         disabled: "",
         secondary: "bg-secondary shadow hover:bg-secondary/90",
+        close: "bg-neutral-700 shadow hover:bg-neutral-700/90",
         episode: "bg-neutral-500 hover:bg-neutral-500/90",
         watchedEpisode: "bg-neutral-700 hover:bg-neutral-700/90",
         ghost: "hover:bg-background/10",
@@ -31,9 +33,10 @@ const buttonVariants = cva(
           "bg-secondary rounded-full size-12 text-secondary-foreground hover:bg-secondary/70",
         paginationActive:
           "bg-primary rounded-full size-12 text-primary-foreground cursor-default",
+        filter: "_bg-layout",
       },
       size: {
-        default: "h-9 px-4 py-2 [&_svg]:size-4",
+        default: "h-9 px-4 py-2 [&_svg]:size-3.5",
         auto: "",
         sm: "h-8 px-3 text-xs",
         lg: "h-10 px-8",

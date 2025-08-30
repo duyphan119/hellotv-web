@@ -6,15 +6,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { LatestVideo } from "../data";
-import { cn, shortenVideoLanguage } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import VideoCard from "./video-card";
 
 type Props = {
   title: string;
-  videos: LatestVideo[];
+  videos: TVideoItem[];
   href: string;
   titleColor: "red" | "blue" | "yellow";
 };
@@ -26,14 +24,14 @@ export default function VideosCountrySection({
   titleColor,
 }: Props) {
   return (
-    <section className="grid grid-cols-5 gap-4">
+    <section className="grid grid-cols-5 xl:grid-cols-6 gap-4 _bg-layout mt-12 p-4">
       <div className="col-span-5 md:col-span-1 flex md:flex-col md:justify-center justify-between">
         <h6
           className={cn(
             "font-medium text-lg bg-gradient-to-r text-transparent bg-clip-text",
-            titleColor === "red" && "from-rose-500 to-rose-200",
-            titleColor === "blue" && "from-sky-500 to-sky-200",
-            titleColor === "yellow" && "from-amber-500 to-amber-200"
+            titleColor === "red" && "from-rose-600 to-rose-300",
+            titleColor === "blue" && "from-sky-600 to-sky-300",
+            titleColor === "yellow" && "from-amber-600 to-amber-300"
           )}
         >
           {title}
@@ -48,53 +46,20 @@ export default function VideosCountrySection({
           Xem tất cả
         </Link>
       </div>
-      <div className="col-span-5 md:col-span-4">
+      <div className="col-span-5 md:col-span-4 xl:col-span-5">
         <Carousel>
           <CarouselContent>
-            {videos.map((video) => (
-              <CarouselItem key={video.id} className="basis-1/2 md:basis-1/3">
-                <Link
-                  href={`/phim/${video.slug}`}
-                  className="relative block w-full aspect-video select-none"
-                >
-                  <Image
-                    unoptimized
-                    src={video.thumbnail}
-                    alt="Thumbnail"
-                    fill
-                    sizes="(max-width: 1200px) 50vw, 100vw"
-                    className="object-cover rounded-md shadow"
-                  />
-                  <Badge variant="episode" className="absolute top-0 right-0 ">
-                    {video.episodeCurrent}
-                  </Badge>
-                  <Badge
-                    variant="language"
-                    className="absolute bottom-0 left-0 "
-                  >
-                    {shortenVideoLanguage(video.language)}
-                  </Badge>
-                </Link>
-                <div className="mt-2">
-                  <Link
-                    href={`/phim/${video.slug}`}
-                    title={video.name}
-                    className="font-medium line-clamp-2 hover:text-primary hover:underline hover:underline-offset-2"
-                  >
-                    {video.name}
-                  </Link>
-                  <p
-                    title={video.originName}
-                    className="text-muted-foreground text-sm line-clamp-2"
-                  >
-                    {video.originName}
-                  </p>
-                </div>
+            {videos.map((video, i) => (
+              <CarouselItem
+                key={i}
+                className="basis-1/2 md:basis-1/3 xl:basis-1/4"
+              >
+                <VideoCard video={video} imageType="thumbnail" />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="!size-8 -left-4 [&_svg]:!size-4 bg-foreground/70 text-background" />
-          <CarouselNext className="!size-8 -right-4 [&_svg]:!size-4 bg-foreground/70 text-background" />
+          <CarouselPrevious />
+          <CarouselNext />
         </Carousel>
       </div>
     </section>

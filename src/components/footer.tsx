@@ -7,7 +7,7 @@ import { Separator } from "./ui/separator";
 export default function Footer() {
   return (
     <footer className="bg-background text-foreground">
-      <div className="max-w-5xl mx-auto p-4 space-y-4">
+      <div className="_container space-y-4 py-4">
         <h1 className="text-2xl font-bold">Hellotv</h1>
         <p className="">
           Hellotv - Trang xem phim online chất lượng cao miễn phí Vietsub,
@@ -21,7 +21,7 @@ export default function Footer() {
           {typeList.map((item) => (
             <Link
               key={item.slug}
-              href={`/danh-sach-phim?typelist=${item.slug}`}
+              href={`/danh-sach/${item.slug}`}
               className="justify-start hover:text-primary hover:underline hover:underline-offset-2"
             >
               {item.name}

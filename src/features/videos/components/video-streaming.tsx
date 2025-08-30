@@ -6,12 +6,11 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import queryString from "query-string";
 import { useEffect } from "react";
-import { Episode } from "../data";
 
 type Props = {
   embedUrl: string;
-  nextEpisode?: Episode;
-  previousEpisode?: Episode;
+  nextEpisode?: TServerDataItem;
+  previousEpisode?: TServerDataItem;
   watchedVideoInput: WatchedVideo;
 };
 

@@ -1,9 +1,11 @@
-import { searchVideos, SearchVideosParams } from "@/features/videos/data";
 import { useQuery } from "@tanstack/react-query";
+import videoApi from "@/features/videos/api";
 
-export default function useSearchVideos(params: SearchVideosParams) {
+export default function useSearchVideos(
+  params: TVideosFilter & { keyword: string }
+) {
   return useQuery({
     queryKey: ["searchVideos", params],
-    queryFn: () => searchVideos(params),
+    queryFn: () => videoApi.searchVideos(params),
   });
 }

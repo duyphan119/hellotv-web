@@ -26,8 +26,10 @@ export default function WatchedVideosSection() {
 
   return (
     <section className="space-y-4 mt-12">
-      <div className="flex items-center justify-between gap-2 bg-neutral-900 p-4 rounded-md">
-        <h5 className="text-xl font-medium">Xem tiếp?</h5>
+      <div className="flex items-center justify-between gap-2 _bg-layout p-4 rounded-md">
+        <h5 className="text-xl font-medium bg-gradient-to-r from-green-400 to-lime-400 text-transparent bg-clip-text">
+          Xem tiếp?
+        </h5>
 
         <Link
           href="/da-xem"
@@ -39,12 +41,12 @@ export default function WatchedVideosSection() {
           Xem tất cả
         </Link>
       </div>
-      <Carousel className="px-4">
+      <Carousel>
         <CarouselContent>
           {watchedVideos.map((item) => (
             <CarouselItem
               key={item.id}
-              className="basis-1/2 md:basis-1/3 lg:basis-1/4"
+              className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
             >
               <Link
                 href={`/xem-phim/${item.slug}${item.query}`}
@@ -62,10 +64,10 @@ export default function WatchedVideosSection() {
                   variant="watchedEpisode"
                   className="absolute top-0 right-0 "
                 >
-                  {item.episodeName}
+                  {item.serverDataItemName}
                 </Badge>
                 <Badge variant="language" className="absolute bottom-0 left-0 ">
-                  {shortenVideoLanguage(shortenServerName(item.serverName))}
+                  {shortenVideoLanguage(shortenServerName(item.episodeName))}
                 </Badge>
               </Link>
               <div className="mt-2">

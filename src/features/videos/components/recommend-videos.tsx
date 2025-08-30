@@ -1,107 +1,88 @@
 "use client";
 
-import { Country } from "@/features/countries/data";
-import useGetVideosByTypeList from "@/features/videos/hooks/useGetVideosByTypeList";
-import RecommendVideosSkeleton from "@/features/videos/skeletons/recommend-videos-skeleton";
-import Image from "next/image";
-import Link from "next/link";
+import { VIDEO_TYPE_SLUG } from "@/lib/constants";
+import { useQueries } from "@tanstack/react-query";
+import videoApi from "@/features/videos/api";
+import VideoCardSkeleton from "@/features/videos/skeletons/video-card-skeleton";
+import VideoCard from "./video-card";
 
 type RecommendVideosProps = {
   slug: string;
-  country?: Country;
+  category: (Omit<TCategory, "_id"> & { id: string })[];
+  videoType: string;
 };
-
-const LIMIT = 9;
 
 export default function RecommendVideos({
   slug,
-  country,
+  category,
+  videoType,
 }: RecommendVideosProps) {
-  const { data: seriesData } = useGetVideosByTypeList("phim-bo", {
-    country: country?.slug,
-    limit: LIMIT,
-  });
-  const { data: movieData } = useGetVideosByTypeList("phim-le", {
-    country: country?.slug,
-    limit: LIMIT,
+  const filter = {
+    category: category.map(({ slug }) => slug).join(","),
+    limit: "27",
+  };
+  const [{ data: latestData }, { data: recommendData }] = useQueries({
+    queries: [
+      {
+        queryKey: ["latest-videos"],
+        queryFn: () => videoApi.fetchLatestVideosData(),
+      },
+      {
+        queryKey: ["recommend-videos", slug, filter],
+        queryFn: () =>
+          videoApi.fetchVideosData(VIDEO_TYPE_SLUG[videoType], filter),
+      },
+    ],
   });
 
-  if (!seriesData || !movieData) return <RecommendVideosSkeleton />;
+  const latestItems =
+    latestData?.items.filter((item) => item.slug !== slug).slice(0, 8) || [];
+  const latestVideoSlugs = latestItems.map((item) => item.slug);
 
   return (
     <>
-      <div className="text-lg font-medium">
-        <Link
-          href={`/danh-sach-phim?typelist=phim-bo`}
-          className="hover:text-yellow-600"
-        >
-          CÓ THỂ BẠN THÍCH
-        </Link>
+      <div className="col-span-12 lg:col-span-3">
+        <div className="_bg-layout rounded-md px-4 py-2">
+          <span className="_text-title-pink">Phim mới</span>
+          <div className="mt-4 grid grid-cols-2 gap-4">
+            {latestData
+              ? latestItems.map((video, index) => (
+                  <VideoCard
+                    key={index}
+                    video={video}
+                    imageType="poster"
+                    className="_bg-layout col-span-2 sm:col-span-1"
+                  />
+                ))
+              : Array.from({ length: 8 }).map((_, i) => (
+                  <VideoCardSkeleton key={i} imageType="poster" />
+                ))}
+          </div>
+        </div>
+        <div className="mt-4"></div>
       </div>
-      <div className="space-y-4 mt-4">
-        {seriesData.pages[0].items
-          .filter((item) => item.slug !== slug)
-
-          .map((video, index) => (
-            <div key={index} className="group">
-              <div className="grid grid-cols-12 gap-4">
-                <Link
-                  href={`/phim/${video.slug}`}
-                  className="col-span-12 md:col-span-4"
-                >
-                  <div className="relative aspect-video">
-                    <Image
-                      unoptimized
-                      src={video.thumbnail}
-                      alt="Thumbnail"
-                      fill
-                      sizes="(max-width: 1200px) 50vw, 100vw"
-                      className="object-cover rounded-md shadow"
-                    />
-                  </div>
-                </Link>
-                <div className="col-span-12 md:col-span-8">
-                  <Link
-                    href={`/phim/${video.slug}`}
-                    className="group-hover:text-yellow-600 text-sm line-clamp-2"
-                  >
-                    {video.name}
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        {movieData.pages[0].items
-          .filter((item) => item.slug !== slug)
-          .map((video, index) => (
-            <div key={index} className="group">
-              <div className="grid grid-cols-12 gap-4">
-                <Link
-                  href={`/xem-phim/${video.slug}`}
-                  className="col-span-12 md:col-span-4"
-                >
-                  <div className="relative aspect-video">
-                    <Image
-                      unoptimized
-                      src={video.thumbnail}
-                      alt="Thumbnail"
-                      fill
-                      sizes="(max-width: 1200px) 50vw, 100vw"
-                      className="object-cover rounded-md shadow"
-                    />
-                  </div>
-                </Link>
-                <div className="col-span-12 md:col-span-8">
-                  <Link
-                    href={`/xem-phim/${video.slug}`}
-                    className="group-hover:text-yellow-600 text-sm line-clamp-2"
-                  >
-                    {video.name}
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="col-span-12">
+        <div className="text-lg font-medium _text-title-pink">
+          <span className="_text-title-pink">Phim cùng thể loại</span>
+        </div>
+        <div className="mt-4 grid grid-cols-12 gap-4">
+          {recommendData
+            ? recommendData.data.items
+                .filter(
+                  (item) =>
+                    item.slug !== slug && !latestVideoSlugs.includes(item.slug)
+                )
+                .slice(0, 18)
+                .map((video, index) => (
+                  <VideoCard
+                    key={index}
+                    video={video}
+                    imageType="poster"
+                    className="_bg-layout col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2"
+                  />
+                ))
+            : null}
+        </div>
       </div>
     </>
   );

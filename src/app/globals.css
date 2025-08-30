@@ -66,4 +66,27 @@
   body {
     @apply bg-background text-foreground;
   }
+  ._container {
+    @apply mx-auto max-w-[1350px] px-4 sm:px-6 lg:px-8;
+  }
+
+  ._bg-container {
+    @apply bg-[#181a2b];
+  }
+
+  ._bg-layout {
+    @apply bg-[#232434];
+  }
+
+  ._text-title-pink {
+    @apply bg-gradient-to-r from-pink-600 to-rose-300 text-transparent bg-clip-text;
+  }
+
+  ._hover-underline {
+    @apply hover:underline hover:underline-offset-2;
+  }
+
+  ._text-primary {
+    @apply text-lime-400;
+  }
 }

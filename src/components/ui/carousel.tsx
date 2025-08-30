@@ -208,9 +208,9 @@ const CarouselPrevious = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-12 sm:size-16 md:size-20 rounded-full [&_svg]:size-6 sm:[&_svg]:size-10 md:[&_svg]:size-14",
+        "absolute size-8 rounded-full [&_svg]:size-4 bg-foreground/70 text-background",
         orientation === "horizontal"
-          ? "left-0 top-1/2 -translate-y-1/2"
+          ? "-left-4 top-1/2 -translate-y-1/2"
           : "top-0 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
@@ -238,9 +238,9 @@ const CarouselNext = React.forwardRef<
       variant={variant}
       size={size}
       className={cn(
-        "absolute size-12 sm:size-16 md:size-20 rounded-full [&_svg]:size-6 sm:[&_svg]:size-10 md:[&_svg]:size-14",
+        "absolute size-8 rounded-full [&_svg]:size-4 bg-foreground/70 text-background",
         orientation === "horizontal"
-          ? "right-0 top-1/2 -translate-y-1/2"
+          ? "-right-4 top-1/2 -translate-y-1/2"
           : "bottom-0 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
