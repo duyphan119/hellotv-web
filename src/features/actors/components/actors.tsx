@@ -14,12 +14,13 @@ import Link from "next/link";
 
 type Props = {
   tmdbId: string;
+  tmdbType: string;
 };
 
-export default function Actors({ tmdbId }: Props) {
+export default function Actors({ tmdbType, tmdbId }: Props) {
   const { data } = useQuery({
-    queryKey: ["actors", tmdbId],
-    queryFn: () => actorApi.fetchActorsData(tmdbId),
+    queryKey: ["actors", tmdbType, tmdbId],
+    queryFn: () => actorApi.fetchActorsData(tmdbType, tmdbId),
   });
   if (!data || data.length === 0) return null;
   return (
@@ -34,11 +35,11 @@ export default function Actors({ tmdbId }: Props) {
               className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
             >
               <div className="_bg-layout rounded-es-md rounded-ee-md">
-                <div className="aspect-[138/175] relative w-full">
+                <div className="aspect-[185/278] relative w-full">
                   <Image
                     unoptimized
                     alt="Avatar"
-                    src={actor.avatar}
+                    src={`https://image.tmdb.org/t/p//w185/${actor.profile_path}`}
                     fill
                     className="rounded-ss-md rounded-se-md"
                   />

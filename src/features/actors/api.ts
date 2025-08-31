@@ -1,179 +1,103 @@
-import * as cheerio from "cheerio";
 import videoApi from "@/features/videos/api";
-import { DOMAIN_TMDB } from "@/lib/constants";
-
-function convertBirthday(text: string): string {
-  // Regex tách: January 30, 2002 (23 years old)
-  const regex =
-    /^([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})(?:\s+\((\d+)\s+years old\))?/;
-  const match = text.match(regex);
-  if (!match) return text;
-
-  const monthMap: Record<string, string> = {
-    January: "01",
-    February: "02",
-    March: "03",
-    April: "04",
-    May: "05",
-    June: "06",
-    July: "07",
-    August: "08",
-    September: "09",
-    October: "10",
-    November: "11",
-    December: "12",
-  };
-
-  const month = monthMap[match[1]];
-  const day = match[2].padStart(2, "0");
-  const year = match[3];
-  const age = match[4] ? ` (${match[4]} tuổi)` : "";
-
-  return `${day}/${month}/${year}${age}`;
-}
 
 const actorApi = {
-  fetchActorsData: async (tmdbId: string) => {
-    const res = await fetch(`${DOMAIN_TMDB}/movie/${tmdbId}?language=vi-VN`, {
-      cache: "no-cache",
-    });
-
-    const html = await res.text();
-
-    const $ = cheerio.load(html);
-
-    const actors: {
-      id: string;
-      name: string;
-      slug: string;
-      avatar: string;
-      character: string;
-    }[] = [];
-
-    $(".people .card").each(function () {
-      const avatar = $(this).find("img.profile").attr("src") || "";
-      const name = $(this).find("p a").text().trim();
-      const slug = $(this).find("p a").attr("href") || "";
-      const character = $(this).find("p.character").text().trim();
-
-      const id = slug?.split("/")[2].replace("?language=vi-VN", "");
-
-      if (id)
-        actors.push({
-          id,
-          name,
-          slug,
-          avatar,
-          character,
-        });
-    });
-
-    return actors;
-  },
-  fetchActorDetailsData: async (
-    actorId: number | string
-  ): Promise<TActorProfileRaw> => {
-    const html = await (
-      await fetch(`${DOMAIN_TMDB}/person/${actorId}?language=vi-VN`, {
-        next: { revalidate: 100 },
-      })
-    ).text();
-    const $ = cheerio.load(html);
-
-    const actorName = $("h2.title a").text();
-    const biography = $(".biography").text();
-
-    const gender =
-      $("section.facts p:nth-of-type(4)")
-        .contents()
-        .filter((_, el) => el.type === "text")
-        .text()
-        .trim() === "Male"
-        ? "Nam"
-        : "Nữ";
-
-    const birthday = convertBirthday(
-      $("section.facts p:nth-of-type(5)")
-        .contents()
-        .filter((_, el) => el.type === "text")
-        .text()
-        .trim()
+  fetchActorsData: async (type: string, id: string): Promise<TCast[]> => {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/${type}/${id}/credits?language=en-US`,
+      {
+        cache: "no-cache",
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+        },
+      }
     );
+    const data: { cast: TCast[] } = await res.json();
+    return data.cast;
+  },
 
+  fetchActorDetailsData: async (actorId: number | string): Promise<TPerson> => {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/person/${actorId}?language=en-US`,
+      {
+        next: { revalidate: 100 },
+        headers: {
+          Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+        },
+      }
+    );
+    return res.json();
+  },
+
+  fetchVideosData: async (
+    actorId: number | string
+  ): Promise<{ tv_list: TVideoItem[]; movie_list: TVideoItem[] }> => {
+    const [tvRes, movieRes] = await Promise.allSettled([
+      actorApi.fetchTvListData(actorId),
+      actorApi.fetchMovieListData(actorId),
+    ]);
     return {
-      id: actorId,
-      name: actorName,
-      biography,
-      gender,
-      birthday,
-      avatar: $(".profile img").attr("src"),
+      tv_list: tvRes.status === "fulfilled" ? tvRes.value : [],
+      movie_list: movieRes.status === "fulfilled" ? movieRes.value : [],
     };
   },
-  fetchVideosData: async function fetchActorData(
-    actorId: number | string
-  ): Promise<{
-    items: TVideoItem[];
-  }> {
-    if (!actorId) return { items: [] };
-    try {
-      const res = await fetch(
-        `${DOMAIN_TMDB}/person/${actorId}?language=vi-VN`,
-        {
-          headers: { "Accept-Language": "en-US,en;q=0.9" },
-          next: { revalidate: 100 },
-        }
-      );
 
-      const html = await res.text();
-      const $ = cheerio.load(html);
+  // 🔑 helper để tránh lặp lại
+  fetchCreditVideos: async <T extends TTvCredit | TMovieCredit>(
+    url: string,
+    getKeyword: (item: T) => string,
+    matchFn: (item: TVideoItem, credit: T) => boolean
+  ): Promise<TVideoItem[]> => {
+    console.log(url);
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+      },
+      cache: "no-cache",
+    });
+    const { cast }: { cast: T[] } = await res.json();
 
-      const inputs = $(".credits_list .credits tbody tr")
-        .map((_, el) => {
-          const name = $(el).find("bdi").text();
-          const [tmdbType, tmdbId] =
-            $(el)
-              .find("a.tooltip")
-              .attr("href")
-              ?.replace("?language=vi-VN", "")
-              .split("/")
-              .slice(1) || [];
-          return { name, tmdbType, tmdbId };
-        })
-        .get();
+    const results = await Promise.allSettled(
+      cast.map((c) => videoApi.searchVideos({ keyword: getKeyword(c) }))
+    );
 
-      const results = await Promise.allSettled(
-        inputs.map((input) => videoApi.searchVideos({ keyword: input.name }))
-      );
+    const items: TVideoItem[] = [];
+    const videoIds = new Set<string>();
 
-      const items: TVideoItem[] = [];
-      const videoIds = new Set<string>();
-
-      results.forEach((res, i) => {
-        if (res.status === "fulfilled") {
-          const { data } = res.value as TVideosResponse;
-          if (data.items) {
-            const video = data.items.find(
-              (item) =>
-                item.tmdb.id &&
-                item.tmdb.id.toString() === inputs[i].tmdbId &&
-                item.tmdb.type === inputs[i].tmdbType &&
-                item.origin_name === inputs[i].name
-            );
-
-            if (video && !videoIds.has(video._id)) {
-              videoIds.add(video._id);
-              items.push(video);
-            }
+    results.forEach((r, i) => {
+      if (r.status === "fulfilled") {
+        const { data } = r.value as TVideosResponse;
+        if (data.items) {
+          const video = data.items.find((item) => matchFn(item, cast[i]));
+          if (video && !videoIds.has(video._id)) {
+            videoIds.add(video._id);
+            items.push(video);
           }
         }
-      });
+      }
+    });
 
-      return { items };
-    } catch (error) {
-      console.log(error);
-      return { items: [] };
-    }
+    return items;
   },
+
+  fetchTvListData: (actorId: string | number) =>
+    actorApi.fetchCreditVideos<TTvCredit>(
+      `https://api.themoviedb.org/3/person/${actorId}/tv_credits?language=en-US`,
+      (c) => c.name,
+      (item, c) =>
+        item.tmdb.id === String(c.id) &&
+        item.tmdb.type === "tv" &&
+        (item.origin_name === c.name || item.origin_name === c.original_name)
+    ),
+
+  fetchMovieListData: (actorId: string | number) =>
+    actorApi.fetchCreditVideos<TMovieCredit>(
+      `https://api.themoviedb.org/3/person/${actorId}/movie_credits?language=en-US`,
+      (c) => c.title,
+      (item, c) =>
+        item.tmdb.id === String(c.id) &&
+        item.tmdb.type === "movie" && // 👈 chỗ này mình chỉnh thành "movie"
+        (item.origin_name === c.title || item.origin_name === c.original_title)
+    ),
 };
 
 export default actorApi;

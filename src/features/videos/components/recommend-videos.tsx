@@ -19,7 +19,7 @@ export default function RecommendVideos({
 }: RecommendVideosProps) {
   const filter = {
     category: category.map(({ slug }) => slug).join(","),
-    limit: "27",
+    limit: "29",
   };
   const [{ data: latestData }, { data: recommendData }] = useQueries({
     queries: [
@@ -36,7 +36,7 @@ export default function RecommendVideos({
   });
 
   const latestItems =
-    latestData?.items.filter((item) => item.slug !== slug).slice(0, 8) || [];
+    latestData?.items.filter((item) => item.slug !== slug).slice(0, 10) || [];
   const latestVideoSlugs = latestItems.map((item) => item.slug);
 
   return (

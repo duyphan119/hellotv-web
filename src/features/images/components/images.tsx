@@ -13,12 +13,13 @@ import imageApi from "@/features/images/api";
 
 type Props = {
   tmdbId: string;
+  tmdbType: string;
 };
 
-export default function Images({ tmdbId }: Props) {
+export default function Images({ tmdbType, tmdbId }: Props) {
   const { data } = useQuery({
-    queryKey: ["images", tmdbId],
-    queryFn: () => imageApi.fetchImagesData(tmdbId),
+    queryKey: ["images", tmdbType, tmdbId],
+    queryFn: () => imageApi.fetchImagesData(tmdbType, tmdbId),
   });
   if (!data || data.length === 0) return null;
   return (
@@ -27,19 +28,24 @@ export default function Images({ tmdbId }: Props) {
 
       <Carousel>
         <CarouselContent>
-          {data.map((image, i) => (
-            <CarouselItem key={i}>
-              <div className="relative w-full aspect-[1000/563]">
-                <Image
-                  unoptimized
-                  alt="Backdrop"
-                  src={image.src}
-                  fill
-                  className="rounded-ss-md rounded-se-md"
-                />
-              </div>
-            </CarouselItem>
-          ))}
+          {data
+            .filter(({ aspect_ratio }) => aspect_ratio > 1)
+            .map((image, i) => (
+              <CarouselItem key={i}>
+                <div
+                  className="relative w-full"
+                  style={{ aspectRatio: image.aspect_ratio }}
+                >
+                  <Image
+                    unoptimized
+                    alt="Backdrop"
+                    src={`https://image.tmdb.org/t/p/w1280${image.file_path}`}
+                    fill
+                    className="rounded-ss-md rounded-se-md"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
         </CarouselContent>
         <CarouselNext />
         <CarouselPrevious />

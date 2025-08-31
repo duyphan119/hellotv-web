@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ type: string; id: string }> }
 ) {
-  const { id } = await params;
+  const { id, type } = await params;
 
-  const data = await imageApi.fetchImagesData(id);
+  const data = await imageApi.fetchImagesData(type, id);
   return NextResponse.json(data);
 }
