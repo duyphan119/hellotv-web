@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import actorApi from "@/features/actors/api";
 import Image from "next/image";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   tmdbId: string;
@@ -22,7 +23,35 @@ export default function Actors({ tmdbType, tmdbId }: Props) {
     queryKey: ["actors", tmdbType, tmdbId],
     queryFn: () => actorApi.fetchActorsData(tmdbType, tmdbId),
   });
-  if (!data || data.length === 0) return null;
+
+  if (!data) {
+    return (
+      <div className="col-span-12">
+        <Skeleton className="w-16 h-6 mb-2" />
+        <Carousel>
+          <CarouselContent>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <CarouselItem
+                key={i}
+                className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+              >
+                <div className="_bg-layout rounded-es-md rounded-ee-md">
+                  <Skeleton className="aspect-[185/278] relative w-full" />
+                </div>
+                <div className="p-2 text-sm text-center space-y-0.5">
+                  <Skeleton className="w-1/2 h-6" />
+                  <Skeleton className="w-1/2 h-5" />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselNext />
+          <CarouselPrevious />
+        </Carousel>
+      </div>
+    );
+  }
+  if (data.length === 0) return null;
   return (
     <div className="col-span-12">
       <div className="mb-2">Diễn viên</div>

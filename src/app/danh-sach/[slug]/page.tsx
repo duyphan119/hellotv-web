@@ -3,6 +3,7 @@ import { TypeList } from "@/features/typelist/data";
 import videoApi from "@/features/videos/api";
 import VideoCard from "@/features/videos/components/video-card";
 import VideosFilter from "@/features/videos/components/video-filter";
+import VideosPagination from "@/features/videos/components/videos-pagination";
 import { getSeo } from "@/lib/utils";
 import { MessageSquareIcon } from "lucide-react";
 import { Metadata } from "next";
@@ -70,6 +71,11 @@ export default async function Page({ params, searchParams }: PageProps) {
               className="col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2"
             />
           ))}
+          <VideosPagination
+            pagination={data.params.pagination}
+            searchParams={awaitedSearchParams}
+            className="col-span-12"
+          />
         </div>
       )}
     </>

@@ -10,6 +10,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import imageApi from "@/features/images/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
   tmdbId: string;
@@ -21,7 +22,15 @@ export default function Images({ tmdbType, tmdbId }: Props) {
     queryKey: ["images", tmdbType, tmdbId],
     queryFn: () => imageApi.fetchImagesData(tmdbType, tmdbId),
   });
-  if (!data || data.length === 0) return null;
+  if (!data)
+    return (
+      <div className="col-span-12">
+        <Skeleton className="mb-2 w-12 h-6" />
+
+        <Skeleton className="relative w-full" style={{ aspectRatio: 1.778 }} />
+      </div>
+    );
+  if (data.length === 0) return null;
   return (
     <div className="col-span-12">
       <div className="mb-2">Hình ảnh</div>
