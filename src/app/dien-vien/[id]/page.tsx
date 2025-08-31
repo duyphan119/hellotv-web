@@ -14,14 +14,14 @@ export const generateMetadata = async ({
     const { name } = await actorApi.fetchActorDetailsData(id);
 
     return {
-      title: `PhimKhaHay | Diễn viên ${name}`,
+      title: `Hellotv | Diễn viên ${name}`,
       description: `Danh sách phim của diễn viên ${name}`,
     };
   } catch (error) {
     console.log(error);
   }
   return {
-    title: "PhimKhaHay | Diễn viên",
+    title: "Hellotv | Diễn viên",
   };
 };
 

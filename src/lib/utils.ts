@@ -28,7 +28,7 @@ export function shortenVideoLanguage(videoLanguage: string) {
 
 export function getSeo(seoOnPage: TSeoOnPage) {
   return {
-    title: `PhimKhaHay | ${seoOnPage.titleHead}`,
+    title: `Hellotv | ${seoOnPage.titleHead}`,
     description: seoOnPage.descriptionHead,
     // openGraph: {
     //   type: seoOnPage.og_type as

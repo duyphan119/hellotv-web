@@ -29,7 +29,7 @@ export const generateMetadata = async ({
   } catch (error) {
     console.log(error);
   }
-  return { title: "PhimKhaHay | Danh sách phim" };
+  return { title: "Hellotv | Danh sách phim" };
 };
 export default async function Page({ params, searchParams }: PageProps) {
   const { slug } = await params;

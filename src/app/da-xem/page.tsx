@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 export default function WatchedVideo() {
   const [watchedVideos, setWatchedVideos] = useState<WatchedVideoType[]>([]);
   useEffect(() => {
-    document.title = "PhimKhaHay | Video đã xem";
+    document.title = "Hellotv | Video đã xem";
 
     setWatchedVideos(getWatchedVideos());
   }, []);
