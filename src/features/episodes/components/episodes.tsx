@@ -36,7 +36,7 @@ export default function Episodes({ videoSlug, episodes, current }: Props) {
                 : "grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6"
             )}
           >
-            {[...server_data].reverse().map(({ name, slug, filename }) => {
+            {server_data.map(({ name, slug, filename }) => {
               const isWatched = watchedVideo?.otherWatchedEpisodes.includes(
                 `${name}${server_name}`
               );

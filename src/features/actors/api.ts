@@ -114,56 +114,65 @@ const actorApi = {
   ): Promise<{
     items: TVideoItem[];
   }> {
-    const res = await fetch(`${DOMAIN_TMDB}/person/${actorId}?language=vi-VN`, {
-      headers: { "Accept-Language": "en-US,en;q=0.9" },
-      next: { revalidate: 100 },
-    });
+    if (!actorId) return { items: [] };
+    try {
+      const res = await fetch(
+        `${DOMAIN_TMDB}/person/${actorId}?language=vi-VN`,
+        {
+          headers: { "Accept-Language": "en-US,en;q=0.9" },
+          next: { revalidate: 100 },
+        }
+      );
 
-    const html = await res.text();
-    const $ = cheerio.load(html);
+      const html = await res.text();
+      const $ = cheerio.load(html);
 
-    const inputs = $(".credits_list .credits tbody tr")
-      .map((_, el) => {
-        const name = $(el).find("bdi").text();
-        const [tmdbType, tmdbId] =
-          $(el)
-            .find("a.tooltip")
-            .attr("href")
-            ?.replace("?language=vi-VN", "")
-            .split("/")
-            .slice(1) || [];
-        return { name, tmdbType, tmdbId };
-      })
-      .get();
+      const inputs = $(".credits_list .credits tbody tr")
+        .map((_, el) => {
+          const name = $(el).find("bdi").text();
+          const [tmdbType, tmdbId] =
+            $(el)
+              .find("a.tooltip")
+              .attr("href")
+              ?.replace("?language=vi-VN", "")
+              .split("/")
+              .slice(1) || [];
+          return { name, tmdbType, tmdbId };
+        })
+        .get();
 
-    const results = await Promise.allSettled(
-      inputs.map((input) => videoApi.searchVideos({ keyword: input.name }))
-    );
+      const results = await Promise.allSettled(
+        inputs.map((input) => videoApi.searchVideos({ keyword: input.name }))
+      );
 
-    const items: TVideoItem[] = [];
-    const videoIds = new Set<string>();
+      const items: TVideoItem[] = [];
+      const videoIds = new Set<string>();
 
-    results.forEach((res, i) => {
-      if (res.status === "fulfilled") {
-        const { data } = res.value as TVideosResponse;
-        if (data.items) {
-          const video = data.items.find(
-            (item) =>
-              item.tmdb.id &&
-              item.tmdb.id.toString() === inputs[i].tmdbId &&
-              item.tmdb.type === inputs[i].tmdbType &&
-              item.origin_name === inputs[i].name
-          );
+      results.forEach((res, i) => {
+        if (res.status === "fulfilled") {
+          const { data } = res.value as TVideosResponse;
+          if (data.items) {
+            const video = data.items.find(
+              (item) =>
+                item.tmdb.id &&
+                item.tmdb.id.toString() === inputs[i].tmdbId &&
+                item.tmdb.type === inputs[i].tmdbType &&
+                item.origin_name === inputs[i].name
+            );
 
-          if (video && !videoIds.has(video._id)) {
-            videoIds.add(video._id);
-            items.push(video);
+            if (video && !videoIds.has(video._id)) {
+              videoIds.add(video._id);
+              items.push(video);
+            }
           }
         }
-      }
-    });
+      });
 
-    return { items };
+      return { items };
+    } catch (error) {
+      console.log(error);
+      return { items: [] };
+    }
   },
 };
 
