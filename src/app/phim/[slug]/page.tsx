@@ -76,8 +76,12 @@ export default async function VideoStreamingPage({
           <div className="col-span-12 sm:col-span-6 xl:col-span-8">
             <VideoInfo video={movie} buttonPlayVisible={true} />
           </div>
-          <Actors tmdbType={movie.tmdb.type} tmdbId={movie.tmdb.id} />
-          <Images tmdbType={movie.tmdb.type} tmdbId={movie.tmdb.id} />
+          {movie.tmdb.id && (
+            <>
+              <Actors tmdbType={movie.tmdb.type} tmdbId={movie.tmdb.id} />
+              <Images tmdbType={movie.tmdb.type} tmdbId={movie.tmdb.id} />
+            </>
+          )}
           <div className="col-span-12">
             <div className="mb-2">Danh sách tập</div>
             <Episodes episodes={episodes} videoSlug={movie.slug} />

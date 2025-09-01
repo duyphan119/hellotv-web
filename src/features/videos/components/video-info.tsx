@@ -123,6 +123,14 @@ export default function VideoInfo({
               ))}
             </td>
           </tr>
+          {!video.tmdb.id && (
+            <>
+              <tr>
+                <td className="w-24 font-medium pr-1 align-top">Diễn viên</td>
+                <td>{video.actor.join(", ")}</td>
+              </tr>
+            </>
+          )}
           <tr>
             <td className="w-24 font-medium pr-1 align-top">Thời gian</td>
             <td>{video.time}</td>
