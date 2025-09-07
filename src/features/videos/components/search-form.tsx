@@ -75,7 +75,7 @@ export default function SearchForm() {
       </form>
       {visible && input !== "" && (
         <div className="absolute top-full right-0 left-0 bg-neutral-950 border border-neutral-600 z-10 rounded-md">
-          {!isLoading && data && data?.data?.items?.length > 0 ? (
+          {!isLoading && data ?( data?.data?.items?.length > 0 ? (
             <>
               <ScrollArea className="">
                 <div className="space-y-4 max-h-64 p-4">
@@ -119,7 +119,12 @@ export default function SearchForm() {
                   Xem tất cả
                 </Link>
               </div>
-            </>
+            </>):( <div className="flex items-center p-4 gap-4">
+            
+              <div className="">Không có kết quả phù hợp</div>
+            </div>
+          
+            )
           ) : (
             <div className="flex items-center p-4 gap-4">
               <Loader2 className="size-5 animate-spin" />
