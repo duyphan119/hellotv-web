@@ -79,7 +79,7 @@ export default function SearchForm() {
             <>
               <ScrollArea className="">
                 <div className="space-y-4 max-h-64 p-4">
-                  {data.data.items.map((video) => (
+                  {data?.data?.items?.map((video) => (
                     <Link
                       key={video.slug}
                       href={`/phim/${video.slug}`}
