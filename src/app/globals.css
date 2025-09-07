@@ -79,7 +79,7 @@
   }
 
   ._text-title-pink {
-    @apply bg-gradient-to-r from-pink-600 to-rose-300 text-transparent bg-clip-text;
+    @apply text-pink-600;
   }
 
   ._hover-underline {
