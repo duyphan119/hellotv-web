@@ -16,7 +16,7 @@ const videoApi = {
       return  {
   status: false,
   msg: "",
-  data: {
+  
     items: [],
     
       pagination: {
@@ -28,7 +28,7 @@ const videoApi = {
   
     
     
-  },
+  
 };
 
     }
