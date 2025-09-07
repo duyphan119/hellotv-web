@@ -42,9 +42,7 @@ const videoApi = {
     });
     const data: TVideoDetailsResponse = await res.json();
 
-        if (!data.status) {
-      return {movie:null,episodes:[],status:false,msg:""}
-    }
+        if (!data.status) throw Error(data.msg);
     return data;
   },
   fetchVideosData: async (
