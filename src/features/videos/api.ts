@@ -93,6 +93,7 @@ const videoApi = {
   searchVideos: async (
     filter?: TVideosFilter & { keyword: string }
   ): Promise<TVideosResponse> => {
+    try {
     const url = queryString.stringifyUrl({
       url: "https://phimapi.com/v1/api/tim-kiem",
       query: filter,
@@ -101,8 +102,9 @@ const videoApi = {
       next: { revalidate: 300 },
     });
     const data: TVideosResponse = await res.json();
-
-    if (!data.status) {
+return data;}
+    catch(err){console.log(err);}
+    
       return {
   status: false,
   msg: "",
@@ -131,9 +133,9 @@ const videoApi = {
     titlePage: "",
   },
 };
-   }
+   
 
-    return data;
+  
   },
 };
 
