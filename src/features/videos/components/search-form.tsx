@@ -75,7 +75,7 @@ export default function SearchForm() {
       </form>
       {visible && input !== "" && (
         <div className="absolute top-full right-0 left-0 bg-neutral-950 border border-neutral-600 z-10 rounded-md">
-          {!isLoading && data ? (
+          {!isLoading && data && data?.data?.items?.length > 0 ? (
             <>
               <ScrollArea className="">
                 <div className="space-y-4 max-h-64 p-4">
