@@ -12,8 +12,9 @@ const videoApi = {
     });
     const data: TLatestVideosResponse = await res.json();
 
-    if (!data.status) throw Error(data.msg);
-
+    if (!data.status) {
+      return {data:{items:[],breadCrumb:[],params:{pagination:{currentPage:1,totalPages:1,totalItemsPerPage:12,totalItems:0}}}}
+    }
     return data;
   },
   fetchVideoDetailsData: async (
@@ -24,8 +25,9 @@ const videoApi = {
     });
     const data: TVideoDetailsResponse = await res.json();
 
-    if (!data.status) throw Error(data.msg);
-
+        if (!data.status) {
+      return {data:{movie:null,episodes:[]}}
+    }
     return data;
   },
   fetchVideosData: async (
@@ -41,8 +43,9 @@ const videoApi = {
     });
     const data: TVideosResponse = await res.json();
 
-    if (!data.status) throw Error(data.msg);
-
+        if (!data.status) {
+      return {data:{items:[],breadCrumb:[],params:{pagination:{currentPage:1,totalPages:1,totalItemsPerPage:12,totalItems:0}}}}
+    }
     return data;
   },
   searchVideos: async (
@@ -57,7 +60,9 @@ const videoApi = {
     });
     const data: TVideosResponse = await res.json();
 
-    if (!data.status) throw Error(data.msg);
+    if (!data.status) {
+      return {data:{items:[],breadCrumb:[],params:{pagination:{currentPage:1,totalPages:1,totalItemsPerPage:12,totalItems:0}}}}
+    }
 
     return data;
   },
