@@ -13,7 +13,24 @@ const videoApi = {
     const data: TLatestVideosResponse = await res.json();
 
     if (!data.status) {
-      return {data:{items:[],breadCrumb:[],params:{pagination:{currentPage:1,totalPages:1,totalItemsPerPage:12,totalItems:0}}}}
+      return  {
+  status: false,
+  msg: "",
+  data: {
+    items: [],
+    
+      pagination: {
+        totalItems: 0,
+        totalItemsPerPage: 0,
+        currentPage: 1,
+        totalPages: 0,
+      },
+  
+    
+    
+  },
+};
+
     }
     return data;
   },
@@ -26,7 +43,7 @@ const videoApi = {
     const data: TVideoDetailsResponse = await res.json();
 
         if (!data.status) {
-      return {data:{movie:null,episodes:[]}}
+      return {movie:null,episodes:[],status:false,msg:""}
     }
     return data;
   },
@@ -44,8 +61,35 @@ const videoApi = {
     const data: TVideosResponse = await res.json();
 
         if (!data.status) {
-      return {data:{items:[],breadCrumb:[],params:{pagination:{currentPage:1,totalPages:1,totalItemsPerPage:12,totalItems:0}}}}
-    }
+      return {
+  status: false,
+  msg: "",
+  data: {
+    seoOnPage: {
+      titleHead: "",
+      descriptionHead: "",
+      og_type: "",
+      og_image: [],
+      og_url: "",
+    },
+    items: [],
+    itemsSportsVideos: [],
+    params: {
+      pagination: {
+        totalItems: 0,
+        totalItemsPerPage: 0,
+        currentPage: 1,
+        totalPages: 0,
+      },
+    },
+    type_list: "",
+    breadCrumb: [],
+    APP_DOMAIN_FRONTEND: "",
+    APP_DOMAIN_CDN_IMAGE: "",
+    titlePage: "",
+  },
+};
+  }
     return data;
   },
   searchVideos: async (
@@ -61,8 +105,35 @@ const videoApi = {
     const data: TVideosResponse = await res.json();
 
     if (!data.status) {
-      return {data:{items:[],breadCrumb:[],params:{pagination:{currentPage:1,totalPages:1,totalItemsPerPage:12,totalItems:0}}}}
-    }
+      return {
+  status: false,
+  msg: "",
+  data: {
+    seoOnPage: {
+      titleHead: "",
+      descriptionHead: "",
+      og_type: "",
+      og_image: [],
+      og_url: "",
+    },
+    items: [],
+    itemsSportsVideos: [],
+    params: {
+      pagination: {
+        totalItems: 0,
+        totalItemsPerPage: 0,
+        currentPage: 1,
+        totalPages: 0,
+      },
+    },
+    type_list: "",
+    breadCrumb: [],
+    APP_DOMAIN_FRONTEND: "",
+    APP_DOMAIN_CDN_IMAGE: "",
+    titlePage: "",
+  },
+};
+   }
 
     return data;
   },
