@@ -28,10 +28,10 @@ export default function VideosCountrySection({
       <div className="col-span-5 md:col-span-1 flex md:flex-col md:justify-center justify-between">
         <h6
           className={cn(
-            "font-medium text-lg bg-gradient-to-r text-transparent bg-clip-text",
-            titleColor === "red" && "from-rose-600 to-rose-300",
-            titleColor === "blue" && "from-sky-600 to-sky-300",
-            titleColor === "yellow" && "from-amber-600 to-amber-300"
+            "font-medium text-lg",
+            titleColor === "red" && "text-rose-600",
+            titleColor === "blue" && "text-sky-600",
+            titleColor === "yellow" && "text-amber-600"
           )}
         >
           {title}
