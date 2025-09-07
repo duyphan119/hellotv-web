@@ -27,7 +27,7 @@ export default function WatchedVideosSection() {
   return (
     <section className="space-y-4 mt-12">
       <div className="flex items-center justify-between gap-2 _bg-layout p-4 rounded-md">
-        <h5 className="text-xl font-medium bg-gradient-to-r from-green-400 to-lime-400 text-transparent bg-clip-text">
+        <h5 className="text-xl font-medium text-lime-600">
           Xem tiếp?
         </h5>
 
