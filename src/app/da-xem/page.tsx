@@ -49,7 +49,7 @@ export default function WatchedVideo() {
                 variant="watchedEpisode"
                 className="absolute top-0 right-0 "
               >
-                Tập {item.serverDataItemName}
+                {item.serverDataItemName}
               </Badge>
               <Badge variant="language" className="absolute bottom-0 left-0 ">
                 {shortenVideoLanguage(shortenServerName(item.episodeName))}
