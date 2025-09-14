@@ -11,7 +11,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { typeList } from "@/features/typelist/data";
 import { ArrowRight, FilterIcon, XIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
 type Props = {
@@ -30,6 +30,7 @@ export default function VideosFilter({
   isSearch = false,
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const { categories, countries, years } = useCommonData();
   const [query, setQuery] = useState<TVideosFilter>(searchParams);
 
@@ -79,6 +80,7 @@ export default function VideosFilter({
         `/the-loai/${catArr[0]}?${queryString.stringify({
           ...params,
           category: undefined,
+          page: undefined,
         })}`
       );
     } else if (couArr.length === 1 && catArr.length !== 1) {
@@ -86,15 +88,23 @@ export default function VideosFilter({
         `/quoc-gia/${couArr[0]}?${queryString.stringify({
           ...params,
           country: undefined,
+          page: undefined
         })}`
       );
     } else {
-      router.push(
-        `/nam/${year || new Date().getFullYear()}?${queryString.stringify({
-          ...params,
+      if(year){
+        router.push(`/nam/${year}?${queryString.stringify({
+          ...params, 
+          year: undefined, 
+          page: undefined,
+        })}`);
+      } else {
+        router.push(`${pathname}?${queryString.stringify({
+          ...params, 
           year: undefined,
-        })}`
-      );
+          page: undefined,
+        })}`);
+      }
     }
   };
 
