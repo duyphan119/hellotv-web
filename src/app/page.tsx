@@ -54,7 +54,7 @@ const queryConfigs: QueryConfig[] = [
       }),
     type: "category",
     slug: "hoc-duong",
-    href: "/the-loai/hoc-duong",
+    href: "/the-loai/hoc-duong?country=han-quoc",
   },
   {
     key: ["videos-category", "hinh-su", "han-quoc"],
@@ -65,7 +65,7 @@ const queryConfigs: QueryConfig[] = [
       }),
     type: "category",
     slug: "hinh-su",
-    href: "/the-loai/hinh-su",
+    href: "/the-loai/hinh-su?country=han-quoc",
   },
   {
     key: ["videos-country", "trung-quoc"],
@@ -84,7 +84,7 @@ const queryConfigs: QueryConfig[] = [
       }),
     type: "category",
     slug: "vien-tuong",
-    href: "/the-loai/vien-tuong",
+    href: "/the-loai/vien-tuong?country=trung-quoc",
   },
   {
     key: ["videos-category", "co-trang", "trung-quoc"],
@@ -95,7 +95,7 @@ const queryConfigs: QueryConfig[] = [
       }),
     type: "category",
     slug: "co-trang",
-    href: "/the-loai/co-trang",
+    href: "/the-loai/co-trang?country=trung-quoc",
   },
   {
     key: ["videos-country", "nhat-ban"],
@@ -114,7 +114,7 @@ const queryConfigs: QueryConfig[] = [
       }),
     type: "category",
     slug: "phieu-luu",
-    href: "/the-loai/phieu-luu",
+    href: "/the-loai/phieu-luu?country=nhat-ban",
   },
   {
     key: ["videos-category", "the-thao", "nhat-ban"],
@@ -125,7 +125,7 @@ const queryConfigs: QueryConfig[] = [
       }),
     type: "category",
     slug: "the-thao",
-    href: "/the-loai/the-thao",
+    href: "/the-loai/the-thao?country=nhat-ban",
   },
   {
     key: ["videos-category", "hai-huoc"],
