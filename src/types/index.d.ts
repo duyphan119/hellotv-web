@@ -46,6 +46,7 @@ type TVideoItem = {
   sub_docquyen: boolean;
   time: string;
   episode_current: string;
+  episode_total: string;
   quality: string;
   lang: string;
   year: number;
@@ -160,7 +161,6 @@ type TVideoDetails = TVideoItem & {
   director: string[];
   actor: string[];
   episodes: TEpisode[];
-  episode_total: string;
   is_copyright: boolean;
   trailer_url: string;
   chieurap: boolean;
