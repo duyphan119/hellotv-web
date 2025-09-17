@@ -84,7 +84,7 @@ const actorApi = {
       `https://api.themoviedb.org/3/person/${actorId}/tv_credits?language=en-US`,
       (c) => c.name,
       (item, c) =>
-        item.tmdb.id && item.tmdb.type&& ? (item.tmdb.id === String(c.id) &&
+        item.tmdb.id && item.tmdb.type ? (item.tmdb.id === String(c.id) &&
         item.tmdb.type === "tv"):
         (item.origin_name === c.name || item.origin_name === c.original_name)
     ),
@@ -93,7 +93,7 @@ const actorApi = {
     actorApi.fetchCreditVideos<TMovieCredit>(
       `https://api.themoviedb.org/3/person/${actorId}/movie_credits?language=en-US`,
       (c) => c.title,
-      (item, c) => item.tmdb.id && item.tmdb.type&& ? (item.tmdb.id === String(c.id) &&
+      (item, c) => item.tmdb.id && item.tmdb.type ? (item.tmdb.id === String(c.id) &&
         item.tmdb.type === "movie"):
         (item.origin_name === c.title || item.origin_name === c.original_title)
     ),
