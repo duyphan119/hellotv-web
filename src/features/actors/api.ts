@@ -87,7 +87,7 @@ const actorApi = {
         item.tmdb.id && item.tmdb.type ? (item.tmdb.id === String(c.id) &&
         item.tmdb.type === "tv"):
         ((item.origin_name === c.name || item.origin_name === c.original_name)
-        && (c.first_air_date?true:false) && c.first_air_date.includes(item.year+"") && c.episode_count+""===item.episode_total
+        && c.first_air_date?.includes(item.year+"") && c.episode_count+""===item.episode_total
         )
     ),
 
@@ -98,7 +98,7 @@ const actorApi = {
       (item, c) => item.tmdb.id && item.tmdb.type ? (item.tmdb.id === String(c.id) &&
         item.tmdb.type === "movie"):
        ( (item.origin_name === c.title || item.origin_name === c.original_title) &&
-       c.release_date.includes(item.year+""))
+       c.release_date?.includes(item.year+""))
     ),
 };
 
