@@ -27,6 +27,7 @@ type CategoryConfig = BaseConfig & {
   type: "category";
   slug: keyof typeof categorySlugTitleMap;
   href: string;
+  title?: string;
 };
 
 export type QueryConfig = LatestConfig | CountryConfig | CategoryConfig;
@@ -38,23 +39,36 @@ const queryConfigs: QueryConfig[] = [
     type: "latest",
   },
   {
+    key: ["videos-typelist", "phim-bo", "han-quoc","han-quoc"],
+    fn: () =>
+      videoApi.fetchVideosData("phim-bo", {
+        limit: "6",
+        country: "trung-quoc,han-quoc",
+      }),
+    type: "category",
+    slug: "phim-bo",
+    title: "PHIM BỘ",
+    href: "/danh-sach/phim-bo?country=trung-quoc,han-quoc",
+  },
+  {
+    key: ["videos-typelist", "phim-le", "han-quoc","han-quoc"],
+    fn: () =>
+      videoApi.fetchVideosData("phim-le", {
+        limit: "6",
+        country: "trung-quoc,han-quoc",
+      }),
+    type: "category",
+    slug: "phim-le",
+    title: "PHIM LẺ",
+    href: "/danh-sach/phim-le?country=trung-quoc,han-quoc",
+  },
+  {
     key: ["videos-country", "han-quoc"],
     fn: () => countryApi.fetchVideosData("han-quoc"),
     type: "country",
     title: "PHIM HÀN QUỐC",
     color: "blue",
     href: "/quoc-gia/han-quoc",
-  },
-  {
-    key: ["videos-category", "hoc-duong", "han-quoc"],
-    fn: () =>
-      categoryApi.fetchVideosData("hoc-duong", {
-        limit: "6",
-        country: "han-quoc",
-      }),
-    type: "category",
-    slug: "hoc-duong",
-    href: "/the-loai/hoc-duong?country=han-quoc",
   },
   {
     key: ["videos-category", "hinh-su", "han-quoc"],
@@ -188,7 +202,7 @@ export default async function Home() {
             <VideosCategorySection
               key={i}
               videos={videos}
-              title={categorySlugTitleMap[cfg.slug!]}
+              title={categorySlugTitleMap[cfg.slug!] || cfg.title}
               href={cfg.href!}
             />
           );
