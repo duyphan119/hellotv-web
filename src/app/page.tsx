@@ -202,7 +202,7 @@ export default async function Home() {
             <VideosCategorySection
               key={i}
               videos={videos}
-              title={categorySlugTitleMap[cfg.slug!] || cfg.title}
+              title={categorySlugTitleMap[cfg.slug!] || cfg.title!}
               href={cfg.href!}
             />
           );
